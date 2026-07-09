@@ -1,29 +1,54 @@
-// ── Theme ──
-function toggleTheme(){const t=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',t);document.querySelectorAll('.theme-btn').forEach(b=>b.textContent=t==='dark'?'☀️':'🌙');}
+function toggleTheme(){const t=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',t);document.querySelectorAll('.theme-btn:not(.lang-btn)').forEach(b=>b.textContent=t==='dark'?'☀️':'🌙');}
 
 // ── Menu ──
 function toggleMenu(){const nav=document.getElementById('navLinks');nav.style.display=nav.style.display==='flex'?'none':'flex';}
 
-// ── Waveform ──
 const wf=document.getElementById('waveform');
 if(wf){for(let i=0;i<28;i++){const b=document.createElement('div');b.className='wave-bar';b.style.height=(20+Math.random()*80)+'%';b.style.animationDelay=(Math.random()*.8)+'s';b.style.animationDuration=(.5+Math.random()*.6)+'s';wf.appendChild(b);}
 setInterval(()=>{wf.querySelectorAll('.wave-bar').forEach(b=>{b.style.height=(20+Math.random()*80)+'%';});const v=68+Math.floor(Math.random()*20);const el=document.getElementById('liveDb');if(el)el.textContent=v;},900);}
 
-// ── Toast ──
 let toastTimeout;
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';t.classList.remove('hide');clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>{t.classList.add('hide');setTimeout(()=>{t.style.display='none';},300);},3000);}
 
-// ── Login modal ──
+// ── Login  ──
 let pendingSeg='ciudadano';
 function openLogin(seg){if(seg)selectSegment(seg);document.getElementById('loginModal').classList.add('active');document.body.style.overflow='hidden';}
 function closeLogin(){document.getElementById('loginModal').classList.remove('active');document.body.style.overflow='';}
 document.getElementById('loginModal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeLogin();});
 function selectSegment(seg){pendingSeg=seg;document.querySelectorAll('.seg-chip').forEach(c=>c.classList.remove('active'));const chip=document.getElementById('chip-'+seg);if(chip)chip.classList.add('active');}
+function highlightSegment(seg){
+  document.querySelectorAll('.hsp-btn').forEach(c=>c.classList.remove('active'));
+  const chip=document.getElementById('chip-hero-'+seg);if(chip)chip.classList.add('active');
+  const all=['ciudadano','trabajador','profesional'];
+  const card=document.getElementById('seg-'+seg);if(!card)return;
+  setTimeout(()=>{
+    all.forEach(s=>{
+      const c=document.getElementById('seg-'+s);if(!c)return;
+      if(s===seg){c.classList.add('segment-highlight');c.classList.remove('dimmed');}
+      else{c.classList.add('dimmed');}
+    });
+    setTimeout(()=>{
+      card.classList.remove('segment-highlight');
+      all.forEach(s=>{const c=document.getElementById('seg-'+s);if(c)c.classList.remove('dimmed');});
+    },2200);
+  },400);
+}
+
+(function(){
+  const stickyCta=document.getElementById('stickyCta');
+  const hero=document.getElementById('inicio');
+  if(!stickyCta||!hero)return;
+  window.addEventListener('scroll',()=>{
+    const heroBottom=hero.getBoundingClientRect().bottom;
+    if(heroBottom<0)stickyCta.classList.add('show');
+    else stickyCta.classList.remove('show');
+  });
+})();
 selectSegment('ciudadano');
 
-function updateEmailDisplay(val){const d=document.getElementById('loginEmailDisplay');if(val.length>3){d.textContent='👤 Sesión como: '+val;d.classList.add('show');}else{d.classList.remove('show');}}
+function updateEmailDisplay(val){const d=document.getElementById('loginEmailDisplay');if(val.length>3){d.textContent='👤 Signed in as: '+val;d.classList.add('show');}else{d.classList.remove('show');}}
 
-// ── Enter dashboard ──
+// ── El dashboard ──
 function enterDash(){
   const nombreEl=document.getElementById('loginNombre');
   const apellidoEl=document.getElementById('loginApellido');
@@ -31,7 +56,6 @@ function enterDash(){
   const passEl=document.getElementById('loginPass');
   const errEl=document.getElementById('loginError');
 
-  // Validaciones
   const nombre=(nombreEl.value||'').trim();
   const apellido=(apellidoEl.value||'').trim();
   const email=(emailEl.value||'').trim();
@@ -40,33 +64,33 @@ function enterDash(){
   errEl.style.display='none';
 
   if(!nombre){
-    errEl.textContent='⚠️ Por favor ingresa tu nombre.';
+    errEl.textContent='⚠️ Please enter your first name.';
     errEl.style.display='block';
     nombreEl.focus();return;
   }
   if(!apellido){
-    errEl.textContent='⚠️ Por favor ingresa tu apellido.';
+    errEl.textContent='⚠️ Please enter your last name.';
     errEl.style.display='block';
     apellidoEl.focus();return;
   }
   if(!email){
-    errEl.textContent='⚠️ Por favor ingresa tu correo electrónico.';
+    errEl.textContent='⚠️ Please enter your email address.';
     errEl.style.display='block';
     emailEl.focus();return;
   }
   if(!email.includes('@')){
-    errEl.textContent='⚠️ El correo ingresado no es válido. Debe incluir el símbolo "@" (ejemplo: usuario@correo.com).';
+    errEl.textContent='⚠️ The email entered is not valid. It must include the "@" symbol (example: user@email.com).';
     errEl.style.display='block';
     emailEl.focus();return;
   }
   const emailParts=email.split('@');
   if(emailParts.length!==2||!emailParts[0]||!emailParts[1]||!emailParts[1].includes('.')){
-    errEl.textContent='⚠️ El formato del correo no es válido. Ejemplo correcto: usuario@correo.com';
+    errEl.textContent='⚠️ The email format is not valid. Correct example: user@email.com';
     errEl.style.display='block';
     emailEl.focus();return;
   }
   if(!pass||pass.length<6){
-    errEl.textContent='⚠️ La contraseña debe tener al menos 6 caracteres.';
+    errEl.textContent='⚠️ The password must be at least 6 characters long.';
     errEl.style.display='block';
     passEl.focus();return;
   }
@@ -78,13 +102,13 @@ function enterDash(){
   window.scrollTo(0,0);
 
   const fullName=nombre+' '+apellido;
-  const segLabels={ciudadano:'Ciudadano',trabajador:'Trabajador',profesional:'Profesional de Salud'};
-  const subs={ciudadano:'Monitorea tu exposición sonora diaria en Lima',trabajador:'Registro de exposición laboral — Ley N° 29783',profesional:'Seguimiento clínico de pacientes expuestos a ruido'};
+  const segLabels={ciudadano:'Citizen',trabajador:'Worker',profesional:'Health Professional'};
+  const subs={ciudadano:'Monitor your daily sound exposure in Lima',trabajador:'Occupational exposure record — Law No. 29783',profesional:'Clinical follow-up of patients exposed to noise'};
   const initials=(nombre[0]||'')+(apellido[0]||'');
 
   document.getElementById('dashAvatar').textContent=initials.toUpperCase();
   document.getElementById('dashUserLabel').textContent=fullName;
-  document.getElementById('dashGreet').textContent='👋 Bienvenido, '+nombre;
+  document.getElementById('dashGreet').textContent='👋 Welcome, '+nombre;
   document.getElementById('dashSub').textContent=subs[pendingSeg]||'';
   document.getElementById('profileAvatarLg').textContent=initials.toUpperCase();
   document.getElementById('profileName').textContent=fullName;
@@ -92,14 +116,19 @@ function enterDash(){
   document.getElementById('pfNombre').value=nombre;
   document.getElementById('pfApellido').value=apellido;
   document.getElementById('pfEmail').value=email;
-  document.getElementById('pfSegmento').value=segLabels[pendingSeg]||'Ciudadano';
+  document.getElementById('pfSegmento').value=segLabels[pendingSeg]||'Citizen';
 
   document.querySelectorAll('.seg-dash').forEach(d=>d.classList.remove('active'));
   const target=document.getElementById('dash-'+pendingSeg);
   if(target)target.classList.add('active');
 
+  document.querySelectorAll('.zones-wrap').forEach(z=>z.style.display='none');
+  const zoneIds={ciudadano:'zonesCiudadano',trabajador:'zonesTrabajador',profesional:'zonesProfesional'};
+  const activeZones=document.getElementById(zoneIds[pendingSeg]);
+  if(activeZones)activeZones.style.display='flex';
+
   showDashPanel('panel');
-  setTimeout(()=>initMaps(),400);
+  requestMicAccess();
 }
 
 function backToLanding(){
@@ -109,11 +138,13 @@ function backToLanding(){
   window.scrollTo(0,0);
 }
 
-// ── Full i18n translations ──
 const i18n={
   es:{
     nav_inicio:'Inicio',nav_problema:'Problema',nav_beneficios:'Beneficios',nav_funcionalidades:'Funcionalidades',nav_planes:'Planes',nav_faq:'Preguntas frecuentes',nav_contacto:'Contacto',nav_login:'Iniciar sesión',
-    hero_eyebrow:'🔊 Protección auditiva inteligente',hero_h1a:'Monitorea el ruido.',hero_h1b:'Protege tu audición.',
+    hero_eyebrow:'🔊 Protección auditiva inteligente',hero_h1_l1:'Tus oídos no te avisan',hero_h1_l2:'cuando el ruido los daña.',hero_h1_l3:'AudioSafe sí.',
+    dbx_c_lead:'¿Qué es un dB?',dbx_c_body:'El decibel (dB) mide qué tan fuerte es un sonido. Desde 65 dB tu oído empieza a esforzarse; por encima de 85 dB sostenidos, el ruido puede dañar tu audición.',
+    dbx_w_lead:'¿Qué es un dB?',dbx_w_body:'El decibel (dB) mide la intensidad del sonido. SUNAFIL establece 85 dB como el límite seguro de exposición ocupacional durante una jornada de 8 horas.',
+    dbx_p_lead:'¿Qué es un dB?',dbx_p_body:'El decibel (dB) mide la intensidad del sonido en una escala logarítmica: cada +10 dB se percibe como aproximadamente el doble de fuerte. La OMS recomienda no superar 53 dB en zonas urbanas.',
     hero_p:'AudioSafe mide los niveles sonoros en tiempo real, genera mapas colaborativos y emite alertas personalizadas para que cuides tu salud auditiva en entornos urbanos y laborales de Lima.',
     hero_btn_start:'Comenzar ahora',hero_btn_how:'Cómo funciona',
     hero_stat1_label:'umbral de riesgo laboral',hero_stat2_label:'monitoreo en tiempo real',hero_stat3_label:'segmentos atendidos',
@@ -135,10 +166,14 @@ const i18n={
     seg1_btn:'Ver dashboard ciudadano',
     seg2_h:'Trabajadores en zonas ruidosas',seg2_p:'Operarios, mecánicos, músicos y empleados en entornos con ruido laboral sostenido.',
     seg2_li1:'Registro verificable de exposición diaria.',seg2_li2:'Alertas cuando superas el límite de 85 dB.',seg2_li3:'Historial exportable para uso médico-laboral.',seg2_li4:'Cumplimiento de normativa SUNAFIL / Ley 29783.',
+    seg2_note:'ℹ️ SUNAFIL es el organismo peruano que fiscaliza la seguridad laboral; la Ley N° 29783 establece los límites legales de exposición al ruido en el trabajo.',
     seg2_btn:'Ver dashboard trabajador',
     seg3_h:'Profesionales de salud',seg3_p:'Médicos ORL, neurólogos y personal de salud ocupacional de clínicas.',
     seg3_li1:'Historial de exposición de sus pacientes.',seg3_li2:'Informes exportables para diagnóstico clínico.',seg3_li3:'Análisis de zonas críticas por área geográfica.',seg3_li4:'Panel de seguimiento longitudinal auditivo.',
     seg3_btn:'Ver dashboard profesional',seg_featured:'Más completo',
+    glance_msg:'restantes en esta zona antes de tu descanso auditivo obligatorio',
+    glance_sub:'Nivel actual: 92 dB · Zona crítica (límite SUNAFIL: 85 dB)',
+    glance_show:'📊 Ver panel detallado',glance_hide:'✕ Ocultar panel detallado',
     feature_eyebrow:'Funcionalidades',feature_h2:'Todo lo necesario para proteger tu audición',
     feat1_h:'Medición en tiempo real',feat1_p:'Niveles de ruido precisos usando el micrófono de tu dispositivo, sin hardware adicional.',
     feat2_h:'Mapas colaborativos',feat2_p:'Visualiza zonas de ruido en Lima generadas por la comunidad de usuarios.',
@@ -189,7 +224,8 @@ const i18n={
     modal_btn_login:'Iniciar sesión',
     dash_panel:'📊 Panel',dash_mapa:'🗺️ Mapa',dash_historial:'📁 Historial',dash_alertas:'🔔 Alertas',dash_configurar:'⚙️ Configurar',dash_perfil:'👤 Mi Perfil',dash_exit:'← Salir',
     dash_greeting:'Panel de control',
-    btn_stop:'⏹ Detener monitoreo',btn_start:'▶️ Iniciar monitoreo',btn_report:'📊 Generar informe',btn_share:'📍 Compartir ubicación',
+    btn_stop:'⏹ Detener monitoreo',btn_start:'▶️ Iniciar monitoreo',btn_report:'📊 Exportar CSV',btn_export_pdf:'📄 Exportar informe (PDF)',btn_share:'📍 Compartir ubicación',
+    mic_error:'No pudimos acceder a tu micrófono. Activa los permisos en la configuración de tu navegador.',mic_retry:'🔄 Reintentar',
     kpi_c1:'Nivel actual',kpi_c2:'Exposición hoy',kpi_c3:'Alertas activas',kpi_c4:'Dosis semanal',
     kpi_c1_trend:'↑ Por encima del límite',kpi_c2_sub:'De 8h máximo',kpi_c3_trend:'↑ 1 nueva hoy',kpi_c4_trend:'↓ Bajo control',
     chart_today:'Historial — últimas 12h',tag_today:'HOY',
@@ -197,7 +233,7 @@ const i18n={
     alert1_p:'Nivel crítico detectado',alert1_s:'95 dB · Av. Javier Prado · hace 2h',
     alert2_p:'Zona moderadamente ruidosa',alert2_s:'72 dB · Miraflores · hace 4h',
     alert3_p:'Nivel seguro',alert3_s:'48 dB · Parque Kennedy · hace 6h',
-    panel_map:'Mapa de zonas — Lima',map_legend1:'Crítico >85dB',map_legend2:'Moderado 65–85dB',map_legend3:'Seguro <65dB',
+    panel_map:'Mapa de zonas — Lima',map_legend1:'Seguro <65dB',map_legend2:'Moderado 65–85dB',map_legend3:'Crítico >85dB',map_last_update:'Última actualización: hace 2 min',
     panel_recs:'Recomendaciones',
     rec1_p:'Usa tapones auditivos',rec1_s:'Si estarás más de 1h en zona de alto ruido.',
     rec2_p:'Toma un descanso auditivo',rec2_s:'Evita auriculares por las próximas 2 horas.',
@@ -215,6 +251,22 @@ const i18n={
     panel_patients:'Panel de pacientes',tag_clinical:'CLÍNICO',
     th_patient:'Paciente',th_sector:'Sector',th_exposure:'Exposición',th_risk:'Riesgo',
     panel_risk_dist:'Distribución por riesgo',
+    riskdist_critical:'Crítico (>90 dB)',riskdist_high:'Alto (85–90 dB)',riskdist_moderate:'Moderado (65–85 dB)',riskdist_safe:'Seguro (<65 dB)',
+    label_patient:'paciente',label_patients:'pacientes',
+    btn_gen_report:'📊 Generar informe institucional (CSV)',
+    panel_hist_compare:'📈 Comparación histórica de niveles',tag_6months:'6 MESES',
+    legend_normal:'Normal <65 dB',legend_moderate_risk:'Riesgo moderado 65–85 dB',legend_high_risk:'Riesgo alto >85 dB',
+    months_short:'Ene,Feb,Mar,Abr,May,Jun',
+    chart_peak_prefix:'⚠️ Pico:',
+    hist_compare_caption:'Comparación del nivel promedio (izquierda) frente al nivel máximo (derecha) reportado por los pacientes cada mes. Pasa el cursor sobre cada barra para ver el detalle y el nivel de riesgo.',
+    tt_avg:'promedio',tt_max:'máx.',
+    tt_risk_normal:'Normal',tt_risk_moderate:'Riesgo moderado',tt_risk_high:'Riesgo alto',
+    panel_prevent:'🩺 Recomendaciones preventivas',
+    prevent1_p:'Protección auditiva obligatoria',prevent1_s:'Recomendar tapones o auriculares certificados para exposiciones >85 dB.',
+    prevent2_p:'Descansos auditivos programados',prevent2_s:'Sugerir descansos de 15 min cada 2h en ambientes ruidosos.',
+    prevent3_p:'Audiometría periódica',prevent3_s:'Chequeo anual para pacientes con dosis recurrente >80%.',
+    prevent4_p:'Derivación a especialista ORL',prevent4_s:'Los pacientes en riesgo crítico deben ser evaluados dentro de 7 días.',
+    toast_updating_map:'🔄 Actualizando puntos del mapa...',
     map_panel_title:'🗺️ Mapa de ruido — Lima Metropolitana',tag_live:'EN VIVO',
     btn_refresh:'🔄 Actualizar',btn_add_point:'📍 Agregar mi punto',btn_export_map:'📥 Exportar mapa',
     add_point_hint:'📍 Haz clic en el mapa para colocar tu punto',map_last_update:'Última actualización: hace 2 min',
@@ -235,9 +287,17 @@ const i18n={
     cfg_email_h:'Alertas por correo',cfg_email_s:'Resumen diario al email',
     cfg_night_h:'Modo silencio nocturno',cfg_night_s:'Sin alertas entre 10pm–7am',
     zones_title:'📍 Zonas de monitoreo',
-    zone1_n:'📍 Casa',zone1_s:'Miraflores, Lima',zone_active:'Activa',
-    zone2_n:'💼 Trabajo',zone2_s:'San Isidro, Lima',zone_moderate:'Moderado',
-    zone3_n:'🏋️ Gimnasio',zone3_s:'Surco, Lima',zone_critical:'Crítico',
+    zone_active:'Activa',zone_moderate:'Moderado',zone_critical:'Crítico',
+    status_high_risk:'Riesgo alto',status_exceeds_limit:'Supera el límite',status_moderate:'Moderado',status_safe:'Seguro',status_critical:'Crítico',status_high:'Alto',
+    zone_ciu1_n:'📍 Casa',zone_ciu1_s:'Miraflores, Lima · 58 dB',
+    zone_ciu2_n:'💼 Trabajo',zone_ciu2_s:'San Isidro, Lima · 78 dB',
+    zone_ciu3_n:'🏋️ Gimnasio',zone_ciu3_s:'Surco, Lima · 91 dB',
+    zone_trab1_n:'🏭 Planta de producción',zone_trab1_s:'Zona industrial, Ate · 92 dB',
+    zone_trab2_n:'🔧 Taller de mantenimiento',zone_trab2_s:'Callao · 84 dB',
+    zone_trab3_n:'🧰 Oficina administrativa',zone_trab3_s:'Callao · 58 dB',
+    zone_prof1_n:'🏥 Consultorio ORL',zone_prof1_s:'Clínica San Felipe, Jesús María · 52 dB',
+    zone_prof2_n:'🩺 Sala de espera',zone_prof2_s:'Clínica San Felipe · 68 dB',
+    zone_prof3_n:'🏭 Visita a planta industrial',zone_prof3_s:'Zona industrial norte · 89 dB',
     btn_add_zone:'+ Agregar zona',
     prefs_title:'🎛️ Preferencias de la aplicación',pref_theme:'Tema',pref_lang:'Idioma',pref_unit:'Unidad de medida',
     btn_change_theme:'Cambiar tema',btn_save_prefs:'💾 Guardar preferencias',
@@ -247,7 +307,10 @@ const i18n={
   },
   en:{
     nav_inicio:'Home',nav_problema:'Problem',nav_beneficios:'Benefits',nav_funcionalidades:'Features',nav_planes:'Plans',nav_faq:'FAQ',nav_contacto:'Contact',nav_login:'Sign in',
-    hero_eyebrow:'🔊 Smart hearing protection',hero_h1a:'Monitor noise.',hero_h1b:'Protect your hearing.',
+    hero_eyebrow:'🔊 Smart hearing protection',hero_h1_l1:'Your ears don\'t warn you',hero_h1_l2:'when noise damages them.',hero_h1_l3:'AudioSafe does.',
+    dbx_c_lead:'What is a dB?',dbx_c_body:'The decibel (dB) measures how loud a sound is. From 65 dB your ear starts to strain; above 85 dB sustained, noise can damage your hearing.',
+    dbx_w_lead:'What is a dB?',dbx_w_body:'The decibel (dB) measures sound intensity. SUNAFIL sets 85 dB as the safe occupational exposure limit during an 8-hour workday.',
+    dbx_p_lead:'What is a dB?',dbx_p_body:'The decibel (dB) measures sound intensity on a logarithmic scale: every +10 dB is perceived as roughly twice as loud. The WHO recommends not exceeding 53 dB in urban areas.',
     hero_p:'AudioSafe measures sound levels in real time, generates collaborative maps and sends personalized alerts to protect your hearing health in urban and work environments in Lima.',
     hero_btn_start:'Get started',hero_btn_how:'How it works',
     hero_stat1_label:'occupational risk threshold',hero_stat2_label:'real-time monitoring',hero_stat3_label:'segments served',
@@ -269,10 +332,14 @@ const i18n={
     seg1_btn:'View citizen dashboard',
     seg2_h:'Workers in noisy areas',seg2_p:'Operators, mechanics, musicians and employees in sustained occupational noise environments.',
     seg2_li1:'Verifiable daily exposure record.',seg2_li2:'Alerts when you exceed the 85 dB limit.',seg2_li3:'Exportable history for medical-work use.',seg2_li4:'Compliance with SUNAFIL / Law 29783 regulations.',
+    seg2_note:'ℹ️ SUNAFIL is the Peruvian agency that oversees workplace safety; Law No. 29783 sets the legal limits for noise exposure at work.',
     seg2_btn:'View worker dashboard',
     seg3_h:'Health professionals',seg3_p:'ENT doctors, neurologists and occupational health staff at clinics.',
     seg3_li1:'Exposure history of their patients.',seg3_li2:'Exportable reports for clinical diagnosis.',seg3_li3:'Analysis of critical zones by geographic area.',seg3_li4:'Longitudinal auditory follow-up panel.',
     seg3_btn:'View professional dashboard',seg_featured:'Most complete',
+    glance_msg:'left in this zone before your mandatory hearing break',
+    glance_sub:'Current level: 92 dB · Critical zone (SUNAFIL limit: 85 dB)',
+    glance_show:'📊 View detailed panel',glance_hide:'✕ Hide detailed panel',
     feature_eyebrow:'Features',feature_h2:'Everything you need to protect your hearing',
     feat1_h:'Real-time measurement',feat1_p:'Precise noise levels using your device microphone, no additional hardware required.',
     feat2_h:'Collaborative maps',feat2_p:'Visualize noise zones in Lima generated by the user community.',
@@ -323,7 +390,8 @@ const i18n={
     modal_btn_login:'Sign in',
     dash_panel:'📊 Dashboard',dash_mapa:'🗺️ Map',dash_historial:'📁 History',dash_alertas:'🔔 Alerts',dash_configurar:'⚙️ Settings',dash_perfil:'👤 My Profile',dash_exit:'← Exit',
     dash_greeting:'Control panel',
-    btn_stop:'⏹ Stop monitoring',btn_start:'▶️ Start monitoring',btn_report:'📊 Generate report',btn_share:'📍 Share location',
+    btn_stop:'⏹ Stop monitoring',btn_start:'▶️ Start monitoring',btn_report:'📊 Export CSV',btn_export_pdf:'📄 Export report (PDF)',btn_share:'📍 Share location',
+    mic_error:'We couldn\u2019t access your microphone. Enable permissions in your browser settings.',mic_retry:'🔄 Retry',
     kpi_c1:'Current level',kpi_c2:'Exposure today',kpi_c3:'Active alerts',kpi_c4:'Weekly dose',
     kpi_c1_trend:'↑ Above limit',kpi_c2_sub:'Of 8h maximum',kpi_c3_trend:'↑ 1 new today',kpi_c4_trend:'↓ Under control',
     chart_today:'History — last 12h',tag_today:'TODAY',
@@ -331,7 +399,7 @@ const i18n={
     alert1_p:'Critical level detected',alert1_s:'95 dB · Av. Javier Prado · 2h ago',
     alert2_p:'Moderately noisy zone',alert2_s:'72 dB · Miraflores · 4h ago',
     alert3_p:'Safe level',alert3_s:'48 dB · Parque Kennedy · 6h ago',
-    panel_map:'Zone map — Lima',map_legend1:'Critical >85dB',map_legend2:'Moderate 65-85dB',map_legend3:'Safe <65dB',
+    panel_map:'Zone map — Lima',map_legend1:'Safe <65dB',map_legend2:'Moderate 65-85dB',map_legend3:'Critical >85dB',map_last_update:'Last update: 2 min ago',
     panel_recs:'Recommendations',
     rec1_p:'Use earplugs',rec1_s:'If you will be in a high-noise zone for more than 1h.',
     rec2_p:'Take a hearing rest',rec2_s:'Avoid headphones for the next 2 hours.',
@@ -349,6 +417,22 @@ const i18n={
     panel_patients:'Patient panel',tag_clinical:'CLINICAL',
     th_patient:'Patient',th_sector:'Sector',th_exposure:'Exposure',th_risk:'Risk',
     panel_risk_dist:'Risk distribution',
+    riskdist_critical:'Critical (>90 dB)',riskdist_high:'High (85–90 dB)',riskdist_moderate:'Moderate (65–85 dB)',riskdist_safe:'Safe (<65 dB)',
+    label_patient:'patient',label_patients:'patients',
+    btn_gen_report:'📊 Generate institutional report (CSV)',
+    panel_hist_compare:'📈 Historical level comparison',tag_6months:'6 MONTHS',
+    legend_normal:'Normal <65 dB',legend_moderate_risk:'Moderate Risk 65–85 dB',legend_high_risk:'High Risk >85 dB',
+    months_short:'Jan,Feb,Mar,Apr,May,Jun',
+    chart_peak_prefix:'⚠️ Peak:',
+    hist_compare_caption:'Comparison of average level (left) vs. maximum level (right) reported by patients each month. Hover over each bar to see detail and risk level.',
+    tt_avg:'average',tt_max:'max',
+    tt_risk_normal:'Normal',tt_risk_moderate:'Moderate Risk',tt_risk_high:'High Risk',
+    panel_prevent:'🩺 Preventive recommendations',
+    prevent1_p:'Mandatory hearing protection',prevent1_s:'Recommend certified plugs or headphones for exposures >85 dB.',
+    prevent2_p:'Scheduled hearing breaks',prevent2_s:'Suggest 15-min breaks every 2h in noisy environments.',
+    prevent3_p:'Periodic audiometry',prevent3_s:'Annual check-up for patients with recurring dose >80%.',
+    prevent4_p:'Referral to ENT specialist',prevent4_s:'Patients at Critical risk should be evaluated within 7 days.',
+    toast_updating_map:'🔄 Updating map points...',
     map_panel_title:'🗺️ Noise map — Metropolitan Lima',tag_live:'LIVE',
     btn_refresh:'🔄 Refresh',btn_add_point:'📍 Add my point',btn_export_map:'📥 Export map',
     add_point_hint:'📍 Click on the map to place your noise point',map_last_update:'Last update: 2 min ago',
@@ -369,9 +453,17 @@ const i18n={
     cfg_email_h:'Email alerts',cfg_email_s:'Daily email summary',
     cfg_night_h:'Night silence mode',cfg_night_s:'No alerts between 10pm-7am',
     zones_title:'📍 Monitoring zones',
-    zone1_n:'📍 Home',zone1_s:'Miraflores, Lima',zone_active:'Active',
-    zone2_n:'💼 Work',zone2_s:'San Isidro, Lima',zone_moderate:'Moderate',
-    zone3_n:'🏋️ Gym',zone3_s:'Surco, Lima',zone_critical:'Critical',
+    zone_active:'Active',zone_moderate:'Moderate',zone_critical:'Critical',
+    status_high_risk:'High risk',status_exceeds_limit:'Exceeds limit',status_moderate:'Moderate',status_safe:'Safe',status_critical:'Critical',status_high:'High',
+    zone_ciu1_n:'📍 Home',zone_ciu1_s:'Miraflores, Lima · 58 dB',
+    zone_ciu2_n:'💼 Work',zone_ciu2_s:'San Isidro, Lima · 78 dB',
+    zone_ciu3_n:'🏋️ Gym',zone_ciu3_s:'Surco, Lima · 91 dB',
+    zone_trab1_n:'🏭 Production plant',zone_trab1_s:'Industrial zone, Ate · 92 dB',
+    zone_trab2_n:'🔧 Maintenance workshop',zone_trab2_s:'Callao · 84 dB',
+    zone_trab3_n:'🧰 Administrative office',zone_trab3_s:'Callao · 58 dB',
+    zone_prof1_n:'🏥 ENT office',zone_prof1_s:'Clínica San Felipe, Jesús María · 52 dB',
+    zone_prof2_n:'🩺 Waiting room',zone_prof2_s:'Clínica San Felipe · 68 dB',
+    zone_prof3_n:'🏭 Industrial plant visit',zone_prof3_s:'North industrial zone · 89 dB',
     btn_add_zone:'+ Add zone',
     prefs_title:'🎛️ App preferences',pref_theme:'Theme',pref_lang:'Language',pref_unit:'Measurement unit',
     btn_change_theme:'Change theme',btn_save_prefs:'💾 Save preferences',
@@ -381,7 +473,10 @@ const i18n={
   },
   zh:{
     nav_inicio:'首页',nav_problema:'问题',nav_beneficios:'优势',nav_funcionalidades:'功能',nav_planes:'计划',nav_faq:'常见问题',nav_contacto:'联系',nav_login:'登录',
-    hero_eyebrow:'🔊 智能听力保护',hero_h1a:'监测噪音。',hero_h1b:'保护您的听力。',
+    hero_eyebrow:'🔊 智能听力保护',hero_h1_l1:'耳朵不会提前警告你,',hero_h1_l2:'但噪音正在悄悄伤害它。',hero_h1_l3:'AudioSafe 会。',
+    dbx_c_lead:'什么是分贝（dB）？',dbx_c_body:'分贝（dB）用来衡量声音的响度。超过 65 dB，耳朵就开始感到压力；长时间处于 85 dB 以上，噪音可能损害您的听力。',
+    dbx_w_lead:'什么是分贝（dB）？',dbx_w_body:'分贝（dB）用来衡量声音强度。SUNAFIL（秘鲁劳动监察局）规定，8 小时工作日内 85 dB 为安全职业暴露上限。',
+    dbx_p_lead:'什么是分贝（dB）？',dbx_p_body:'分贝（dB）以对数刻度衡量声音强度：每增加 10 dB，响度大约感知为原来的两倍。世卫组织建议城市地区不超过 53 dB。',
     hero_p:'AudioSafe实时测量声级，生成协作地图，发送个性化警报，帮助您在利马的城市和工作环境中保护听力健康。',
     hero_btn_start:'立即开始',hero_btn_how:'如何使用',
     hero_stat1_label:'职业风险阈值',hero_stat2_label:'实时监测',hero_stat3_label:'服务细分群体',
@@ -403,10 +498,14 @@ const i18n={
     seg1_btn:'查看市民仪表板',
     seg2_h:'噪声区工人',seg2_p:'操作员、机械师、音乐家和持续噪声工作环境中的员工。',
     seg2_li1:'可核查的每日暴露记录。',seg2_li2:'超过85分贝限值时发出警报。',seg2_li3:'可导出的医疗/工作历史记录。',seg2_li4:'符合SUNAFIL/第29783号法律规定。',
+    seg2_note:'ℹ️ SUNAFIL是秘鲁负责监督劳动安全的机构；第29783号法律规定了工作场所噪音暴露的法定限值。',
     seg2_btn:'查看工人仪表板',
     seg3_h:'健康专业人员',seg3_p:'诊所的耳鼻喉科医生、神经科医生和职业健康人员。',
     seg3_li1:'患者的暴露历史。',seg3_li2:'可导出的临床诊断报告。',seg3_li3:'按地理区域分析关键区域。',seg3_li4:'纵向听力随访面板。',
     seg3_btn:'查看专业人员仪表板',seg_featured:'最全面',
+    glance_msg:'后需要在此区域进行强制听力休息',
+    glance_sub:'当前水平：92 dB · 危急区域（SUNAFIL 限值：85 dB）',
+    glance_show:'📊 查看详细面板',glance_hide:'✕ 隐藏详细面板',
     feature_eyebrow:'功能',feature_h2:'保护听力所需的一切',
     feat1_h:'实时测量',feat1_p:'使用设备麦克风精确测量噪声级，无需额外硬件。',
     feat2_h:'协作地图',feat2_p:'可视化利马用户社区生成的噪声区。',
@@ -457,7 +556,8 @@ const i18n={
     modal_btn_login:'登录',
     dash_panel:'📊 面板',dash_mapa:'🗺️ 地图',dash_historial:'📁 历史',dash_alertas:'🔔 警报',dash_configurar:'⚙️ 设置',dash_perfil:'👤 我的档案',dash_exit:'← 退出',
     dash_greeting:'控制面板',
-    btn_stop:'⏹ 停止监测',btn_start:'▶️ 开始监测',btn_report:'📊 生成报告',btn_share:'📍 分享位置',
+    btn_stop:'⏹ 停止监测',btn_start:'▶️ 开始监测',btn_report:'📊 导出CSV',btn_export_pdf:'📄 导出报告（PDF）',btn_share:'📍 分享位置',
+    mic_error:'我们无法访问您的麦克风。请在浏览器设置中启用权限。',mic_retry:'🔄 重试',
     kpi_c1:'当前级别',kpi_c2:'今日暴露',kpi_c3:'活跃警报',kpi_c4:'每周剂量',
     kpi_c1_trend:'↑ 超过限值',kpi_c2_sub:'最多8小时',kpi_c3_trend:'↑ 今天1个新警报',kpi_c4_trend:'↓ 受控',
     chart_today:'历史记录 — 最近12小时',tag_today:'今天',
@@ -465,7 +565,7 @@ const i18n={
     alert1_p:'检测到危急级别',alert1_s:'95 dB · Av. Javier Prado · 2小时前',
     alert2_p:'中度嘈杂区域',alert2_s:'72 dB · Miraflores · 4小时前',
     alert3_p:'安全级别',alert3_s:'48 dB · Parque Kennedy · 6小时前',
-    panel_map:'区域地图 — 利马',map_legend1:'危急 >85dB',map_legend2:'中等 65-85dB',map_legend3:'安全 <65dB',
+    panel_map:'区域地图 — 利马',map_legend1:'安全 <65dB',map_legend2:'中等 65-85dB',map_legend3:'危急 >85dB',map_last_update:'最后更新：2 分钟前',
     panel_recs:'建议',
     rec1_p:'使用耳塞',rec1_s:'如果您将在高噪声区待超过1小时。',
     rec2_p:'休息耳朵',rec2_s:'接下来2小时内避免使用耳机。',
@@ -483,6 +583,22 @@ const i18n={
     panel_patients:'患者面板',tag_clinical:'临床',
     th_patient:'患者',th_sector:'行业',th_exposure:'暴露',th_risk:'风险',
     panel_risk_dist:'风险分布',
+    riskdist_critical:'危急 (>90 dB)',riskdist_high:'较高 (85–90 dB)',riskdist_moderate:'中等 (65–85 dB)',riskdist_safe:'安全 (<65 dB)',
+    label_patient:'位患者',label_patients:'位患者',
+    btn_gen_report:'📊 生成机构报告 (CSV)',
+    panel_hist_compare:'📈 历史水平对比',tag_6months:'6个月',
+    legend_normal:'正常 <65 dB',legend_moderate_risk:'中等风险 65–85 dB',legend_high_risk:'高风险 >85 dB',
+    months_short:'1月,2月,3月,4月,5月,6月',
+    chart_peak_prefix:'⚠️ 峰值：',
+    hist_compare_caption:'每月患者报告的平均水平（左）与最高水平（右）对比。将鼠标悬停在每个柱形上可查看详情和风险等级。',
+    tt_avg:'平均',tt_max:'最高',
+    tt_risk_normal:'正常',tt_risk_moderate:'中等风险',tt_risk_high:'高风险',
+    panel_prevent:'🩺 预防建议',
+    prevent1_p:'强制听力防护',prevent1_s:'建议对暴露 >85 dB 的情况使用认证耳塞或耳罩。',
+    prevent2_p:'定期听力休息',prevent2_s:'在噪声环境中每2小时建议休息15分钟。',
+    prevent3_p:'定期听力检测',prevent3_s:'对反复剂量 >80% 的患者进行年度检查。',
+    prevent4_p:'转诊耳鼻喉科专家',prevent4_s:'处于危急风险的患者应在7天内接受评估。',
+    toast_updating_map:'🔄 正在更新地图点位...',
     map_panel_title:'🗺️ 噪声地图 — 利马大都市',tag_live:'直播',
     btn_refresh:'🔄 刷新',btn_add_point:'📍 添加我的点',btn_export_map:'📥 导出地图',
     add_point_hint:'📍 点击地图放置您的噪声点',map_last_update:'上次更新：2分钟前',
@@ -503,9 +619,17 @@ const i18n={
     cfg_email_h:'电子邮件警报',cfg_email_s:'每日邮件摘要',
     cfg_night_h:'夜间静音模式',cfg_night_s:'晚上10点至早上7点无警报',
     zones_title:'📍 监测区域',
-    zone1_n:'📍 家',zone1_s:'Miraflores, 利马',zone_active:'活跃',
-    zone2_n:'💼 工作',zone2_s:'San Isidro, 利马',zone_moderate:'中等',
-    zone3_n:'🏋️ 健身房',zone3_s:'Surco, 利马',zone_critical:'危急',
+    zone_active:'活跃',zone_moderate:'中等',zone_critical:'危急',
+    status_high_risk:'高风险',status_exceeds_limit:'超出限值',status_moderate:'中等',status_safe:'安全',status_critical:'危急',status_high:'较高',
+    zone_ciu1_n:'📍 家',zone_ciu1_s:'Miraflores, 利马 · 58 dB',
+    zone_ciu2_n:'💼 工作',zone_ciu2_s:'San Isidro, 利马 · 78 dB',
+    zone_ciu3_n:'🏋️ 健身房',zone_ciu3_s:'Surco, 利马 · 91 dB',
+    zone_trab1_n:'🏭 生产工厂',zone_trab1_s:'工业区，Ate · 92 dB',
+    zone_trab2_n:'🔧 维修车间',zone_trab2_s:'Callao · 84 dB',
+    zone_trab3_n:'🧰 行政办公室',zone_trab3_s:'Callao · 58 dB',
+    zone_prof1_n:'🏥 耳鼻喉科诊室',zone_prof1_s:'圣费利佩诊所，Jesús María · 52 dB',
+    zone_prof2_n:'🩺 候诊室',zone_prof2_s:'圣费利佩诊所 · 68 dB',
+    zone_prof3_n:'🏭 工业厂区巡查',zone_prof3_s:'北部工业区 · 89 dB',
     btn_add_zone:'+ 添加区域',
     prefs_title:'🎛️ 应用偏好',pref_theme:'主题',pref_lang:'语言',pref_unit:'测量单位',
     btn_change_theme:'更换主题',btn_save_prefs:'💾 保存偏好',
@@ -516,18 +640,15 @@ const i18n={
 };
 let currentLang='es';
 
-function setLang(lang){
+function setLang(lang,silent){
   currentLang=lang;
   const t=i18n[lang]||i18n.es;
 
-  // NAV
   const navMap={inicio:'nav_inicio',problema:'nav_problema',beneficios:'nav_beneficios',funcionalidades:'nav_funcionalidades',planes:'nav_planes',faq:'nav_faq',contacto:'nav_contacto'};
   document.querySelectorAll('.nav-links a').forEach(a=>{const href=(a.getAttribute('href')||'').replace('#','');if(navMap[href])a.textContent=t[navMap[href]];});
   document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(t[k])el.textContent=t[k];});
 
   // HERO
-  const heroH1=document.querySelector('.hero-content h1');
-  if(heroH1){const em=heroH1.querySelector('em');if(em){heroH1.childNodes[0].textContent=t.hero_h1a+'\n';em.textContent=t.hero_h1b;}}
   const heroPara=document.querySelector('.hero-content>p');if(heroPara)heroPara.textContent=t.hero_p;
   const heroStart=document.querySelector('.hero-actions .btn-primary');if(heroStart)heroStart.textContent=t.hero_btn_start;
   const heroHow=document.querySelector('.hero-actions .btn-secondary');if(heroHow)heroHow.textContent=t.hero_btn_how;
@@ -535,9 +656,7 @@ function setLang(lang){
   if(heroStats[0])heroStats[0].querySelector('span').textContent=t.hero_stat1_label;
   if(heroStats[1])heroStats[1].querySelector('span').textContent=t.hero_stat2_label;
   if(heroStats[2])heroStats[2].querySelector('span').textContent=t.hero_stat3_label;
-  const heroEyebrow=document.querySelector('.hero-content .eyebrow');if(heroEyebrow)heroEyebrow.textContent=t.hero_eyebrow;
 
-  // MONITOR CARD
   const monLabel=document.querySelector('.monitor-header .label');if(monLabel)monLabel.textContent=t.label_current_level;
   const liveBadge=document.querySelector('.live-badge');if(liveBadge)liveBadge.innerHTML='<span class="live-dot"></span> '+t.label_live;
   const mpills=document.querySelectorAll('.metric-pill');
@@ -547,20 +666,16 @@ function setLang(lang){
   const floatAlert=document.querySelector('.float-alert');
   if(floatAlert){floatAlert.querySelector('strong').textContent=t.float_alert_title;floatAlert.querySelector('span').textContent=t.float_alert_body;}
 
-  // SECTION EYEBROWS (only section-heading ones, not hero)
   const sectionEyebrows=document.querySelectorAll('.section-heading .eyebrow');
   const sEyeKeys=['problem_eyebrow','benefit_eyebrow','feature_eyebrow','how_eyebrow','plans_eyebrow','faq_eyebrow','contact_eyebrow'];
   sectionEyebrows.forEach((el,i)=>{if(sEyeKeys[i])el.textContent=t[sEyeKeys[i]];});
-  // H2s
   const sH2s=document.querySelectorAll('.section-heading h2');
   const sH2Keys=['problem_h2','benefit_h2','feature_h2','how_h2','plans_h2','faq_h2','contact_heading'];
   sH2s.forEach((el,i)=>{if(sH2Keys[i])el.textContent=t[sH2Keys[i]];});
-  // Paras
   const sPs=document.querySelectorAll('.section-heading>p');
   const sPKeys=['problem_p','benefit_p',null,null,null,null,'contact_p'];
   sPs.forEach((el,i)=>{if(sPKeys[i])el.textContent=t[sPKeys[i]];});
 
-  // PROBLEMA CARDS
   const probCards=document.querySelectorAll('#problema .info-card');
   const probData=[['prob_c1_h','prob_c1_p'],['prob_c2_h','prob_c2_p'],['prob_c3_h','prob_c3_p'],['prob_c4_h','prob_c4_p'],['prob_c5_h','prob_c5_p'],['prob_c6_h','prob_c6_p']];
   probCards.forEach((card,i)=>{if(probData[i]){card.querySelector('h3').textContent=t[probData[i][0]];card.querySelector('p').textContent=t[probData[i][1]];}});
@@ -592,7 +707,6 @@ function setLang(lang){
   if(priceCards[1]){priceCards[1].querySelector('h3').textContent=t.plan2_h;priceCards[1].querySelector(':scope>p').textContent=t.plan2_p;const pn=priceCards[1].querySelector('.price-num');if(pn)pn.innerHTML=t.plan2_price+' <small>'+t.plan2_period+'</small>';const l=priceCards[1].querySelectorAll('ul li');['plan2_li1','plan2_li2','plan2_li3','plan2_li4','plan2_li5'].forEach((k,j)=>{if(l[j])l[j].textContent=t[k];});const b=priceCards[1].querySelector('.btn-plan');if(b)b.textContent=t.plan2_btn;const pt=priceCards[1].querySelector('.popular-tag');if(pt)pt.textContent=t.popular_tag;}
   if(priceCards[2]){priceCards[2].querySelector('h3').textContent=t.plan3_h;priceCards[2].querySelector(':scope>p').textContent=t.plan3_p;const pn=priceCards[2].querySelector('.price-num');if(pn)pn.textContent=t.plan3_price;const l=priceCards[2].querySelectorAll('ul li');['plan3_li1','plan3_li2','plan3_li3','plan3_li4','plan3_li5'].forEach((k,j)=>{if(l[j])l[j].textContent=t[k];});const b=priceCards[2].querySelector('.btn-plan');if(b)b.textContent=t.plan3_btn;}
 
-  // FAQ
   const faqs=document.querySelectorAll('.faq-list details');
   const faqData=[['faq1_q','faq1_a'],['faq2_q','faq2_a'],['faq3_q','faq3_a'],['faq4_q','faq4_a'],['faq5_q','faq5_a'],['faq6_q','faq6_a']];
   faqs.forEach((d,i)=>{if(faqData[i]){d.querySelector('summary').childNodes[0].textContent=t[faqData[i][0]];d.querySelector('p').textContent=t[faqData[i][1]];}});
@@ -623,18 +737,15 @@ function setLang(lang){
     const sendBtn=cForm.querySelector('button');if(sendBtn)sendBtn.textContent=t.contact_f_send;
   }
 
-  // CTA
   const ctaCard=document.querySelector('.cta-card');
   if(ctaCard){const h2=ctaCard.querySelector('h2');if(h2)h2.textContent=t.cta_h2;const p=ctaCard.querySelector('p');if(p)p.textContent=t.cta_p;const btn=ctaCard.querySelector('button');if(btn)btn.textContent=t.cta_btn;}
 
-  // FOOTER
   const footCopy=document.querySelector('.footer-bottom small');if(footCopy)footCopy.textContent=t.footer_copy;
   const footCols=document.querySelectorAll('.footer-col h4');
   if(footCols[1])footCols[1].textContent=t.footer_product;
   if(footCols[2])footCols[2].textContent=t.footer_company;
   if(footCols[3])footCols[3].textContent=t.footer_legal;
 
-  // MODAL
   const modalTitle=document.querySelector('.modal-title');if(modalTitle)modalTitle.textContent=t.modal_welcome;
   const modalSub=document.querySelector('.modal-sub');if(modalSub)modalSub.textContent=t.modal_sub;
   const modalLabels=document.querySelectorAll('#loginOverlay .form-group label');
@@ -657,16 +768,18 @@ function setLang(lang){
   const dnp=document.getElementById('dn-perfil');if(dnp)dnp.textContent=t.dash_perfil;
   const exitBtn=document.querySelector('.dash-nav .btn-ghost');if(exitBtn)exitBtn.textContent=t.dash_exit;
 
-  // DASHBOARD WELCOME
+  // DASHBOARD BIENVENIDA
   const dg=document.getElementById('dashGreet');if(dg)dg.textContent=t.dash_greeting;
 
-  // MONITOR CONTROLS
   const btnStop=document.getElementById('btnStop');if(btnStop)btnStop.textContent=monitoring?t.btn_stop:t.btn_start;
   const ctrlBtns=document.querySelectorAll('.monitor-controls .ctrl-btn');
   if(ctrlBtns[1])ctrlBtns[1].textContent=t.btn_report;
-  if(ctrlBtns[2])ctrlBtns[2].textContent=t.btn_share;
+  if(ctrlBtns[2])ctrlBtns[2].textContent=t.btn_export_pdf;
+  if(ctrlBtns[3])ctrlBtns[3].textContent=t.btn_share;
+  const micErr=document.getElementById('micErrorBanner');
+  if(micErr){const mt=micErr.querySelector('.mic-error-text');if(mt)mt.textContent=t.mic_error;const rb=micErr.querySelector('.mic-retry-btn');if(rb)rb.textContent=t.mic_retry;}
 
-  // KPI CIUDADANO
+  // CIUDADANO
   const kpiC=document.querySelectorAll('#dash-ciudadano .kpi-card');
   [['kpi_c1','kpi_c1_trend'],['kpi_c2','kpi_c2_sub'],['kpi_c3','kpi_c3_trend'],['kpi_c4','kpi_c4_trend']].forEach(([lk,tk],i)=>{
     if(!kpiC[i])return;const l=kpiC[i].querySelector('.kpi-label');if(l)l.textContent=t[lk];const tr=kpiC[i].querySelector('.kpi-trend');if(tr)tr.textContent=t[tk];
@@ -678,14 +791,18 @@ function setLang(lang){
   if(cAlerts[0]){const p=cAlerts[0].querySelector('.alert-body p');const s=cAlerts[0].querySelector('.alert-body small');if(p)p.textContent=t.alert1_p;if(s)s.textContent=t.alert1_s;}
   if(cAlerts[1]){const p=cAlerts[1].querySelector('.alert-body p');const s=cAlerts[1].querySelector('.alert-body small');if(p)p.textContent=t.alert2_p;if(s)s.textContent=t.alert2_s;}
   if(cAlerts[2]){const p=cAlerts[2].querySelector('.alert-body p');const s=cAlerts[2].querySelector('.alert-body small');if(p)p.textContent=t.alert3_p;if(s)s.textContent=t.alert3_s;}
-  if(cPanels[2]){const pt=cPanels[2].querySelector('.panel-title');if(pt)pt.textContent=t.panel_map;}
-  if(cPanels[3]){const pt=cPanels[3].querySelector('.panel-title');if(pt)pt.textContent=t.panel_recs;}
-  const recs=document.querySelectorAll('#dash-ciudadano .dash-panel:nth-child(4) .alert-item');
-  if(recs[0]){const ab=recs[0].querySelector('.alert-body');if(ab){const p=ab.querySelector('p');const s=ab.querySelector('small');if(p)p.textContent=t.rec1_p;if(s)s.textContent=t.rec1_s;}}
-  if(recs[1]){const ab=recs[1].querySelector('.alert-body');if(ab){const p=ab.querySelector('p');const s=ab.querySelector('small');if(p)p.textContent=t.rec2_p;if(s)s.textContent=t.rec2_s;}}
-  if(recs[2]){const ab=recs[2].querySelector('.alert-body');if(ab){const p=ab.querySelector('p');const s=ab.querySelector('small');if(p)p.textContent=t.rec3_p;if(s)s.textContent=t.rec3_s;}}
+  if(cPanels[2]){const pt=cPanels[2].querySelector('.panel-title');if(pt)pt.textContent=t.panel_recs;}
+  if(cAlerts[3]){const ab=cAlerts[3].querySelector('.alert-body');if(ab){const p=ab.querySelector('p');const s=ab.querySelector('small');if(p)p.textContent=t.rec1_p;if(s)s.textContent=t.rec1_s;}}
+  if(cAlerts[4]){const ab=cAlerts[4].querySelector('.alert-body');if(ab){const p=ab.querySelector('p');const s=ab.querySelector('small');if(p)p.textContent=t.rec2_p;if(s)s.textContent=t.rec2_s;}}
+  if(cAlerts[5]){const ab=cAlerts[5].querySelector('.alert-body');if(ab){const p=ab.querySelector('p');const s=ab.querySelector('small');if(p)p.textContent=t.rec3_p;if(s)s.textContent=t.rec3_s;}}
 
-  // KPI TRABAJADOR
+  // GLANCE CARD TRABAJADOR
+  const gMsg=document.getElementById('glanceMsg');if(gMsg)gMsg.textContent=t.glance_msg;
+  const gSub=document.getElementById('glanceSub');if(gSub)gSub.textContent=t.glance_sub;
+  const gBtn=document.getElementById('glanceToggleBtn');
+  if(gBtn)gBtn.textContent=(document.getElementById('workerDetail')&&document.getElementById('workerDetail').style.display!=='none')?t.glance_hide:t.glance_show;
+
+  // TRABAJADOR
   const kpiW=document.querySelectorAll('#dash-trabajador .kpi-card');
   [['kpi_w1','kpi_w1_trend'],['kpi_w2','kpi_w2_trend'],['kpi_w3','kpi_w3_trend'],['kpi_w4','kpi_w4_trend']].forEach(([lk,tk],i)=>{
     if(!kpiW[i])return;const l=kpiW[i].querySelector('.kpi-label');if(l)l.textContent=t[lk];const tr=kpiW[i].querySelector('.kpi-trend');if(tr)tr.textContent=t[tk];
@@ -702,7 +819,7 @@ function setLang(lang){
     const eb=wPanels[2].querySelector('button');if(eb)eb.textContent=t.btn_export_csv;
   }
 
-  // KPI PROFESIONAL
+  // PROFESIONAL
   const kpiP=document.querySelectorAll('#dash-profesional .kpi-card');
   [['kpi_p1','kpi_p1_trend'],['kpi_p2','kpi_p2_trend'],['kpi_p3','kpi_p3_sub'],['kpi_p4','kpi_p4_trend']].forEach(([lk,tk],i)=>{
     if(!kpiP[i])return;const l=kpiP[i].querySelector('.kpi-label');if(l)l.textContent=t[lk];const tr=kpiP[i].querySelector('.kpi-trend');if(tr)tr.textContent=t[tk];
@@ -710,9 +827,47 @@ function setLang(lang){
   const pPanels=document.querySelectorAll('#dash-profesional .dash-panel');
   if(pPanels[0]){const pt=pPanels[0].querySelector('.panel-title');if(pt){const tag=pt.querySelector('.pt-tag');pt.childNodes[0].textContent=t.panel_patients+' ';if(tag)tag.textContent=t.tag_clinical;}
     const ths=pPanels[0].querySelectorAll('th');[t.th_patient,t.th_sector,t.th_exposure,t.th_dose,t.th_risk].forEach((v,i)=>{if(ths[i])ths[i].textContent=v;});}
-  if(pPanels[1]){const pt=pPanels[1].querySelector('.panel-title');if(pt)pt.textContent=t.panel_risk_dist;}
+  if(pPanels[1]){
+    const pt=pPanels[1].querySelector('.panel-title');if(pt)pt.textContent=t.panel_risk_dist;
+    const genBtn=pPanels[1].querySelector('.btn-secondary');if(genBtn)genBtn.textContent=t.btn_gen_report;
+    const progItems=pPanels[1].querySelectorAll('.prog-item .prog-header span:first-child');
+    const rdKeys=['riskdist_critical','riskdist_high','riskdist_moderate','riskdist_safe'];
+    progItems.forEach((el,i)=>{if(rdKeys[i]&&t[rdKeys[i]])el.textContent=t[rdKeys[i]];});
+  }
 
-  // MAPA PANEL
+  const histPanel2=document.getElementById('histComparePanel');
+  if(histPanel2){
+    const pt=histPanel2.querySelector('.panel-title');
+    if(pt){const tag=pt.querySelector('.pt-tag');pt.childNodes[0].textContent=t.panel_hist_compare+' ';if(tag)tag.textContent=t.tag_6months;}
+    const legendSpans=histPanel2.querySelectorAll('.chart-risk-legend>span');
+    const legendKeys=['legend_normal','legend_moderate_risk','legend_high_risk'];
+    legendSpans.forEach((el,i)=>{if(!legendKeys[i])return;const dot=el.querySelector('.risk-dot');el.textContent=' '+t[legendKeys[i]];if(dot)el.prepend(dot);});
+    const months=(t.months_short||'Jan,Feb,Mar,Apr,May,Jun').split(',');
+    const monthLabels=histPanel2.querySelectorAll('#histCompareLabels span');
+    monthLabels.forEach((el,i)=>{const m=months[Math.floor(i/2)];if(m)el.textContent=m;});
+
+    const monthData=[[58,'tt_risk_normal',70,'tt_risk_moderate'],[55,'tt_risk_normal',74,'tt_risk_moderate'],[71,'tt_risk_moderate',87,'tt_risk_high'],[57,'tt_risk_normal',93,'tt_risk_high'],[69,'tt_risk_moderate',95,'tt_risk_high'],[53,'tt_risk_normal',73,'tt_risk_moderate']];
+    const bars=histPanel2.querySelectorAll('#histCompareBars .chart-bar');
+    monthData.forEach(([avg,avgKey,max,maxKey],i)=>{
+      const m=months[i];
+      const avgBar=bars[i*2],maxBar=bars[i*2+1];
+      if(avgBar)avgBar.title=`${m} (${t.tt_avg}): ${avg} dB — ${t[avgKey]}`;
+      if(maxBar)maxBar.title=`${m} (${t.tt_max}): ${max} dB — ${t[maxKey]}`;
+    });
+    const peakFlag=document.getElementById('chartPeakFlag');
+    if(peakFlag){const strong=peakFlag.querySelector('strong');if(strong)strong.textContent=t.tt_risk_high;peakFlag.childNodes[0].textContent=t.chart_peak_prefix+' '+(months[4]||'May')+' · ';}
+    const caption=document.getElementById('histCompareCaption');if(caption)caption.textContent=t.hist_compare_caption;
+  }
+
+  const preventPanel=document.getElementById('preventPanel');
+  if(preventPanel){
+    const pt=preventPanel.querySelector('.panel-title');if(pt)pt.textContent=t.panel_prevent;
+    const pItems=preventPanel.querySelectorAll('.alert-item');
+    const pData=[['prevent1_p','prevent1_s'],['prevent2_p','prevent2_s'],['prevent3_p','prevent3_s'],['prevent4_p','prevent4_s']];
+    pItems.forEach((item,i)=>{if(!pData[i])return;const p=item.querySelector('.alert-body p');const s=item.querySelector('.alert-body small');if(p)p.textContent=t[pData[i][0]];if(s)s.textContent=t[pData[i][1]];});
+  }
+  updatePatientKPIs();
+
   const mapPanel=document.querySelector('#dp-mapa .dash-panel');
   if(mapPanel){
     const pt=mapPanel.querySelector('.panel-title');if(pt){const tag=pt.querySelector('.pt-tag');pt.childNodes[0].textContent=t.map_panel_title+' ';if(tag)tag.textContent=t.tag_live;}
@@ -721,7 +876,6 @@ function setLang(lang){
     const hint=document.getElementById('addPointHint');if(hint)hint.textContent=t.add_point_hint;
   }
 
-  // HISTORIAL PANEL
   const histPanel=document.querySelector('#dp-historial .dash-panel');
   if(histPanel){
     const pt=histPanel.querySelector('.panel-title');if(pt){const tag=pt.querySelector('.pt-tag');pt.childNodes[0].textContent=t.hist_title+' ';if(tag)tag.textContent=t.tag_30days;}
@@ -730,7 +884,6 @@ function setLang(lang){
     const ths=histPanel.querySelectorAll('th');[t.th_date,t.th_max,t.th_avg,t.th_dose,t.th_exptime,t.th_status].forEach((v,i)=>{if(ths[i])ths[i].textContent=v;});
   }
 
-  // ALERTAS PANEL
   const kpiA=document.querySelectorAll('#dp-alertas .kpi-card');
   [['kpi_a1','kpi_a1_trend'],['kpi_a2','kpi_a2_trend'],['kpi_a3','kpi_a3_trend'],['kpi_a4','kpi_a4_trend']].forEach(([lk,tk],i)=>{
     if(!kpiA[i])return;const l=kpiA[i].querySelector('.kpi-label');if(l)l.textContent=t[lk];const tr=kpiA[i].querySelector('.kpi-trend');if(tr)tr.textContent=t[tk];
@@ -751,7 +904,6 @@ function setLang(lang){
     });
   }
 
-  // CONFIGURAR PANEL
   const cfgPanels=document.querySelectorAll('#dp-configurar .dash-panel');
   if(cfgPanels[0]){
     const pt=cfgPanels[0].querySelector('.panel-title');if(pt)pt.textContent=t.config_alerts_title;
@@ -761,10 +913,6 @@ function setLang(lang){
   }
   if(cfgPanels[1]){
     const pt=cfgPanels[1].querySelector('.panel-title');if(pt)pt.textContent=t.zones_title;
-    const zi=cfgPanels[1].querySelectorAll('[style*="space-between"]');
-    if(zi[0]){const p=zi[0].querySelector('p');const s=zi[0].querySelector('small');const tg=zi[0].querySelector('.tag');if(p)p.textContent=t.zone1_n;if(s)s.textContent=t.zone1_s;if(tg)tg.textContent=t.zone_active;}
-    if(zi[1]){const p=zi[1].querySelector('p');const s=zi[1].querySelector('small');const tg=zi[1].querySelector('.tag');if(p)p.textContent=t.zone2_n;if(s)s.textContent=t.zone2_s;if(tg)tg.textContent=t.zone_moderate;}
-    if(zi[2]){const p=zi[2].querySelector('p');const s=zi[2].querySelector('small');const tg=zi[2].querySelector('.tag');if(p)p.textContent=t.zone3_n;if(s)s.textContent=t.zone3_s;if(tg)tg.textContent=t.zone_critical;}
     const azb=cfgPanels[1].querySelector('.ctrl-btn');if(azb)azb.textContent=t.btn_add_zone;
   }
   const prefsPanel=document.querySelector('#dp-configurar>div:last-child');
@@ -777,7 +925,6 @@ function setLang(lang){
     const sb=prefsPanel.querySelector('[onclick*="saveAppPreferences"]');if(sb)sb.textContent=t.btn_save_prefs;
   }
 
-  // PERFIL PANEL
   const profLabels=document.querySelectorAll('.profile-field label');
   ['label_name','label_lastname','label_email','label_phone','label_city','label_segment'].forEach((k,i)=>{if(profLabels[i])profLabels[i].textContent=t[k];});
   const spb=document.querySelector('[onclick="saveProfile()"]');if(spb)spb.textContent=t.btn_save_profile;
@@ -788,28 +935,82 @@ function setLang(lang){
   if(actDivs[1])actDivs[1].textContent=t.prof_alerts_recv;
   if(actDivs[2])actDivs[2].textContent=t.prof_reports;
 
-  // LANG BUTTONS
   document.querySelectorAll('.lang-opt').forEach(b=>b.classList.remove('active'));
   const activeLangBtn=document.getElementById('lopt-'+lang);if(activeLangBtn)activeLangBtn.classList.add('active');
   document.getElementById('langMenu').classList.remove('open');
-  showToast(lang==='es'?'🌐 Idioma: Español':lang==='en'?'🌐 Language: English':'🌐 语言: 中文');
+  if(!silent)showToast(lang==='es'?'🌐 Idioma: Español':lang==='en'?'🌐 Language: English':'🌐 语言: 中文');
 }
 function applyLanguage(lang){setLang(lang);}
 
 function toggleLangMenu(){document.getElementById('langMenu').classList.toggle('open');}
 document.addEventListener('click',e=>{if(!e.target.closest('.lang-selector')){const m=document.getElementById('langMenu');if(m)m.classList.remove('open');}});
+let currentUnit='dB_SPL';
+const UNIT_OFFSETS={dB_SPL:0,dBA:-2,dBC:3};
+const UNIT_LABELS={dB_SPL:'dB',dBA:'dB(A)',dBC:'dB(C)'};
+function unitSuffix(){return UNIT_LABELS[currentUnit]||'dB';}
+function convertDbValue(base){return Math.round(base+(UNIT_OFFSETS[currentUnit]||0));}
+
+function refreshAllDbDisplays(){
+  document.querySelectorAll('.db-auto').forEach(el=>{
+    const base=parseFloat(el.dataset.db);
+    if(!isNaN(base))el.textContent=convertDbValue(base);
+  });
+  document.querySelectorAll('.db-unit-auto').forEach(el=>{el.textContent=' '+unitSuffix();});
+  const thresholdSlider=document.getElementById('thresholdSlider');
+  const thresholdLabel=document.getElementById('thresholdValLabel');
+  if(thresholdSlider && thresholdLabel)thresholdLabel.textContent=thresholdSlider.value+' '+unitSuffix();
+  // Refresca marcadores del mapa (si ya están creados) para que su popup use la unidad activa
+  if(typeof refreshMapMarkersUnit==='function')refreshMapMarkersUnit();
+}
+
 function applyUnit(unit){
-  const labels={'dB_SPL':'📊 Unidad: dB (SPL) — nivel de presión sonora','dBA':'📊 Unidad: dB(A) — ponderado A (uso más común)','dBC':'📊 Unidad: dB(C) — ponderado C (sonidos de impacto)'};
-  showToast(labels[unit]||'Unidad actualizada');
-  // Update visible dB labels across the UI
-  document.querySelectorAll('.db-unit').forEach(el=>el.textContent=unit.replace('_',' ').replace('dB SPL','dB').split(' ')[0]);
+  currentUnit=unit;
+  refreshAllDbDisplays();
+  const labels={'dB_SPL':'📊 Unit: dB (SPL) — sound pressure level','dBA':'📊 Unit: dB(A) — A-weighted (most common use)','dBC':'📊 Unit: dB(C) — C-weighted (impact sounds)'};
+  showToast(labels[unit]||'Unit updated');
+}
+
+function wrapDbValues(root){
+  if(!root)return;
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{
+    acceptNode(node){
+      if(!node.nodeValue||!/\d+(?:\.\d+)?\s?dB\b/.test(node.nodeValue))return NodeFilter.FILTER_REJECT;
+      if(node.parentElement && node.parentElement.closest('.no-db-wrap'))return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+  const nodes=[];
+  let n;
+  while(n=walker.nextNode())nodes.push(n);
+  const re=/(\d+(?:\.\d+)?)\s?dB\b/g;
+  nodes.forEach(node=>{
+    const text=node.nodeValue;
+    const frag=document.createDocumentFragment();
+    let last=0,m;
+    re.lastIndex=0;
+    while(m=re.exec(text)){
+      frag.appendChild(document.createTextNode(text.slice(last,m.index)));
+      const numSpan=document.createElement('span');
+      numSpan.className='db-auto';
+      numSpan.dataset.db=m[1];
+      numSpan.textContent=m[1];
+      frag.appendChild(numSpan);
+      const unitSpan=document.createElement('span');
+      unitSpan.className='db-unit-auto';
+      unitSpan.textContent=' dB';
+      frag.appendChild(unitSpan);
+      last=re.lastIndex;
+    }
+    frag.appendChild(document.createTextNode(text.slice(last)));
+    node.parentNode.replaceChild(frag,node);
+  });
 }
 function saveAppPreferences(){
   const lang=document.getElementById('appLanguage');
   const unit=document.getElementById('appUnit');
-  const langName=lang?lang.options[lang.selectedIndex].text:'Español';
+  const langName=lang?lang.options[lang.selectedIndex].text:'English';
   const unitName=unit?unit.options[unit.selectedIndex].text:'dB (SPL)';
-  showToast('✅ Preferencias guardadas: '+langName+' · '+unitName);
+  showToast('✅ Preferences saved: '+langName+' · '+unitName);
 }
 
 // ── Button Functions ──
@@ -817,117 +1018,154 @@ function saveProfile(){
   const n=document.getElementById('pfNombre').value.trim();
   const a=document.getElementById('pfApellido').value.trim();
   const e=document.getElementById('pfEmail').value.trim();
-  if(!n||!a){showToast('⚠️ Nombre y apellido son obligatorios');return;}
-  if(!e.includes('@')){showToast('⚠️ Correo inválido: falta "@"');return;}
+  if(!n||!a){showToast('⚠️ First and last name are required');return;}
+  if(!e.includes('@')){showToast('⚠️ Invalid email: missing "@"');return;}
   const full=n+' '+a;
   document.getElementById('profileName').textContent=full;
   document.getElementById('profileEmail').textContent=e;
   document.getElementById('dashUserLabel').textContent=full;
   document.getElementById('dashAvatar').textContent=(n[0]||'')+(a[0]||'');
   document.getElementById('profileAvatarLg').textContent=(n[0]||'')+(a[0]||'');
-  showToast('✅ Perfil actualizado: '+full);
+  showToast('✅ Profile updated: '+full);
 }
 
 function changePassword(){
   const e=document.getElementById('pfEmail').value.trim();
-  if(!e||!e.includes('@')){showToast('⚠️ Correo inválido. Verifica el campo de correo.');return;}
-  showToast('📧 Correo de cambio de contraseña enviado a: '+e);
+  if(!e||!e.includes('@')){showToast('⚠️ Invalid email. Check the email field.');return;}
+  showToast('📧 Password reset email sent to: '+e);
 }
 
 function addZone(){
-  const name=prompt('Nombre de la nueva zona (ej: Trabajo, Gimnasio, Universidad):');
-  if(!name||!name.trim()){showToast('⚠️ Ingresa un nombre válido para la zona');return;}
-  const addr=prompt('Dirección o referencia:');
-  showToast('📍 Zona "'+name.trim()+'" agregada correctamente');
+  const name=prompt('Name of the new zone (e.g. Work, Gym, University):');
+  if(!name||!name.trim()){showToast('⚠️ Enter a valid name for the zone');return;}
+  const addr=prompt('Address or reference (e.g. Miraflores, Lima):');
+  if(!addr||!addr.trim()){showToast('⚠️ Enter a valid address or reference');return;}
+  const dbStr=prompt('Approximate noise level in that zone, in dB (e.g. 70):');
+  const db=parseFloat(dbStr);
+  if(isNaN(db)||db<30||db>140){showToast('⚠️ Invalid noise level. Must be between 30 and 140 dB');return;}
+  let riskClass,riskLabel;
+  if(db>=85){riskClass='tag-red';riskLabel='Critical';}
+  else if(db>=65){riskClass='tag-amber';riskLabel='Moderate';}
+  else{riskClass='tag-green';riskLabel='Safe';}
+  const list=document.getElementById('zones'+pendingSeg.charAt(0).toUpperCase()+pendingSeg.slice(1));
+  if(!list){showToast('⚠️ Zone list not found');return;}
+  const item=document.createElement('div');
+  item.className='zone-item';
+  item.style.cssText='padding:12px;background:var(--navy-mid);border-radius:var(--radius-md);display:flex;justify-content:space-between;align-items:center;gap:10px;';
+  item.innerHTML=`<div><p style="font-weight:600;font-size:.9rem;">📍 ${name.trim()}</p><small style="color:var(--muted);">${addr.trim()} · ${db} dB</small></div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span class="tag ${riskClass}">${riskLabel}</span>
+      <button class="ctrl-btn ctrl-btn-red" style="padding:5px 10px;font-size:.72rem;" onclick="this.closest('.zone-item').remove();showToast('🗑️ Zone deleted')" title="Delete zone">✕</button>
+    </div>`;
+  list.insertBefore(item,list.querySelector('button'));
+  wrapDbValues(item);
+  refreshAllDbDisplays();
+  showToast('✅ Zone "'+name.trim()+'" added successfully');
 }
 
 function configureAlerts(){
   showDashPanel('configurar');
-  showToast('⚙️ Panel de configuración de alertas abierto');
+  showToast('⚙️ Alert configuration panel opened');
 }
 
 function markAllRead(){
   document.querySelectorAll('.notif-dot').forEach(d=>d.style.display='none');
-  showToast('✅ Todas las alertas marcadas como leídas');
+  showToast('✅ All alerts marked as read');
 }
 
 function exportPDF(){
-  const name=document.getElementById('profileName')?.textContent||'Usuario';
+  const name=document.getElementById('profileName')?.textContent||'User';
   const now=new Date();
-  const dateStr=now.toLocaleDateString('es-PE',{year:'numeric',month:'long',day:'numeric'});
-  const timeStr=now.toLocaleTimeString('es-PE',{hour:'2-digit',minute:'2-digit'});
+  const dateStr=now.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  const timeStr=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
   const content=`============================================================
-  INFORME AudioSafe — Historial de Exposición Sonora
+  AudioSafe REPORT — Sound Exposure History
 ============================================================
-Usuario     : ${name}
-Fecha       : ${dateStr} ${timeStr}
-Segmento    : ${document.getElementById('pfSegmento')?.value||'Ciudadano'}
-Correo      : ${document.getElementById('profileEmail')?.textContent||'—'}
+User        : ${name}
+Date        : ${dateStr} ${timeStr}
+Segment     : ${document.getElementById('pfSegmento')?.value||'Citizen'}
+Email       : ${document.getElementById('profileEmail')?.textContent||'—'}
 ------------------------------------------------------------
-HISTORIAL DE EXPOSICIÓN — ÚLTIMOS 7 DÍAS
+EXPOSURE HISTORY — LAST 7 DAYS
 ------------------------------------------------------------
-Fecha              Nivel Máx.  Nivel Prom.  Dosis   Tiempo     Estado
-Jue 18 Jun 2026    92 dB       78 dB        87%     5h 40m     Riesgo alto
-Mié 17 Jun 2026    95 dB       82 dB        102%    6h 20m     Supera límite
-Mar 16 Jun 2026    88 dB       75 dB        74%     4h 50m     Moderado
-Lun 15 Jun 2026    76 dB       62 dB        38%     2h 10m     Seguro
-Dom 14 Jun 2026    60 dB       52 dB        18%     1h 20m     Seguro
-Sáb 13 Jun 2026    85 dB       74 dB        65%     4h 00m     Moderado
-Vie 12 Jun 2026    90 dB       80 dB        91%     5h 10m     Riesgo alto
+Date               Max Level   Avg Level    Dose    Time       Status
+Thu Jun 18, 2026   92 dB       78 dB        87%     5h 40m     High risk
+Wed Jun 17, 2026   95 dB       82 dB        102%    6h 20m     Exceeds limit
+Tue Jun 16, 2026   88 dB       75 dB        74%     4h 50m     Moderate
+Mon Jun 15, 2026   76 dB       62 dB        38%     2h 10m     Safe
+Sun Jun 14, 2026   60 dB       52 dB        18%     1h 20m     Safe
+Sat Jun 13, 2026   85 dB       74 dB        65%     4h 00m     Moderate
+Fri Jun 12, 2026   90 dB       80 dB        91%     5h 10m     High risk
 ------------------------------------------------------------
-RESUMEN
+SUMMARY
 ------------------------------------------------------------
-Nivel máximo registrado : 95 dB (Mié 17 Jun 2026)
-Dosis máxima            : 102% — Supera límite SUNAFIL
-Días en riesgo alto     : 3 de 7
-Exposición total        : 26h 00m en 7 días
+Maximum level recorded  : 95 dB (Wed Jun 17, 2026)
+Maximum dose            : 102% — Exceeds SUNAFIL limit
+Days at high risk       : 3 out of 7
+Total exposure          : 26h 00m over 7 days
 
-Umbral de referencia    : 85 dB (Ley 29783 / SUNAFIL)
-Límite diario seguro    : 8h a 85 dB
+Reference threshold     : 85 dB (Law 29783 / SUNAFIL)
+Safe daily limit        : 8h at 85 dB
 ------------------------------------------------------------
-RECOMENDACIONES
+RECOMMENDATIONS
 ------------------------------------------------------------
-• Usar protectores auditivos en jornadas >85 dB
-• Tomar descansos auditivos cada 2h de exposición
-• Consultar especialista ORL si la exposición persiste
+• Use hearing protection during shifts >85 dB
+• Take hearing breaks every 2h of exposure
+• See an ENT specialist if exposure persists
 ------------------------------------------------------------
-Generado por AudioSafe v4.0 — audiosafe.pe
-UPC IHC & Tecnologías Móviles · Lima, Perú
+Generated by AudioSafe v4.0 — audiosafe.pe
+UPC IHC & Mobile Technologies · Lima, Peru
 ============================================================`;
   const blob=new Blob([content],{type:'text/plain;charset=utf-8'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
   a.href=url;
-  a.download='AudioSafe_Informe_'+name.replace(/ /g,'_')+'_'+now.toISOString().slice(0,10)+'.txt';
+  a.download='AudioSafe_Report_'+name.replace(/ /g,'_')+'_'+now.toISOString().slice(0,10)+'.txt';
   a.click();
   URL.revokeObjectURL(url);
-  showToast('✅ Informe TXT descargado exitosamente');
+  showToast('✅ TXT report downloaded successfully');
 }
 
-function exportCSV(){
-  const name=document.getElementById('profileName')?.textContent||'Usuario';
-  const csv='Fecha,Nivel Max,Nivel Prom,Dosis,Tiempo,Estado\n18 Jun 2026,92 dB,78 dB,87%,5h 40m,Riesgo alto\n17 Jun 2026,95 dB,82 dB,102%,6h 20m,Supera límite\n16 Jun 2026,88 dB,75 dB,74%,4h 50m,Moderado\n15 Jun 2026,76 dB,62 dB,38%,2h 10m,Seguro';
-  const blob=new Blob([csv],{type:'text/csv'});
+function tableToCSVRows(table){
+  if(!table)return [];
+  return [...table.querySelectorAll('tr')]
+    .filter(row=>row.style.display!=='none')
+    .map(row=>[...row.children].map(cell=>cell.textContent.replace(/\s+/g,' ').trim()));
+}
+function rowsToCSV(rows){
+  return rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\r\n');
+}
+function downloadCSV(filename,csvContent){
+  const blob=new Blob(['\ufeff'+csvContent],{type:'text/csv;charset=utf-8;'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
-  a.href=url;a.download='AudioSafe_Historial.csv';a.click();
+  a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();
   URL.revokeObjectURL(url);
-  showToast('📊 Historial exportado en CSV exitosamente');
+}
+function dateStamp(){return new Date().toISOString().slice(0,10);}
+
+function exportCSV(tableId){
+  const table=tableId?document.getElementById(tableId):document.querySelector('.data-table');
+  if(!table){showToast('⚠️ Could not find the table to export');return;}
+  const rows=tableToCSVRows(table);
+  if(!rows.length){showToast('⚠️ No visible data to export');return;}
+  downloadCSV('AudioSafe_History_'+dateStamp()+'.csv',rowsToCSV(rows));
+  showToast('📊 History exported to CSV (Excel) successfully');
 }
 
 function exportMap(){
-  showToast('🗺️ Exportando mapa de ruido en PDF... Listo en instantes');
+  showToast('🗺️ Exporting noise map to PDF... Ready in a moment');
 }
 
 function filterByDate(){
-  const desde=prompt('Fecha de inicio (dd/mm/aaaa):');
-  if(!desde){showToast('⚠️ Ingresa una fecha de inicio válida');return;}
-  const hasta=prompt('Fecha de fin (dd/mm/aaaa):');
-  if(!hasta){showToast('⚠️ Ingresa una fecha de fin válida');return;}
-  const parseDate=s=>{const p=s.split('/');if(p.length!==3)return null;return new Date(+p[2],+p[1]-1,+p[0]);};
+  const desde=prompt('Start date (mm/dd/yyyy):');
+  if(!desde){showToast('⚠️ Enter a valid start date');return;}
+  const hasta=prompt('End date (mm/dd/yyyy):');
+  if(!hasta){showToast('⚠️ Enter a valid end date');return;}
+  const parseDate=s=>{const p=s.split('/');if(p.length!==3)return null;return new Date(+p[2],+p[0]-1,+p[1]);};
   const dStart=parseDate(desde);const dEnd=parseDate(hasta);
-  if(!dStart||isNaN(dStart)||!dEnd||isNaN(dEnd)){showToast('⚠️ Formato de fecha inválido. Usa dd/mm/aaaa');return;}
-  if(dStart>dEnd){showToast('⚠️ La fecha de inicio debe ser anterior a la fecha de fin');return;}
+  if(!dStart||isNaN(dStart)||!dEnd||isNaN(dEnd)){showToast('⚠️ Invalid date format. Use mm/dd/yyyy');return;}
+  if(dStart>dEnd){showToast('⚠️ The start date must be before the end date');return;}
   // Filter all data tables
   const tables=document.querySelectorAll('.data-table tbody');
   let shown=0,hidden=0;
@@ -936,12 +1174,11 @@ function filterByDate(){
       const cell=row.cells[0];if(!cell)return;
       const txt=cell.textContent.trim();
       // Try to parse date from cell (various formats)
-      const months={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11,Ene:0,Feb:1,Mié:2,Hoy:new Date().getMonth()};
-      const mES={Ene:0,Feb:1,Mar:2,Abr:3,May:4,Jun:5,Jul:6,Ago:7,Sep:8,Oct:9,Nov:10,Dic:11};
-      // Pattern: "Jue 18 Jun 2026" or "Hoy · Jue 18 Jun"
-      const m=txt.match(/(\d{1,2})\s+([A-Za-záéíóú]+)\s+(\d{4})/);
+      const monthsEN={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+      // Pattern: "Thu Jun 18, 2026" or "Today · Thu Jun 18"
+      const m=txt.match(/([A-Za-z]{3,})\s+(\d{1,2}),?\s+(\d{4})/);
       if(m){
-        const day=+m[1];const mon=mES[m[2]]??mES[m[2].slice(0,3)]??0;const yr=+m[3];
+        const mon=monthsEN[m[1].slice(0,3)]??0;const day=+m[2];const yr=+m[3];
         const rowDate=new Date(yr,mon,day);
         const visible=rowDate>=dStart&&rowDate<=dEnd;
         row.style.display=visible?'':'none';
@@ -949,69 +1186,170 @@ function filterByDate(){
       }
     });
   });
-  showToast(`📅 Filtro aplicado: ${desde} → ${hasta} (${shown} filas visibles)`);
+  showToast(`📅 Filter applied: ${desde} → ${hasta} (${shown} rows visible)`);
 }
 function resetDateFilter(){
   document.querySelectorAll('.data-table tbody tr').forEach(r=>r.style.display='');
-  showToast('🔄 Filtro de fecha eliminado');
+  showToast('🔄 Date filter cleared');
 }
 
-// ── Add noise point via map click (drag-to-place) ──
 let addPointMode=false;
 let addPointMarker=null;
 function activateAddPoint(){
-  if(!mapFull){showToast('🗺️ Primero abre el panel Mapa');return;}
+  if(!mapFull){showToast('🗺️ First open the Map panel');return;}
   addPointMode=true;
   document.getElementById('addPointHint').style.display='inline-flex';
   document.getElementById('btnAddPoint').style.background='var(--cyan)';
   document.getElementById('btnAddPoint').style.color='var(--navy)';
-  showToast('📍 Haz clic en el mapa para colocar tu punto de ruido');
+  showToast('📍 Click on the map to place your noise point');
   mapFull.once('click',function(e){
     addPointMode=false;
     document.getElementById('addPointHint').style.display='none';
     document.getElementById('btnAddPoint').style.background='';
     document.getElementById('btnAddPoint').style.color='';
-    const db=prompt('Nivel aproximado de ruido en dB (ej: 82):');
+    const db=prompt('Approximate noise level in dB (e.g. 82):');
     const dbNum=parseFloat(db);
-    if(isNaN(dbNum)||dbNum<30||dbNum>140){showToast('⚠️ Nivel de ruido inválido. Debe ser entre 30 y 140 dB');return;}
-    const loc=prompt('Nombre del lugar (ej: Av. Brasil, Lima):');
-    if(!loc||!loc.trim()){showToast('⚠️ Ingresa un nombre de lugar válido');return;}
+    if(isNaN(dbNum)||dbNum<30||dbNum>140){showToast('⚠️ Invalid noise level. Must be between 30 and 140 dB');return;}
+    const loc=prompt('Name of the place (e.g. Av. Brasil, Lima):');
+    if(!loc||!loc.trim()){showToast('⚠️ Enter a valid place name');return;}
     const risk=dbNum>=85?'red':dbNum>=65?'amber':'green';
     const col=colorMap[risk];
     const icon=L.divIcon({html:`<div style="width:16px;height:16px;background:${col};border:2.5px solid #fff;border-radius:50%;box-shadow:0 0 10px ${col}"></div>`,iconSize:[16,16],iconAnchor:[8,8],className:''});
     const marker=L.marker([e.latlng.lat,e.latlng.lng],{icon,draggable:true}).addTo(mapFull);
-    marker.bindPopup(`<b>📍 ${loc.trim()}</b><br>🔊 ${dbNum} dB<br><span style="color:${col}">● ${risk==='red'?'Crítico':risk==='amber'?'Moderado':'Seguro'}</span><br><small style="color:#888">Puedes arrastrar este marcador</small>`).openPopup();
-    showToast('✅ Punto agregado: '+loc.trim()+' — '+dbNum+' dB');
+    marker._noisePt={lat:e.latlng.lat,lng:e.latlng.lng,db:dbNum,name:loc.trim(),risk};
+    allNoiseMarkers.push(marker);
+    marker.bindPopup(`<b>📍 ${loc.trim()}</b><br>🔊 ${convertDbValue(dbNum)} ${unitSuffix()}<br><span style="color:${col}">● ${risk==='red'?'Critical':risk==='amber'?'Moderate':'Safe'}</span><br><small style="color:#888">You can drag this marker</small>`).openPopup();
+    showToast('✅ Point added: '+loc.trim()+' — '+dbNum+' dB');
   });
 }
 function addNoisePoint(){activateAddPoint();}
+function refreshMapPoints(){const t=i18n[currentLang]||i18n.es;showToast(t.toast_updating_map||'🔄 Updating map points...');}
 
 
+// ── Generar informe — ahora descarga un CSV/Excel real ──
 function generateReport(){
-  const name=document.getElementById('profileName')?.textContent||'Usuario';
-  showToast('📊 Generando informe institucional para '+name+'...');
+  const name=document.getElementById('profileName')?.textContent||'User';
+  const now=new Date();
+  const activeDash=document.querySelector('.seg-dash.active');
+  const rows=[['AudioSafe — Report'],['User',name],['Date',now.toLocaleString('en-US')],['Unit of measurement',unitSuffix()],[]];
+
+  if(activeDash){
+    rows.push(['Indicator','Value']);
+    activeDash.querySelectorAll('.kpi-card').forEach(card=>{
+      const label=card.querySelector('.kpi-label')?.textContent.trim()||'';
+      const value=card.querySelector('.kpi-value')?.textContent.trim().replace(/\s+/g,' ')||'';
+      rows.push([label,value]);
+    });
+  }
+
+  const patientTable=document.getElementById('tablePacientes');
+  if(patientTable && activeDash && activeDash.id==='dash-profesional'){
+    rows.push([]);
+    rows.push(['Patient panel']);
+    tableToCSVRows(patientTable).forEach(r=>rows.push(r));
+  }
+
+  const sunafilTable=document.getElementById('tableHistorialSunafil');
+  if(sunafilTable && activeDash && activeDash.id==='dash-trabajador'){
+    rows.push([]);
+    rows.push(['Daily exposure history (SUNAFIL)']);
+    tableToCSVRows(sunafilTable).forEach(r=>rows.push(r));
+  }
+
+  downloadCSV('AudioSafe_Report_'+name.replace(/\s+/g,'_')+'_'+dateStamp()+'.csv',rowsToCSV(rows));
+  showToast('✅ Report downloaded in CSV (Excel) format');
 }
 
-function shareLocation(){showToast('📍 Ubicación y nivel sonoro compartidos con la comunidad');}
+// ── Registro de pacientes por especialistas de salud ──
+function addPatient(){
+  const nombre=prompt('Patient name and age (e.g. Rosa T. · 40y):');
+  if(!nombre||!nombre.trim()){showToast('⚠️ Enter a valid name');return;}
+  const sector=prompt('Patient sector or activity (e.g. Construction, Office):');
+  if(!sector||!sector.trim()){showToast('⚠️ Enter a valid sector');return;}
+  const dbStr=prompt('Recorded exposure level, in dB (e.g. 82):');
+  const db=parseFloat(dbStr);
+  if(isNaN(db)||db<30||db>140){showToast('⚠️ Invalid noise level. Must be between 30 and 140 dB');return;}
+  const table=document.getElementById('tablePacientes');
+  if(!table){showToast('⚠️ Patient panel not found');return;}
+  const dosis=Math.min(999,Math.round((db/85)*100));
+  let riskClass,riskLabel;
+  if(db>=90){riskClass='tag-red';riskLabel='Critical';}
+  else if(db>=85){riskClass='tag-red';riskLabel='High';}
+  else if(db>=65){riskClass='tag-amber';riskLabel='Moderate';}
+  else{riskClass='tag-green';riskLabel='Safe';}
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td>${nombre.trim()}</td><td>${sector.trim()}</td><td>${db} dB</td><td>${dosis}%</td><td><span class="tag ${riskClass}">${riskLabel}</span></td>`;
+  table.querySelector('tbody').appendChild(tr);
+  wrapDbValues(tr);
+  refreshAllDbDisplays();
+  updatePatientKPIs();
+  showToast('✅ Patient registered: '+nombre.trim());
+}
+
+// Recalcula KPIs y distribución de riesgo del panel profesional a partir de la tabla real
+function updatePatientKPIs(){
+  const table=document.getElementById('tablePacientes');
+  if(!table)return;
+  const t=i18n[currentLang]||i18n.es;
+  const rows=[...table.querySelectorAll('tbody tr')];
+  const counts={status_critical:0,status_high:0,status_moderate:0,status_safe:0};
+  rows.forEach(r=>{
+    const tag=r.querySelector('.tag');
+    const key=tag?tag.getAttribute('data-i18n'):'';
+    if(key&&counts.hasOwnProperty(key))counts[key]++;
+  });
+  const total=rows.length;
+  const enRiesgo=counts.status_critical+counts.status_high;
+  const profDash=document.getElementById('dash-profesional');
+  if(profDash){
+    const kpiCards=profDash.querySelectorAll('.kpi-grid .kpi-card .kpi-value');
+    if(kpiCards[0])kpiCards[0].textContent=total;
+    if(kpiCards[1])kpiCards[1].textContent=enRiesgo;
+  }
+  const progItems=document.querySelectorAll('#dash-profesional .prog-item');
+  const order=['status_critical','status_high','status_moderate','status_safe'];
+  const patientWord=(n)=>n===1?(t.label_patient||'patient'):(t.label_patients||'patients');
+  progItems.forEach((item,i)=>{
+    const key=order[i];
+    const count=counts[key]||0;
+    const pct=total?Math.round((count/total)*100):0;
+    const headerSpans=item.querySelectorAll('.prog-header span');
+    if(headerSpans[1])headerSpans[1].textContent=count+' '+patientWord(count);
+    const fill=item.querySelector('.prog-fill');
+    if(fill)fill.style.width=pct+'%';
+  });
+}
+
+function shareLocation(){showToast('📍 Location and sound level shared with the community');}
 
 function resolveAlert(btn){
   const item=btn.closest('.alert-item');
   if(item){item.style.opacity='0.4';item.style.pointerEvents='none';}
-  showToast('✅ Alerta resuelta exitosamente');
+  showToast('✅ Alert resolved successfully');
 }
 
 function postponeAlert(btn){
   const item=btn.closest('.alert-item');
-  showToast('⏰ Alerta pospuesta por 2 horas');
+  showToast('⏰ Alert postponed for 2 hours');
 }
 
 function sendContactForm(){
-  const nombre=document.querySelector('.cf-group input[placeholder="Tu nombre"]')?.value.trim();
-  const apellido=document.querySelector('.cf-group input[placeholder="Tu apellido"]')?.value.trim();
+  const nombre=document.querySelector('.cf-group input[placeholder="Your first name"]')?.value.trim();
+  const apellido=document.querySelector('.cf-group input[placeholder="Your last name"]')?.value.trim();
   const email=document.querySelector('.cf-group input[type="email"]')?.value.trim();
-  if(!nombre){showToast('⚠️ Ingresa tu nombre en el formulario de contacto');return;}
-  if(!email||!email.includes('@')){showToast('⚠️ Correo inválido: debe incluir "@" (ej: nombre@correo.com)');return;}
-  showToast('✅ Mensaje enviado correctamente. Te contactaremos en menos de 24h.');
+  if(!nombre){showToast('⚠️ Enter your first name in the contact form');return;}
+  if(!email||!email.includes('@')){showToast('⚠️ Invalid email: must include "@" (e.g. name@email.com)');return;}
+  showToast('✅ Message sent successfully. We will contact you within 24h.');
+}
+
+// ── Glanceable UI (perfil Trabajador) ──
+function toggleWorkerDetail(){
+  const detail=document.getElementById('workerDetail');
+  const btn=document.getElementById('glanceToggleBtn');
+  if(!detail||!btn)return;
+  const showing=detail.style.display!=='none';
+  detail.style.display=showing?'none':'block';
+  btn.textContent=showing?'📊 View detailed panel':'✕ Hide detailed panel';
 }
 
 // ── Dashboard panels ──
@@ -1028,18 +1366,37 @@ function showDashPanel(panel){
 
 // ── Monitor controls ──
 let monitoring=true;
+let micStream=null;
+// Ayudar a reconocer y recuperarse de errores: si el micrófono falla, mostramos un aviso
+// claro y accionable en vez de dejar la app congelada o fallando en silencio.
+function requestMicAccess(){
+  const banner=document.getElementById('micErrorBanner');
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+    if(banner){banner.style.display='flex';const t=banner.querySelector('.mic-error-text');if(t)t.textContent='🎙️ Your browser does not support microphone access. Try a recent version of Chrome, Firefox or Edge.';}
+    return;
+  }
+  navigator.mediaDevices.getUserMedia({audio:true})
+    .then(stream=>{
+      micStream=stream;
+      if(banner)banner.style.display='none';
+    })
+    .catch(()=>{
+      // El monitoreo simulado sigue funcionando: el error de permisos nunca bloquea la interfaz.
+      if(banner){const t=banner.querySelector('.mic-error-text');if(t)t.textContent='🎙️ We couldn\'t access your microphone. Enable permissions in your browser settings.';banner.style.display='flex';}
+    });
+}
+function retryMicAccess(){showToast('🎙️ Requesting microphone access...');requestMicAccess();}
 function toggleMonitor(){
   monitoring=!monitoring;
   const btn=document.getElementById('btnStop');
-  if(monitoring){btn.textContent='⏹ Detener monitoreo';btn.className='ctrl-btn ctrl-btn-red';showToast('▶️ Monitoreo iniciado');}
-  else{btn.textContent='▶️ Iniciar monitoreo';btn.className='ctrl-btn ctrl-btn-green';showToast('⏹ Monitoreo detenido');}
+  if(monitoring){btn.textContent='⏹ Stop monitoring';btn.className='ctrl-btn ctrl-btn-red';showToast('▶️ Monitoring started');requestMicAccess();}
+  else{
+    btn.textContent='▶️ Start monitoring';btn.className='ctrl-btn ctrl-btn-green';showToast('⏹ Monitoring stopped');
+    const banner=document.getElementById('micErrorBanner');if(banner)banner.style.display='none';
+    if(micStream){micStream.getTracks().forEach(tr=>tr.stop());micStream=null;}
+  }
 }
-function generateReport(){showToast('📊 Generando informe... Listo en segundos.');}
-function exportPDF(){showToast('📥 Exportando informe PDF... Descarga iniciada.');}
-function shareLocation(){showToast('📍 Ubicación y nivel sonoro compartidos con la comunidad.');}
-function saveProfile(){const n=document.getElementById('pfNombre').value;const a=document.getElementById('pfApellido').value;showToast('✅ Perfil actualizado: '+n+' '+a);}
 
-// ── Leaflet Maps Lima ──
 // Puntos de ruido reales en Lima
 const noisePts=[
   {lat:-12.0688,lng:-77.0476,db:94,name:'Av. Javier Prado Este',risk:'red'},
@@ -1057,22 +1414,25 @@ const noisePts=[
 ];
 const colorMap={red:'#EF4444',amber:'#F59E0B',green:'#22C55E'};
 
-let mapDashC=null, mapFull=null;
+let mapFull=null;
+const allNoiseMarkers=[];
 function createNoiseMarker(map,pt){
   const col=colorMap[pt.risk];
   const icon=L.divIcon({html:`<div style="width:14px;height:14px;background:${col};border:2px solid #fff;border-radius:50%;box-shadow:0 0 8px ${col}"></div>`,iconSize:[14,14],iconAnchor:[7,7],className:''});
-  L.marker([pt.lat,pt.lng],{icon}).addTo(map).bindPopup(`<b>${pt.name}</b><br>🔊 ${pt.db} dB<br><span style="color:${col}">● ${pt.risk==='red'?'Crítico':pt.risk==='amber'?'Moderado':'Seguro'}</span>`);
+  const marker=L.marker([pt.lat,pt.lng],{icon}).addTo(map);
+  marker._noisePt=pt;
+  marker.bindPopup(`<b>${pt.name}</b><br>🔊 ${convertDbValue(pt.db)} ${unitSuffix()}<br><span style="color:${col}">● ${pt.risk==='red'?'Critical':pt.risk==='amber'?'Moderate':'Safe'}</span>`);
+  allNoiseMarkers.push(marker);
+}
+// Re-genera los popups de los marcadores fijos cuando cambia la unidad de medida
+function refreshMapMarkersUnit(){
+  allNoiseMarkers.forEach(marker=>{
+    const pt=marker._noisePt;if(!pt)return;
+    const col=colorMap[pt.risk];
+    marker.setPopupContent(`<b>${pt.name}</b><br>🔊 ${convertDbValue(pt.db)} ${unitSuffix()}<br><span style="color:${col}">● ${pt.risk==='red'?'Critical':pt.risk==='amber'?'Moderate':'Safe'}</span>`);
+  });
 }
 
-function initMaps(){
-  const isDark=document.documentElement.getAttribute('data-theme')==='dark';
-  const tiles='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-  const attr='© OpenStreetMap';
-  if(!mapDashC){
-    const mc=document.getElementById('mapDashC');
-    if(mc){mapDashC=L.map('mapDashC',{zoomControl:true,scrollWheelZoom:false}).setView([-12.0731,-77.0465],12);L.tileLayer(tiles,{attribution:attr}).addTo(mapDashC);noisePts.forEach(p=>createNoiseMarker(mapDashC,p));}
-  }
-}
 function initFullMap(){
   const tiles='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
   if(!mapFull){
@@ -1083,10 +1443,16 @@ function initFullMap(){
   }
 }
 
-// Fix Leaflet icon path issue
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({iconRetinaUrl:'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',iconUrl:'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',shadowUrl:'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png'});
 
-// ── Reveal on scroll ──
+
 const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.1});
 document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+// ── Inicialización de la unidad de medida ──
+wrapDbValues(document.getElementById('dashboard'));
+refreshAllDbDisplays();
+
+// ── Idioma por defecto: Español ──
+setLang('es', true);
