@@ -3,19 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AudioSafe | Protege tu salud auditiva</title>
+  <title>AudioSafe | Protect your hearing health</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <!-- Leaflet map -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-    <link rel="stylesheet" href="assets/styles/styles.css" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-<!-- LANDING -->
 <div id="landing">
 
-  <!-- NAV -->
+  <div class="sticky-cta" id="stickyCta">
+    <button class="btn btn-primary btn-hero" onclick="openLogin()">Start for free →</button>
+  </div>
+
   <header class="site-header">
     <nav class="navbar container">
       <a class="brand" href="#inicio">
@@ -44,30 +46,29 @@
             <text x="29" y="35.2" fill="white" font-size="6.5" font-family="Arial Black,Arial" font-weight="900">A</text>
           </svg>
         </div>
-        AudioSafe
+        <span class="brand-text">AudioSafe</span>
       </a>
       <div class="nav-links" id="navLinks">
-        <a href="#inicio">Inicio</a>
-        <a href="#problema">Problema</a>
-        <a href="#beneficios">Beneficios</a>
-        <a href="#funcionalidades">Funcionalidades</a>
-        <a href="#planes">Planes</a>
-        <a href="#faq">Preguntas frecuentes</a>
-        <a href="#contacto">Contacto</a>
+        <a href="#inicio">Home</a>
+        <a href="#problema">Problem</a>
+        <a href="#beneficios">Benefits</a>
+        <a href="#funcionalidades">Features</a>
+        <a href="#planes">Plans</a>
+        <a href="#faq">Help &amp; Contact</a>
       </div>
       <div class="nav-actions">
-        <button class="theme-btn" onclick="toggleTheme()" title="Cambiar tema">☀️</button>
+        <button class="theme-btn" onclick="toggleTheme()" title="Change theme">☀️</button>
         <!-- Language selector -->
         <div class="lang-selector" id="langSelector">
-          <button class="theme-btn lang-btn" onclick="toggleLangMenu()" title="Cambiar idioma" id="langBtnMain">🌐</button>
+          <button class="theme-btn lang-btn" onclick="toggleLangMenu()" title="Change language" id="langBtnMain">🌐</button>
           <div class="lang-menu" id="langMenu">
             <button onclick="setLang('es')" class="lang-opt active" id="lopt-es">🇵🇪 ES</button>
             <button onclick="setLang('en')" class="lang-opt" id="lopt-en">🇺🇸 EN</button>
             <button onclick="setLang('zh')" class="lang-opt" id="lopt-zh">🇨🇳 中</button>
           </div>
         </div>
-        <button class="btn btn-primary" onclick="openLogin()" data-i18n="nav_login">Iniciar sesión</button>
-        <button class="menu-toggle" onclick="toggleMenu()" id="menuBtn" aria-label="Menú">
+        <button class="btn btn-primary" onclick="openLogin()" data-i18n="nav_login">Sign in</button>
+        <button class="menu-toggle" onclick="toggleMenu()" id="menuBtn" aria-label="Menu">
           <span></span><span></span><span></span>
         </button>
       </div>
@@ -75,7 +76,6 @@
   </header>
 
   <main>
-    <!-- INICIO / HERO -->
     <section class="hero" id="inicio">
       <div class="hero-bg">
         <div class="hero-orb orb-1"></div>
@@ -83,42 +83,50 @@
       </div>
       <div class="container hero-grid">
         <div class="hero-content reveal">
-          <span class="eyebrow">🔊 Protección auditiva inteligente</span>
-          <h1>Monitorea el ruido.<br><em>Protege tu audición.</em></h1>
-          <p>AudioSafe mide los niveles sonoros en tiempo real, genera mapas colaborativos y emite alertas personalizadas para que cuides tu salud auditiva en entornos urbanos y laborales de Lima.</p>
+          <span class="eyebrow" data-i18n="hero_eyebrow">🔊 The app that protects your hearing</span>
+          <h1><span data-i18n="hero_h1_l1">Your ears don't warn you</span><br><span data-i18n="hero_h1_l2">when noise damages them.</span><br><em data-i18n="hero_h1_l3">AudioSafe does.</em></h1>
+          <p>Measure the sound around you in real time, get warned in time, and protect something that, once lost, never comes back.</p>
           <div class="hero-actions">
-            <button class="btn btn-primary" onclick="openLogin()">Comenzar ahora</button>
-            <a class="btn btn-secondary" href="#como-funciona">Cómo funciona</a>
+            <button class="btn btn-primary btn-hero cta-pulse" onclick="openLogin()">Start for free →</button>
+            <a class="btn-text-link" href="#como-funciona">or see how it works</a>
           </div>
-          <div class="hero-stats">
-            <div><strong>85 dB</strong><span>umbral de riesgo laboral</span></div>
-            <div><strong>24/7</strong><span>monitoreo en tiempo real</span></div>
-            <div><strong>3</strong><span>segmentos atendidos</span></div>
+          <div class="hero-trust-row">
+            <span>✓ No credit card required</span>
+            <span>✓ Ready in 2 minutes</span>
+            <span>✓ +1,200 people in Lima already use it</span>
           </div>
         </div>
         <div class="hero-visual reveal">
           <div class="monitor-card">
             <div class="monitor-header">
-              <span class="label">Nivel sonoro actual</span>
-              <span class="live-badge"><span class="live-dot"></span> EN VIVO</span>
+              <span class="label">Sound level now</span>
+              <span class="live-badge"><span class="live-dot"></span> LIVE</span>
             </div>
             <div class="db-display">
               <span class="db-value" id="liveDb">78</span>
               <div>
                 <span class="db-unit">dB</span>
-                <span class="db-label" style="display:block">SPL</span>
+                <span class="db-label" style="display:block">current level</span>
               </div>
             </div>
             <div class="waveform" id="waveform"></div>
             <div class="monitor-metrics">
-              <div class="metric-pill"><span class="m-label">Exposición</span><span class="m-value m-warn">3h 12m</span></div>
-              <div class="metric-pill"><span class="m-label">Zona</span><span class="m-value m-ok">Moderada</span></div>
-              <div class="metric-pill"><span class="m-label">Riesgo</span><span class="m-value m-warn">Medio</span></div>
+              <div class="metric-pill"><span class="m-label">Exposure</span><span class="m-value m-warn">3h 12m</span></div>
+              <div class="metric-pill"><span class="m-label">Zone</span><span class="m-value m-ok">Moderate</span></div>
+              <div class="metric-pill"><span class="m-label">Risk</span><span class="m-value m-warn">Medium</span></div>
             </div>
           </div>
           <div class="float-alert">
-            <strong>⚠️ Alerta preventiva</strong>
-            <span>Nivel supera 75 dB. Considera usar protección auditiva.</span>
+            <strong>⚠️ Preventive alert</strong>
+            <span>Level exceeds 75 dB. Consider using hearing protection.</span>
+          </div>
+          <div class="hero-segment-picker" role="group" aria-label="Customize your experience based on your profile">
+            <span class="hsp-label">How do you want to use AudioSafe?</span>
+            <div class="hsp-grid">
+              <a href="#beneficios" class="hsp-btn" id="chip-hero-ciudadano" onclick="highlightSegment('ciudadano')">🏙️ <strong>I'm a Citizen</strong><small>Urban citizen</small></a>
+              <a href="#beneficios" class="hsp-btn" id="chip-hero-trabajador" onclick="highlightSegment('trabajador')">⚙️ <strong>I'm a Worker</strong><small>Company worker</small></a>
+              <a href="#beneficios" class="hsp-btn" id="chip-hero-profesional" onclick="highlightSegment('profesional')">🩺 <strong>I'm a Professional</strong><small>Health specialist</small></a>
+            </div>
           </div>
         </div>
       </div>
@@ -128,17 +136,20 @@
     <section class="section-pad problem" id="problema">
       <div class="container">
         <div class="section-heading reveal">
-          <span class="eyebrow">Problemática</span>
-          <h2>El ruido afecta a millones sin que lo noten</h2>
-          <p>Lima registra niveles de 75–85 dB en avenidas principales, muy por encima del límite recomendado de 53 dB. El daño auditivo es silencioso y acumulativo.</p>
+          <span class="eyebrow">The Problem</span>
+          <h2>Noise affects millions without them noticing</h2>
+          <div class="stat-callout">
+            <strong>75–85 dB</strong>
+            <span>recorded by Lima on main avenues — well above the recommended limit of <strong style="color:var(--amber);">53 dB</strong> (WHO). Hearing damage is silent and cumulative.</span>
+          </div>
         </div>
         <div class="cards-grid">
-          <article class="info-card reveal"><span class="card-icon">📉</span><h3>Daño invisible</h3><p>La pérdida auditiva por ruido no duele al principio y se detecta tarde, cuando el daño ya es permanente.</p></article>
-          <article class="info-card reveal"><span class="card-icon">🏙️</span><h3>Ciudades ruidosas</h3><p>Más del 60% de la población urbana peruana vive en zonas con tráfico intenso y niveles de ruido peligrosos.</p></article>
-          <article class="info-card reveal"><span class="card-icon">🏭</span><h3>Riesgo laboral</h3><p>1 de cada 3 trabajadores en el mundo está expuesto a ruido superior a 85 dB durante su jornada laboral.</p></article>
-          <article class="info-card reveal"><span class="card-icon">🩺</span><h3>Diagnóstico tardío</h3><p>Los médicos no cuentan con datos objetivos de exposición histórica de sus pacientes para evaluar el riesgo real.</p></article>
-          <article class="info-card reveal"><span class="card-icon">📵</span><h3>Sin herramientas accesibles</h3><p>Las soluciones existentes son o demasiado técnicas o carecen de alertas personalizadas y mapas colaborativos.</p></article>
-          <article class="info-card reveal"><span class="card-icon">📈</span><h3>Crecimiento del problema</h3><p>Para el 2050, más de 2,500 millones de personas tendrán algún grado de pérdida auditiva (OMS, 2021).</p></article>
+          <article class="info-card reveal"><span class="card-icon">📉</span><h3>Invisible damage</h3><p>Noise-induced hearing loss doesn't hurt at first and is detected late, when the damage is already permanent.</p></article>
+          <article class="info-card reveal"><span class="card-icon">🏙️</span><h3>Noisy cities</h3><p>More than 60% of the Peruvian urban population lives in areas with heavy traffic and dangerous noise levels.</p></article>
+          <article class="info-card reveal"><span class="card-icon">🏭</span><h3>Occupational risk</h3><p>1 in 3 workers worldwide is exposed to noise above 85 dB during their workday.</p></article>
+          <article class="info-card reveal"><span class="card-icon">🩺</span><h3>Late diagnosis</h3><p>Doctors lack objective historical exposure data for their patients to assess the real risk.</p></article>
+          <article class="info-card reveal"><span class="card-icon">📵</span><h3>No accessible tools</h3><p>Existing solutions are either too technical or lack personalized alerts and collaborative maps.</p></article>
+          <article class="info-card reveal"><span class="card-icon">📈</span><h3>Growing problem</h3><p>By 2050, more than 2.5 billion people will have some degree of hearing loss (WHO, 2021).</p></article>
         </div>
       </div>
     </section>
@@ -147,68 +158,48 @@
     <section class="section-pad" id="beneficios">
       <div class="container">
         <div class="section-heading reveal">
-          <span class="eyebrow">Beneficios</span>
-          <h2>Una experiencia pensada para cada usuario</h2>
-          <p>AudioSafe adapta su valor a ciudadanos, trabajadores y profesionales de salud que necesitan gestionar su exposición sonora.</p>
+          <span class="eyebrow">Benefits</span>
+          <h2>An experience designed for every user</h2>
+          <p>AudioSafe adapts its value to citizens, workers, and health professionals who need to manage their sound exposure.</p>
         </div>
         <div class="segment-grid">
-          <article class="segment-card reveal">
+          <article class="segment-card reveal" id="seg-ciudadano">
             <div class="segment-icon">🏙️</div>
-            <h3>Ciudadanos urbanos</h3>
-            <p>Personas entre 18–60 años expuestas crónicamente al ruido de la ciudad.</p>
+            <h3>Urban citizens</h3>
+            <p>People between 18–60 years old chronically exposed to city noise.</p>
             <ul>
-              <li>Medición en tiempo real desde el smartphone.</li>
-              <li>Alertas cuando superas umbrales de riesgo.</li>
-              <li>Mapa de zonas ruidosas en tu ruta diaria.</li>
-              <li>Recomendaciones para proteger tu audición.</li>
+              <li>Real-time measurement from your smartphone.</li>
+              <li>Alerts when you exceed risk thresholds.</li>
+              <li>Map of noisy zones on your daily route.</li>
+              <li>Recommendations to protect your hearing.</li>
             </ul>
-            <button class="btn-segment" onclick="openLogin('ciudadano')">Ver dashboard ciudadano</button>
+            <button class="btn-segment" onclick="openLogin('ciudadano')">View citizen dashboard</button>
           </article>
-          <article class="segment-card featured reveal">
+          <article class="segment-card featured reveal" id="seg-trabajador">
             <div class="segment-icon">⚙️</div>
-            <h3>Trabajadores en zonas ruidosas</h3>
-            <p>Operarios, mecánicos, músicos y empleados en entornos con ruido laboral sostenido.</p>
+            <h3>Workers in noisy areas</h3>
+            <p>Operators, mechanics, musicians and employees in sustained occupational noise environments.</p>
             <ul>
-              <li>Registro verificable de exposición diaria.</li>
-              <li>Alertas cuando superas el límite de 85 dB.</li>
-              <li>Historial exportable para uso médico-laboral.</li>
-              <li>Cumplimiento de normativa SUNAFIL / Ley 29783.</li>
+              <li>Verifiable daily exposure record.</li>
+              <li>Alerts when you exceed the 85 dB limit.</li>
+              <li>Exportable history for medical-work use.</li>
+              <li>Compliance with SUNAFIL / Law 29783 regulations.</li>
             </ul>
-            <button class="btn-segment" onclick="openLogin('trabajador')">Ver dashboard trabajador</button>
+            <p class="seg-note" data-i18n="seg2_note">ℹ️ SUNAFIL is the Peruvian agency that oversees workplace safety; Law No. 29783 sets the legal limits for noise exposure at work.</p>
+            <button class="btn-segment" onclick="openLogin('trabajador')">View worker dashboard</button>
           </article>
-          <article class="segment-card reveal">
+          <article class="segment-card reveal" id="seg-profesional">
             <div class="segment-icon">🩺</div>
-            <h3>Profesionales de salud</h3>
-            <p>Médicos ORL, neurólogos y personal de salud ocupacional de clínicas.</p>
+            <h3>Health professionals</h3>
+            <p>ENT doctors, neurologists and occupational health staff at clinics.</p>
             <ul>
-              <li>Historial de exposición de sus pacientes.</li>
-              <li>Informes exportables para diagnóstico clínico.</li>
-              <li>Análisis de zonas críticas por área geográfica.</li>
-              <li>Panel de seguimiento longitudinal auditivo.</li>
+              <li>Exposure history of their patients.</li>
+              <li>Exportable reports for clinical diagnosis.</li>
+              <li>Analysis of critical zones by geographic area.</li>
+              <li>Longitudinal auditory follow-up panel.</li>
             </ul>
-            <button class="btn-segment" onclick="openLogin('profesional')">Ver dashboard profesional</button>
+            <button class="btn-segment" onclick="openLogin('profesional')">View professional dashboard</button>
           </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- FUNCIONALIDADES -->
-    <section class="section-pad features" id="funcionalidades">
-      <div class="container">
-        <div class="section-heading reveal">
-          <span class="eyebrow">Funcionalidades</span>
-          <h2>Todo lo necesario para proteger tu audición</h2>
-        </div>
-        <div class="feature-grid">
-          <article class="feature-card reveal"><span>📡</span><h3>Medición en tiempo real</h3><p>Niveles de ruido precisos usando el micrófono de tu dispositivo, sin hardware adicional.</p></article>
-          <article class="feature-card reveal"><span>🗺️</span><h3>Mapas colaborativos</h3><p>Visualiza zonas de ruido en Lima generadas por la comunidad de usuarios.</p></article>
-          <article class="feature-card reveal"><span>🔔</span><h3>Alertas inteligentes</h3><p>Notificaciones personalizadas cuando los niveles sonoros superen tus umbrales configurados.</p></article>
-          <article class="feature-card reveal"><span>📊</span><h3>Panel visual</h3><p>Dashboard adaptado a tu segmento con métricas, gráficos y estado de exposición.</p></article>
-          <article class="feature-card reveal"><span>📁</span><h3>Historial exportable</h3><p>Registros de exposición descargables en PDF para médicos, empleadores o autoridades.</p></article>
-          <article class="feature-card reveal"><span>⏱️</span><h3>Dosis de exposición</h3><p>Calcula tu dosis diaria de ruido y te avisa cuándo pausar o usar protección auditiva.</p></article>
-          <article class="feature-card reveal"><span>🔬</span><h3>Análisis avanzado</h3><p>Espectrogramas, nivel equivalente de ruido (Leq) y métricas profesionales para expertos.</p></article>
-          <article class="feature-card reveal"><span>🏢</span><h3>Gestión institucional</h3><p>Convenios con municipalidades y centros de salud para análisis de zonas críticas.</p></article>
-          <article class="feature-card reveal"><span>🌐</span><h3>Acceso multiplataforma</h3><p>Disponible en web, iOS y Android. Sincronización automática entre dispositivos.</p></article>
         </div>
       </div>
     </section>
@@ -217,140 +208,204 @@
     <section class="section-pad" id="como-funciona">
       <div class="container">
         <div class="section-heading reveal">
-          <span class="eyebrow">¿Cómo funciona?</span>
-          <h2>En 4 pasos sencillos</h2>
+          <span class="eyebrow">How does it work?</span>
+          <h2>In 4 simple steps</h2>
         </div>
         <div class="steps reveal">
-          <div class="step-card"><div class="step-num">1</div><h3>Crea tu cuenta</h3><p>Regístrate y selecciona tu perfil: ciudadano, trabajador o profesional.</p></div>
-          <div class="step-card"><div class="step-num">2</div><h3>Activa el micrófono</h3><p>AudioSafe usa el micrófono de tu smartphone para capturar el entorno sonoro.</p></div>
-          <div class="step-card"><div class="step-num">3</div><h3>Monitorea en vivo</h3><p>Ve los niveles de ruido en tiempo real y recibe alertas cuando superes los límites.</p></div>
-          <div class="step-card"><div class="step-num">4</div><h3>Genera informes</h3><p>Exporta tu historial en PDF para uso médico, laboral o personal.</p></div>
+          <div class="step-card"><div class="step-num">1</div><h3>Create your account</h3><p>Sign up and select your profile: citizen, worker or professional.</p></div>
+          <div class="step-card"><div class="step-num">2</div><h3>Activate the microphone</h3><p>AudioSafe uses your smartphone's microphone to capture the sound environment.</p></div>
+          <div class="step-card"><div class="step-num">3</div><h3>Monitor live</h3><p>See noise levels in real time and receive alerts when you exceed the limits.</p></div>
+          <div class="step-card"><div class="step-num">4</div><h3>Generate reports</h3><p>Export your history as a PDF for medical, work, or personal use.</p></div>
         </div>
       </div>
     </section>
 
-    <!-- PLANES -->
+    <section class="midfunnel-cta">
+      <div class="container">
+        <p>You've seen how it works. Start measuring your exposure today.</p>
+        <button class="btn btn-primary btn-hero" onclick="openLogin()">Start for free →</button>
+      </div>
+    </section>
+
+    <section class="trust-bar" aria-label="Trust indicators">
+      <div class="container">
+        <div class="trust-stats">
+          <div class="trust-stat"><span class="trust-icon">🎯</span><strong>85 dB</strong><span>occupational risk threshold</span></div>
+          <div class="trust-stat"><span class="trust-icon">⏱️</span><strong>24/7</strong><span>real-time monitoring</span></div>
+          <div class="trust-stat"><span class="trust-icon">🎚️</span><strong>±2–3 dB</strong><span>measurement accuracy</span></div>
+          <div class="trust-stat"><span class="trust-icon">🧩</span><strong>3</strong><span>specialized segments</span></div>
+        </div>
+        <div class="trust-logos">
+          <span class="trust-label">Aligned with:</span>
+          <span class="trust-logo">🏛️ SUNAFIL · Law 29783</span>
+          <span class="trust-logo">🌍 WHO environmental noise guidelines</span>
+          <span class="trust-logo">🏥 Partner ENT clinics</span>
+        </div>
+        <div class="testimonial-grid">
+          <blockquote class="testimonial-card">
+            <p>"I walk around La Molina thinking it's quiet, but the app showed me there are pretty noisy stretches on my daily route. Now I avoid them when I can."</p>
+            <footer>— Cecibel Cárdenas, urban citizen, La Molina</footer>
+          </blockquote>
+          <blockquote class="testimonial-card">
+            <p>"At Bshaper, noise is part of everyday life. With AudioSafe I finally have a real record of how much I'm exposed to, not just what I assume it is."</p>
+            <footer>— Juliano Bonino, worker at Bshaper, Barranco</footer>
+          </blockquote>
+          <blockquote class="testimonial-card">
+            <p>"My patients were almost never believed about how much noise they endured at work. Now they come in with their history, and that changes the whole consultation."</p>
+            <footer>— Fernando Gordillo León, ENT specialist, Villa María del Triunfo</footer>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- FUNCIONALIDADES -->
+    <section class="section-pad features" id="funcionalidades">
+      <div class="container">
+        <div class="section-heading reveal">
+          <span class="eyebrow">Features</span>
+          <h2>Everything you need to protect your hearing</h2>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card reveal"><span>📡</span><h3>Real-time measurement</h3><p>Precise noise levels using your device's microphone, no additional hardware required.</p></article>
+          <article class="feature-card reveal"><span>🗺️</span><h3>Collaborative maps</h3><p>Visualize noise zones in Lima generated by the user community.</p></article>
+          <article class="feature-card reveal"><span>🔔</span><h3>Smart alerts</h3><p>Personalized notifications when sound levels exceed your configured thresholds.</p></article>
+          <article class="feature-card reveal"><span>📊</span><h3>Visual panel</h3><p>Dashboard adapted to your segment with metrics, charts and exposure status.</p></article>
+          <article class="feature-card reveal"><span>📁</span><h3>Exportable history</h3><p>Downloadable exposure records in PDF for doctors, employers or authorities.</p></article>
+          <article class="feature-card reveal"><span>⏱️</span><h3>Exposure dose</h3><p>Calculates your daily noise dose and warns you when to pause or use hearing protection.</p></article>
+          <article class="feature-card reveal"><span>🔬</span><h3>Advanced analysis</h3><p>Spectrograms, equivalent noise level (Leq) and professional metrics for experts.</p></article>
+          <article class="feature-card reveal"><span>🏢</span><h3>Institutional management</h3><p>Agreements with municipalities and health centers for analysis of critical zones.</p></article>
+          <article class="feature-card reveal"><span>🌐</span><h3>Multi-platform access</h3><p>Available on web, iOS and Android. Automatic sync across devices.</p></article>
+        </div>
+      </div>
+    </section>
+
     <section class="section-pad" id="planes">
       <div class="container">
         <div class="section-heading reveal">
-          <span class="eyebrow">Planes</span>
-          <h2>Elige el plan para tu necesidad</h2>
+          <span class="eyebrow">Plans</span>
+          <h2>Choose the plan for your needs</h2>
+        </div>
+        <div class="trust-strip-mini reveal">
+          <span>⭐ <strong>4.7/5</strong> user rating</span>
+          <span>👥 <strong>+1,200</strong> people monitoring in Lima</span>
+          <span>🏛️ Aligned with <strong>SUNAFIL · Law 29783</strong></span>
+          <span>🔒 Private data, cancel anytime</span>
         </div>
         <div class="pricing-grid">
           <article class="price-card reveal">
-            <h3>Gratuito</h3>
-            <p>Para empezar a medir y entender tu exposición.</p>
+            <h3>Free</h3>
+            <p>To start measuring and understanding your exposure.</p>
             <div class="price-num">S/ 0</div>
             <ul>
-              <li>Medición básica en tiempo real.</li>
-              <li>Alertas simples de umbral.</li>
-              <li>Acceso al mapa colaborativo.</li>
-              <li>Historial de los últimos 7 días.</li>
+              <li>Basic real-time measurement.</li>
+              <li>Simple threshold alerts.</li>
+              <li>Access to the collaborative map.</li>
+              <li>Last 7 days of history.</li>
             </ul>
-            <button class="btn-plan btn-plan-outline" onclick="openLogin()">Empezar gratis</button>
+            <button class="btn-plan btn-plan-outline" onclick="openLogin()">Start for free</button>
           </article>
           <article class="price-card popular reveal">
-            <span class="popular-tag">Más elegido</span>
+            <span class="popular-tag">Most popular</span>
             <h3>Premium</h3>
-            <p>Para ciudadanos y trabajadores que necesitan más control.</p>
-            <div class="price-num">S/ 12.90 <small>/ mes</small></div>
+            <p>For citizens and workers who need more control.</p>
+            <div class="price-num">S/ 12.90 <small>/ month</small></div>
             <ul>
-              <li>Historial ilimitado y exportable.</li>
-              <li>Alertas personalizadas avanzadas.</li>
-              <li>Análisis de dosis diaria / semanal.</li>
-              <li>Reportes PDF para médico o empleador.</li>
-              <li>Soporte prioritario.</li>
+              <li>Unlimited, exportable history.</li>
+              <li>Advanced personalized alerts.</li>
+              <li>Daily / weekly dose analysis.</li>
+              <li>PDF reports for doctors or employers.</li>
+              <li>Priority support.</li>
             </ul>
-            <button class="btn-plan btn-plan-primary" onclick="openLogin()">Iniciar sesión</button>
+            <button class="btn-plan btn-plan-primary" onclick="openLogin()">Sign in</button>
           </article>
           <article class="price-card reveal">
-            <h3>Institucional</h3>
-            <p>Para clínicas, empresas y municipalidades.</p>
-            <div class="price-num" style="font-size:1.6rem">A medida</div>
+            <h3>Institutional</h3>
+            <p>For clinics, companies and municipalities.</p>
+            <div class="price-num" style="font-size:1.6rem">Custom</div>
             <ul>
-              <li>Panel multi-usuario y multi-sede.</li>
-              <li>Reportes analíticos por zona geográfica.</li>
-              <li>Integración con sistemas de salud ocupacional.</li>
-              <li>Convenio con SUNAFIL / municipalidades.</li>
-              <li>Soporte dedicado.</li>
+              <li>Multi-user, multi-site panel.</li>
+              <li>Analytical reports by geographic zone.</li>
+              <li>Integration with occupational health systems.</li>
+              <li>Agreement with SUNAFIL / municipalities.</li>
+              <li>Dedicated support.</li>
             </ul>
-            <button class="btn-plan btn-plan-outline" onclick="showToast('📧 Solicitud enviada. Te contactaremos pronto.')">Solicitar información</button>
+            <button class="btn-plan btn-plan-outline" onclick="showToast('📧 Request sent. We will contact you soon.')">Request information</button>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- FAQ -->
     <section class="section-pad" id="faq">
       <div class="container">
         <div class="section-heading reveal">
-          <span class="eyebrow">Preguntas frecuentes</span>
-          <h2>Resuelve tus dudas antes de empezar</h2>
+          <span class="eyebrow">FAQ</span>
+          <h2>Answers to your questions before you start</h2>
         </div>
         <div class="faq-list reveal">
-          <details><summary>¿Necesito un dispositivo especial para medir el ruido?</summary><p>No. AudioSafe usa el micrófono integrado de tu smartphone para medir los niveles sonoros. No requiere hardware adicional.</p></details>
-          <details><summary>¿Qué tan precisas son las mediciones?</summary><p>Las mediciones tienen una precisión de ±2–3 dB comparadas con sonómetros profesionales. Para contextos clínicos o legales, recomendamos complementar con equipo certificado.</p></details>
-          <details><summary>¿AudioSafe sirve para cumplir con la normativa SUNAFIL?</summary><p>Sí. Los registros exportables de exposición diaria y el historial verificable son un apoyo para demostrar el monitoreo de riesgo ocupacional ante inspecciones.</p></details>
-          <details><summary>¿Mis datos de ubicación y salud son privados?</summary><p>Sí. Tus datos personales y de ubicación nunca se comparten con terceros sin tu consentimiento explícito. Los datos del mapa colaborativo se comparten de forma anónima y agregada.</p></details>
-          <details><summary>¿Puedo usar AudioSafe como profesional de salud para mis pacientes?</summary><p>Sí. El segmento de profesionales incluye un panel de pacientes con historial de exposición, informes exportables y análisis longitudinal diseñado para uso clínico.</p></details>
-          <details><summary>¿Funciona en zonas sin conexión a internet?</summary><p>AudioSafe puede capturar datos de forma offline y sincronizarlos cuando recuperes la conexión. El mapa colaborativo requiere conexión para actualizar datos de otros usuarios.</p></details>
+          <details><summary>Do I need a special device to measure noise?</summary><p>No. AudioSafe uses your smartphone's built-in microphone to measure sound levels. No additional hardware is required.</p></details>
+          <details><summary>How accurate are the measurements?</summary><p>Measurements have an accuracy of ±2–3 dB compared to professional sound level meters. For clinical or legal contexts, we recommend supplementing with certified equipment.</p></details>
+          <details><summary>Does AudioSafe help comply with SUNAFIL regulations?</summary><p>Yes. Exportable daily exposure records and verifiable history help demonstrate occupational risk monitoring during inspections.</p></details>
+          <details><summary>Is my location and health data private?</summary><p>Yes. Your personal and location data is never shared with third parties without your explicit consent. Collaborative map data is shared anonymously and in aggregate.</p></details>
+          <details><summary>Can I use AudioSafe as a health professional for my patients?</summary><p>Yes. The professional segment includes a patient panel with exposure history, exportable reports, and longitudinal analysis designed for clinical use.</p></details>
+          <details><summary>Does it work in areas without internet access?</summary><p>AudioSafe can capture data offline and sync it once you regain connection. The collaborative map requires a connection to update other users' data.</p></details>
         </div>
       </div>
     </section>
 
-    <!-- CONTACTO -->
+    <section class="section-pad cta-section">
+      <div class="container">
+        <div class="cta-card reveal">
+          <h2>Start protecting your hearing today</h2>
+          <p>Join Lima's most complete sound monitoring platform. Measure, get alerted, and act before the damage becomes permanent.</p>
+          <button class="btn btn-primary btn-hero" onclick="openLogin()">Start for free →</button>
+          <p class="hero-microcopy" style="margin-top:16px;margin-bottom:0;">📱 Available on Web · iOS · Android &nbsp;·&nbsp; ✓ Free to start</p>
+        </div>
+      </div>
+    </section>
+    
+  <!-- CONTACTO -->
     <section class="section-pad" id="contacto" style="background:var(--navy-mid);">
       <div class="container">
         <div class="section-heading reveal">
-          <span class="eyebrow">Contacto</span>
-          <h2 data-i18n="contact_heading">¿Tienes alguna consulta?</h2>
-          <p>Estamos aquí para ayudarte. Escríbenos y te respondemos en menos de 24 horas.</p>
+          <span class="eyebrow">Contact</span>
+          <h2 data-i18n="contact_heading">Have a question?</h2>
+          <p>We're here to help. Write to us and we'll respond within 24 hours.</p>
         </div>
         <div class="contact-grid reveal">
           <div class="contact-info">
-            <h3>Hablemos</h3>
-            <p>Nuestro equipo está listo para orientarte sobre la plataforma, planes institucionales o integraciones personalizadas.</p>
-            <div class="contact-item"><span>📧</span><span>contacto@audiosafe.pe</span></div>
+            <h3>Let's talk</h3>
+            <p>Our team is ready to guide you on the platform, institutional plans or custom integrations.</p>
+            <div class="contact-item"><span>📧</span><span><strong>Contact:</strong> contacto@audiosafe.pe</span></div>
             <div class="contact-item"><span>📞</span><span>+51 1 234-5678</span></div>
-            <div class="contact-item"><span>📍</span><span>Lima, Perú — UPC Campus Monterrico</span></div>
-            <div class="contact-item"><span>🕐</span><span>Lun–Vie: 9:00am – 6:00pm</span></div>
+            <div class="contact-item"><span>📍</span><span>Lima, Peru — UPC Monterrico Campus</span></div>
+            <div class="contact-item"><span>🕐</span><span>Mon–Fri: 9:00am – 6:00pm</span></div>
             <div style="margin-top:24px;padding:20px;background:var(--cyan-dim);border:1px solid var(--cyan);border-radius:var(--radius-lg);">
-              <p style="font-size:.9rem;font-weight:600;color:var(--cyan);margin-bottom:8px;">🏥 ¿Eres una institución?</p>
-              <p style="font-size:.85rem;color:var(--muted);">Contáctanos para conocer nuestros convenios con municipalidades, clínicas y empresas industriales de Lima.</p>
+              <p style="font-size:.9rem;font-weight:600;color:var(--cyan);margin-bottom:8px;">🏥 Are you an institution?</p>
+              <p style="font-size:.85rem;color:var(--muted);">Contact us to learn about our agreements with municipalities, clinics and industrial companies in Lima.</p>
             </div>
           </div>
           <div class="contact-form">
             <div class="form-row">
-              <div class="cf-group"><label>Nombre</label><input type="text" placeholder="Tu nombre"/></div>
-              <div class="cf-group"><label>Apellido</label><input type="text" placeholder="Tu apellido"/></div>
+              <div class="cf-group"><label>First name</label><input type="text" placeholder="Your first name"/></div>
+              <div class="cf-group"><label>Last name</label><input type="text" placeholder="Your last name"/></div>
             </div>
-            <div class="cf-group"><label>Correo electrónico</label><input type="email" placeholder="tu@correo.com"/></div>
-            <div class="cf-group"><label>Asunto</label>
+            <div class="cf-group"><label>Email address</label><input type="email" placeholder="you@email.com"/></div>
+            <div class="cf-group"><label>Subject</label>
               <select style="width:100%;padding:12px 16px;background:var(--navy-mid);border:1px solid var(--navy-border);border-radius:var(--radius-md);color:var(--white);font-size:.95rem;outline:none;">
-                <option>Consulta general</option>
-                <option>Plan institucional</option>
-                <option>Soporte técnico</option>
-                <option>Convenio municipal</option>
+                <option>General inquiry</option>
+                <option>Institutional plan</option>
+                <option>Technical support</option>
+                <option>Municipal agreement</option>
               </select>
             </div>
-            <div class="cf-group"><label>Mensaje</label><textarea rows="4" placeholder="Escribe tu mensaje aquí..."></textarea></div>
-            <button class="btn btn-primary" style="width:100%;" onclick="sendContactForm()">Enviar mensaje</button>
+            <div class="cf-group"><label>Message</label><textarea rows="4" placeholder="Write your message here..."></textarea></div>
+            <button class="btn btn-primary" style="width:100%;" onclick="sendContactForm()">Send message</button>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- CTA -->
-    <section class="section-pad cta-section">
-      <div class="container">
-        <div class="cta-card reveal">
-          <h2>Empieza a proteger tu audición hoy</h2>
-          <p>Únete a la plataforma de monitoreo sonoro más completa de Lima. Mide, alerta y actúa antes de que el daño sea permanente.</p>
-          <button class="btn btn-primary" style="font-size:1rem;padding:14px 36px;" onclick="openLogin()">Iniciar sesión</button>
-        </div>
-      </div>
-    </section>
-  </main>
+    </main>
 
   <footer class="site-footer">
     <div class="container footer-grid">
@@ -373,37 +428,37 @@
           </div>
           <span style="font-family:'Space Grotesk';font-weight:700;color:var(--cyan);">AudioSafe</span>
         </div>
-        <p style="color:var(--muted);font-size:.88rem;max-width:260px;">Tecnología de protección auditiva para ciudadanos, trabajadores y profesionales de salud en Lima, Perú.</p>
+        <p style="color:var(--muted);font-size:.88rem;max-width:260px;">Hearing protection technology for citizens, workers and health professionals in Lima, Peru.</p>
       </div>
       <div class="footer-col">
-        <h4>Plataforma</h4>
-        <a href="#problema">Problemática</a>
-        <a href="#beneficios">Beneficios</a>
-        <a href="#funcionalidades">Funcionalidades</a>
-        <a href="#planes">Planes</a>
+        <h4>Platform</h4>
+        <a href="#problema">The Problem</a>
+        <a href="#beneficios">Benefits</a>
+        <a href="#funcionalidades">Features</a>
+        <a href="#planes">Plans</a>
       </div>
       <div class="footer-col">
-        <h4>Empresa</h4>
-        <a href="#contacto">Sobre AudioSafe</a>
-        <a href="#faq">Preguntas frecuentes</a>
-        <a href="#contacto">Convenios</a>
-        <a href="#contacto">Contacto</a>
+        <h4>Company</h4>
+        <a href="#contacto">About AudioSafe</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contacto">Partnerships</a>
+        <a href="#contacto">Contact</a>
       </div>
       <div class="footer-col">
-        <h4>Redes</h4>
-        <a href="#" onclick="showToast('Redirigiendo a Instagram...')">Instagram</a>
-        <a href="#" onclick="showToast('Redirigiendo a LinkedIn...')">LinkedIn</a>
-        <a href="#" onclick="showToast('Redirigiendo a YouTube...')">YouTube</a>
-        <a href="#" onclick="showToast('Redirigiendo a GitHub...')">GitHub</a>
+        <h4>Social</h4>
+        <a href="#" onclick="showToast('Redirecting to Instagram...')">Instagram</a>
+        <a href="#" onclick="showToast('Redirecting to LinkedIn...')">LinkedIn</a>
+        <a href="#" onclick="showToast('Redirecting to YouTube...')">YouTube</a>
+        <a href="#" onclick="showToast('Redirecting to GitHub...')">GitHub</a>
       </div>
     </div>
     <div class="footer-bottom container">
-      <small>© 2026 AudioSafe – Startup UPC IHC & Tecnologías Móviles. Todos los derechos reservados.</small>
+      <small>© 2026 AudioSafe – UPC IHC &amp; Mobile Technologies Startup. All rights reserved.</small>
     </div>
   </footer>
 </div>
 
-<!-- LOGIN MODAL -->
+<!-- LOGIN  -->
 <div class="modal-overlay" id="loginModal">
   <div class="modal-box">
     <button class="modal-close" onclick="closeLogin()">✕</button>
@@ -422,42 +477,40 @@
           <text x="23" y="31" fill="white" font-size="5" font-family="Arial" font-weight="bold">A</text>
         </svg>
       </div>
-      <div class="modal-title" style="margin:0;">Bienvenido a AudioSafe</div>
+      <div class="modal-title" style="margin:0;">Welcome to AudioSafe</div>
     </div>
-    <p class="modal-sub">Inicia sesión para acceder al dashboard.</p>
+    <p class="modal-sub">Sign in to access the dashboard.</p>
     <div id="loginEmailDisplay" class="username-display"></div>
-    <!-- Validation error box -->
     <div id="loginError" style="display:none;background:var(--red-dim);border:1px solid var(--red);border-radius:var(--radius-md);padding:10px 14px;font-size:.83rem;color:var(--red);margin-bottom:12px;"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:0;">
+    <div class="mg-2col" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:0;">
       <div class="form-group" style="margin-bottom:0;">
-        <label>Nombre</label>
-        <input type="text" id="loginNombre" placeholder="Tu nombre"/>
+        <label>First name</label>
+        <input type="text" id="loginNombre" placeholder="Your first name"/>
       </div>
       <div class="form-group" style="margin-bottom:0;">
-        <label>Apellido</label>
-        <input type="text" id="loginApellido" placeholder="Tu apellido"/>
+        <label>Last name</label>
+        <input type="text" id="loginApellido" placeholder="Your last name"/>
       </div>
     </div>
     <div class="form-group">
-      <label>Correo electrónico</label>
-      <input type="email" id="loginEmail" placeholder="tu@correo.com" oninput="updateEmailDisplay(this.value)"/>
+      <label>Email address</label>
+      <input type="email" id="loginEmail" placeholder="you@email.com" oninput="updateEmailDisplay(this.value)"/>
     </div>
     <div class="form-group">
-      <label>Contraseña</label>
+      <label>Password</label>
       <input type="password" id="loginPass" placeholder="••••••••"/>
     </div>
-    <p class="modal-seg-label">¿Cuál es tu perfil?</p>
+    <p class="modal-seg-label">What is your profile?</p>
     <div class="seg-chips">
-      <button class="seg-chip" id="chip-ciudadano" onclick="selectSegment('ciudadano')">🏙️ Ciudadano</button>
-      <button class="seg-chip" id="chip-trabajador" onclick="selectSegment('trabajador')">⚙️ Trabajador</button>
-      <button class="seg-chip" id="chip-profesional" onclick="selectSegment('profesional')">🩺 Profesional</button>
+      <button class="seg-chip" id="chip-ciudadano" onclick="selectSegment('ciudadano')">🏙️ Citizen</button>
+      <button class="seg-chip" id="chip-trabajador" onclick="selectSegment('trabajador')">⚙️ Worker</button>
+      <button class="seg-chip" id="chip-profesional" onclick="selectSegment('profesional')">🩺 Professional</button>
     </div>
     <div class="form-divider" style="margin-top:20px;"></div>
-    <button class="btn-full btn-login" onclick="enterDash()">Iniciar sesión</button>
+    <button class="btn-full btn-login" onclick="enterDash()">Sign in</button>
   </div>
 </div>
 
-<!-- TOAST -->
 <div id="toast" class="toast" style="display:none;"></div>
 
 <!-- DASHBOARD -->
@@ -478,51 +531,57 @@
           <text x="22" y="28" fill="white" font-size="4.5" font-family="Arial" font-weight="bold">A</text>
         </svg>
       </div>
-      AudioSafe
+      <span class="brand-text">AudioSafe</span>
     </a>
     <div class="dash-nav-links" id="dashNavLinks">
-      <a onclick="showDashPanel('panel')" class="active" id="dn-panel">📊 Panel</a>
-      <a onclick="showDashPanel('mapa')" id="dn-mapa">🗺️ Mapa</a>
-      <a onclick="showDashPanel('historial')" id="dn-historial">📁 Historial</a>
-      <a onclick="showDashPanel('alertas')" class="notif-badge" id="dn-alertas">🔔 Alertas<span class="notif-dot"></span></a>
-      <a onclick="showDashPanel('configurar')" id="dn-configurar">⚙️ Configurar</a>
-      <a onclick="showDashPanel('perfil')" id="dn-perfil">👤 Mi Perfil</a>
+      <a onclick="showDashPanel('panel')" class="active" id="dn-panel">📊 Dashboard</a>
+      <a onclick="showDashPanel('mapa')" id="dn-mapa">🗺️ Map</a>
+      <a onclick="showDashPanel('historial')" id="dn-historial">📁 History</a>
+      <a onclick="showDashPanel('alertas')" class="notif-badge" id="dn-alertas">🔔 Alerts<span class="notif-dot"></span></a>
+      <a onclick="showDashPanel('configurar')" id="dn-configurar">⚙️ Settings</a>
+      <a onclick="showDashPanel('perfil')" id="dn-perfil">👤 My Profile</a>
     </div>
     <div class="dash-spacer"></div>
-    <button class="theme-btn" onclick="toggleTheme()" title="Cambiar tema">☀️</button>
+    <button class="theme-btn" onclick="toggleTheme()" title="Change theme">☀️</button>
     <div class="dash-user" onclick="showDashPanel('perfil')">
       <div class="dash-avatar" id="dashAvatar">US</div>
-      <span id="dashUserLabel">Usuario</span>
+      <span id="dashUserLabel">User</span>
     </div>
-    <button class="btn btn-ghost" onclick="backToLanding()" style="font-size:.82rem;">← Salir</button>
+    <button class="btn btn-ghost" onclick="backToLanding()" style="font-size:.82rem;">← Exit</button>
   </nav>
 
   <div class="dash-main">
     <div class="dash-welcome">
-      <h2 id="dashGreet">Panel de control</h2>
+      <h2 id="dashGreet">Dashboard</h2>
       <p id="dashSub" style="color:var(--muted);font-size:.88rem;"></p>
     </div>
 
-    <!-- PANEL PRINCIPAL (tabs) -->
     <div id="dp-panel">
-      <!-- Controles de monitoreo -->
       <div class="monitor-controls">
-        <button class="ctrl-btn ctrl-btn-red" id="btnStop" onclick="toggleMonitor()">⏹ Detener monitoreo</button>
-        <button class="ctrl-btn ctrl-btn-blue" onclick="generateReport()">📊 Generar informe</button>
-        <button class="ctrl-btn ctrl-btn-green" onclick="shareLocation()">📍 Compartir ubicación</button>
+        <button class="ctrl-btn ctrl-btn-red" id="btnStop" onclick="toggleMonitor()">⏹ Stop monitoring</button>
+        <button class="ctrl-btn ctrl-btn-blue" onclick="generateReport()">📊 Export CSV</button>
+        <button class="ctrl-btn ctrl-btn-blue" onclick="exportPDF()">📄 Export report (PDF)</button>
+        <button class="ctrl-btn ctrl-btn-green" onclick="shareLocation()">📍 Share location</button>
+      </div>
+
+      <div id="micErrorBanner" class="mic-error-banner" style="display:none;">
+        <span style="font-size:1.1rem;">🎙️</span>
+        <span class="mic-error-text">We couldn't access your microphone. Enable permissions in your browser settings.</span>
+        <button class="mic-retry-btn" onclick="retryMicAccess()">🔄 Retry</button>
       </div>
 
       <!-- CIUDADANO -->
       <div class="seg-dash" id="dash-ciudadano">
+        <div class="db-explainer">ℹ️ <span><strong data-i18n="dbx_c_lead">What is a dB?</strong> <span data-i18n="dbx_c_body">The decibel (dB) measures how loud a sound is. From 65 dB your ear starts to strain; above 85 dB sustained, noise can damage your hearing.</span></span></div>
         <div class="kpi-grid">
-          <div class="kpi-card"><div class="kpi-label">Nivel actual</div><div class="kpi-value" style="color:var(--amber);">78 dB</div><div class="kpi-trend trend-up">↑ Por encima del límite</div></div>
-          <div class="kpi-card"><div class="kpi-label">Exposición hoy</div><div class="kpi-value" style="color:var(--cyan);">3h 12m</div><div class="kpi-trend" style="color:var(--muted);">De 8h máximo</div></div>
-          <div class="kpi-card"><div class="kpi-label">Alertas activas</div><div class="kpi-value" style="color:var(--red);">2</div><div class="kpi-trend trend-up">↑ 1 nueva hoy</div></div>
-          <div class="kpi-card"><div class="kpi-label">Dosis semanal</div><div class="kpi-value" style="color:var(--green);">62%</div><div class="kpi-trend trend-down">↓ Bajo control</div></div>
+          <div class="kpi-card"><div class="kpi-label">Current level</div><div class="kpi-value" style="color:var(--amber);">78 dB</div><div class="kpi-trend trend-up">↑ Above the limit</div></div>
+          <div class="kpi-card"><div class="kpi-label">Exposure today</div><div class="kpi-value" style="color:var(--cyan);">3h 12m</div><div class="kpi-trend" style="color:var(--muted);">Out of 8h max</div></div>
+          <div class="kpi-card"><div class="kpi-label">Active alerts</div><div class="kpi-value" style="color:var(--red);">2</div><div class="kpi-trend trend-up">↑ 1 new today</div></div>
+          <div class="kpi-card"><div class="kpi-label">Weekly dose</div><div class="kpi-value" style="color:var(--green);">62%</div><div class="kpi-trend trend-down">↓ Under control</div></div>
         </div>
         <div class="dash-grid">
           <div class="dash-panel">
-            <div class="panel-title">Historial — últimas 12h <span class="pt-tag">HOY</span></div>
+            <div class="panel-title">History — last 12h <span class="pt-tag">TODAY</span></div>
             <div class="chart-bars">
               <div class="chart-bar amber" style="height:55%"></div><div class="chart-bar" style="height:38%"></div>
               <div class="chart-bar amber" style="height:70%"></div><div class="chart-bar red" style="height:90%"></div>
@@ -534,111 +593,150 @@
             <div class="chart-labels"><span>8am</span><span>9am</span><span>10am</span><span>11am</span><span>12pm</span><span>1pm</span><span>2pm</span><span>3pm</span><span>4pm</span><span>5pm</span><span>6pm</span><span>7pm</span></div>
           </div>
           <div class="dash-panel">
-            <div class="panel-title">Alertas recientes</div>
+            <div class="panel-title">Recent alerts</div>
             <div class="alert-list">
-              <div class="alert-item"><div class="alert-dot dot-red"></div><div class="alert-body"><p>Nivel crítico detectado</p><small>95 dB · Av. Javier Prado · hace 2h</small></div></div>
-              <div class="alert-item"><div class="alert-dot dot-amber"></div><div class="alert-body"><p>Zona moderadamente ruidosa</p><small>72 dB · Miraflores · hace 4h</small></div></div>
-              <div class="alert-item"><div class="alert-dot dot-green"></div><div class="alert-body"><p>Nivel seguro</p><small>48 dB · Parque Kennedy · hace 6h</small></div></div>
+              <div class="alert-item"><div class="alert-dot dot-red"></div><div class="alert-body"><p>Critical level detected</p><small>95 dB · Av. Javier Prado · 2h ago</small></div></div>
+              <div class="alert-item"><div class="alert-dot dot-amber"></div><div class="alert-body"><p>Moderately noisy zone</p><small>72 dB · Miraflores · 4h ago</small></div></div>
+              <div class="alert-item"><div class="alert-dot dot-green"></div><div class="alert-body"><p>Safe level</p><small>48 dB · Parque Kennedy · 6h ago</small></div></div>
             </div>
           </div>
         </div>
-        <div class="dash-grid">
-          <div class="dash-panel">
-            <div class="panel-title">Mapa de zonas — Lima</div>
-            <div class="map-real"><div id="mapDashC"></div></div>
-            <div style="display:flex;gap:16px;margin-top:12px;font-size:.78rem;color:var(--muted);">
-              <span><span style="color:var(--red)">●</span> Crítico >85dB</span>
-              <span><span style="color:var(--amber)">●</span> Moderado 65–85dB</span>
-              <span><span style="color:var(--green)">●</span> Seguro &lt;65dB</span>
-            </div>
-          </div>
-          <div class="dash-panel">
-            <div class="panel-title">Recomendaciones</div>
-            <div class="alert-list">
-              <div class="alert-item" style="border-color:var(--red);background:var(--red-dim);"><span style="font-size:1.2rem;">🔴</span><div class="alert-body"><p style="color:var(--red);">Usa tapones auditivos</p><small>Si estarás más de 1h en zona de alto ruido.</small></div></div>
-              <div class="alert-item" style="border-color:var(--amber);"><span style="font-size:1.2rem;">🟡</span><div class="alert-body"><p>Toma un descanso auditivo</p><small>Evita auriculares por las próximas 2 horas.</small></div></div>
-              <div class="alert-item" style="border-color:var(--green);"><span style="font-size:1.2rem;">🟢</span><div class="alert-body"><p>Ruta alternativa disponible</p><small>Av. Arequipa: nivel promedio 58 dB.</small></div></div>
-            </div>
+        <div class="dash-panel" style="margin-bottom:20px;">
+          <div class="panel-title">Recommendations</div>
+          <div class="alert-list alert-list-grid">
+            <div class="alert-item" style="border-color:var(--red);background:var(--red-dim);"><span style="font-size:1.2rem;">🔴</span><div class="alert-body"><p style="color:var(--red);">Use ear plugs</p><small>If you'll be more than 1h in a high-noise zone.</small></div></div>
+            <div class="alert-item" style="border-color:var(--amber);"><span style="font-size:1.2rem;">🟡</span><div class="alert-body"><p>Take a hearing break</p><small>Avoid headphones for the next 2 hours.</small></div></div>
+            <div class="alert-item" style="border-color:var(--green);"><span style="font-size:1.2rem;">🟢</span><div class="alert-body"><p>Alternative route available</p><small>Av. Arequipa: average level 58 dB.</small></div></div>
           </div>
         </div>
       </div>
 
       <!-- TRABAJADOR -->
       <div class="seg-dash" id="dash-trabajador">
+          <div class="glance-card glance-red" id="glanceCard">
+          <div class="glance-main">
+            <div class="glance-icon" id="glanceIcon">⏱️</div>
+            <div>
+              <div class="glance-time" id="glanceTime">23 min</div>
+              <div class="glance-msg" id="glanceMsg">left in this zone before your mandatory hearing break</div>
+              <div class="glance-sub" id="glanceSub">Current level: 92 dB · Critical zone (SUNAFIL limit: 85 dB)</div>
+            </div>
+          </div>
+          <button class="glance-toggle" id="glanceToggleBtn" onclick="toggleWorkerDetail()">📊 View detailed panel</button>
+        </div>
+        <div id="workerDetail" style="display:none;">
+        <div class="db-explainer">ℹ️ <span><strong data-i18n="dbx_w_lead">What is a dB?</strong> <span data-i18n="dbx_w_body">The decibel (dB) measures sound intensity. SUNAFIL sets 85 dB as the safe occupational exposure limit during an 8-hour workday.</span></span></div>
         <div class="kpi-grid">
-          <div class="kpi-card"><div class="kpi-label">Exposición actual</div><div class="kpi-value" style="color:var(--red);">92 dB</div><div class="kpi-trend trend-up">↑ Supera límite (85 dB)</div></div>
-          <div class="kpi-card"><div class="kpi-label">Dosis diaria</div><div class="kpi-value" style="color:var(--amber);">87%</div><div class="kpi-trend trend-up">↑ Riesgo alto</div></div>
-          <div class="kpi-card"><div class="kpi-label">Tiempo en zona crítica</div><div class="kpi-value" style="color:var(--red);">5h 40m</div><div class="kpi-trend trend-up">↑ De 8h máximo</div></div>
-          <div class="kpi-card"><div class="kpi-label">Días sin riesgo</div><div class="kpi-value" style="color:var(--green);">3</div><div class="kpi-trend trend-down">↓ Esta semana</div></div>
+          <div class="kpi-card"><div class="kpi-label">Current exposure</div><div class="kpi-value" style="color:var(--red);">92 dB</div><div class="kpi-trend trend-up">↑ Exceeds limit (85 dB)</div></div>
+          <div class="kpi-card"><div class="kpi-label">Daily dose</div><div class="kpi-value" style="color:var(--amber);">87%</div><div class="kpi-trend trend-up">↑ High risk</div></div>
+          <div class="kpi-card"><div class="kpi-label">Time in critical zone</div><div class="kpi-value" style="color:var(--red);">5h 40m</div><div class="kpi-trend trend-up">↑ Out of 8h max</div></div>
+          <div class="kpi-card"><div class="kpi-label">Risk-free days</div><div class="kpi-value" style="color:var(--green);">3</div><div class="kpi-trend trend-down">↓ This week</div></div>
         </div>
         <div class="dash-grid">
           <div class="dash-panel">
-            <div class="panel-title">Registro de exposición — Semana</div>
+            <div class="panel-title">Exposure record — Week</div>
             <div class="chart-bars">
               <div class="chart-bar" style="height:40%"></div><div class="chart-bar amber" style="height:72%"></div>
               <div class="chart-bar red" style="height:95%"></div><div class="chart-bar red" style="height:88%"></div>
               <div class="chart-bar amber" style="height:78%"></div><div class="chart-bar" style="height:35%"></div>
               <div class="chart-bar" style="height:30%"></div>
             </div>
-            <div class="chart-labels"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div>
-            <div style="margin-top:12px;padding:12px;background:var(--red-dim);border:1px solid var(--red);border-radius:8px;font-size:.82rem;color:var(--red);">⚠️ Miércoles y jueves superaron el límite. Se recomienda descanso auditivo el fin de semana.</div>
+            <div class="chart-labels"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+            <div style="margin-top:12px;padding:12px;background:var(--red-dim);border:1px solid var(--red);border-radius:8px;font-size:.82rem;color:var(--red);">⚠️ Wednesday and Thursday exceeded the limit. A hearing break over the weekend is recommended.</div>
           </div>
           <div class="dash-panel">
-            <div class="panel-title">Dosis acumulada</div>
+            <div class="panel-title">Accumulated dose</div>
             <div class="gauge-wrap" style="padding:20px 0;">
               <svg width="140" height="80" viewBox="0 0 140 80">
                 <path d="M 15 75 A 55 55 0 0 1 125 75" fill="none" stroke="var(--navy-border)" stroke-width="12" stroke-linecap="round"/>
                 <path d="M 15 75 A 55 55 0 0 1 125 75" fill="none" stroke="var(--red)" stroke-width="12" stroke-linecap="round" stroke-dasharray="173" stroke-dashoffset="22"/>
               </svg>
               <div class="gauge-val" style="color:var(--red);margin-top:-10px;">87%</div>
-              <div class="gauge-sub">Dosis diaria acumulada</div>
+              <div class="gauge-sub">Accumulated daily dose</div>
             </div>
           </div>
         </div>
         <div class="dash-panel" style="margin-bottom:20px;">
-          <div class="panel-title">Historial SUNAFIL <span class="pt-tag">VERIFICABLE</span></div>
-          <table class="data-table">
-            <thead><tr><th>Fecha</th><th>Nivel máx.</th><th>Dosis</th><th>Tiempo</th><th>Estado</th></tr></thead>
+          <div class="panel-title">SUNAFIL history <span class="pt-tag">VERIFIABLE</span></div>
+          <div class="table-scroll">
+          <table class="data-table" id="tableHistorialSunafil">
+            <thead><tr><th>Date</th><th>Max level</th><th>Dose</th><th>Time</th><th>Status</th></tr></thead>
             <tbody>
-              <tr><td>Hoy · Jue 18 Jun</td><td>92 dB</td><td>87%</td><td>5h 40m</td><td><span class="tag tag-red">Riesgo alto</span></td></tr>
-              <tr><td>Mié 17 Jun</td><td>95 dB</td><td>102%</td><td>6h 20m</td><td><span class="tag tag-red">Supera límite</span></td></tr>
-              <tr><td>Mar 16 Jun</td><td>88 dB</td><td>74%</td><td>4h 50m</td><td><span class="tag tag-amber">Moderado</span></td></tr>
-              <tr><td>Lun 15 Jun</td><td>76 dB</td><td>38%</td><td>2h 10m</td><td><span class="tag tag-green">Seguro</span></td></tr>
+              <tr><td>Today · Thu Jun 18</td><td>92 dB</td><td>87%</td><td>5h 40m</td><td><span class="tag tag-red" data-i18n="status_high_risk">High risk</span></td></tr>
+              <tr><td>Wed Jun 17</td><td>95 dB</td><td>102%</td><td>6h 20m</td><td><span class="tag tag-red" data-i18n="status_exceeds_limit">Exceeds limit</span></td></tr>
+              <tr><td>Tue Jun 16</td><td>88 dB</td><td>74%</td><td>4h 50m</td><td><span class="tag tag-amber" data-i18n="status_moderate">Moderate</span></td></tr>
+              <tr><td>Mon Jun 15</td><td>76 dB</td><td>38%</td><td>2h 10m</td><td><span class="tag tag-green" data-i18n="status_safe">Safe</span></td></tr>
             </tbody>
           </table>
-          <button class="btn btn-secondary" style="margin-top:8px;font-size:.85rem;" onclick="exportCSV()">📊 Exportar CSV</button>
+          </div>
+        </div>
         </div>
       </div>
 
       <!-- PROFESIONAL -->
       <div class="seg-dash" id="dash-profesional">
+        <div class="db-explainer">ℹ️ <span><strong data-i18n="dbx_p_lead">What is a dB?</strong> <span data-i18n="dbx_p_body">The decibel (dB) measures sound intensity on a logarithmic scale: every +10 dB is perceived as roughly twice as loud. The WHO recommends not exceeding 53 dB in urban areas.</span></span></div>
         <div class="kpi-grid">
-          <div class="kpi-card"><div class="kpi-label">Pacientes activos</div><div class="kpi-value" style="color:var(--cyan);">47</div><div class="kpi-trend" style="color:var(--green);">↑ 3 nuevos esta semana</div></div>
-          <div class="kpi-card"><div class="kpi-label">En riesgo auditivo</div><div class="kpi-value" style="color:var(--red);">12</div><div class="kpi-trend trend-up">↑ Requieren atención</div></div>
-          <div class="kpi-card"><div class="kpi-label">Reportes generados</div><div class="kpi-value" style="color:var(--green);">89</div><div class="kpi-trend" style="color:var(--muted);">Este mes</div></div>
-          <div class="kpi-card"><div class="kpi-label">Nivel promedio zona</div><div class="kpi-value" style="color:var(--amber);">81 dB</div><div class="kpi-trend trend-up">↑ Zona industrial Norte</div></div>
+          <div class="kpi-card"><div class="kpi-label">Active patients</div><div class="kpi-value" style="color:var(--cyan);">5</div><div class="kpi-trend" style="color:var(--green);">↑ 3 new this week</div></div>
+          <div class="kpi-card"><div class="kpi-label">At hearing risk</div><div class="kpi-value" style="color:var(--red);">2</div><div class="kpi-trend trend-up">↑ Require attention</div></div>
+          <div class="kpi-card"><div class="kpi-label">Reports generated</div><div class="kpi-value" style="color:var(--green);">89</div><div class="kpi-trend" style="color:var(--muted);">This month</div></div>
+          <div class="kpi-card"><div class="kpi-label">Zone average level</div><div class="kpi-value" style="color:var(--amber);">81 dB</div><div class="kpi-trend trend-up">↑ North industrial zone</div></div>
         </div>
         <div class="dash-grid">
           <div class="dash-panel">
-            <div class="panel-title">Panel de pacientes <span class="pt-tag">CLÍNICO</span></div>
-            <table class="data-table">
-              <thead><tr><th>Paciente</th><th>Sector</th><th>Exposición</th><th>Dosis</th><th>Riesgo</th></tr></thead>
+            <div class="panel-title" style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+              <span>Patient panel <span class="pt-tag">CLINICAL</span></span>
+              <button class="ctrl-btn ctrl-btn-green" style="font-size:.75rem;padding:7px 14px;" onclick="addPatient()">➕ Register patient</button>
+            </div>
+            <div class="table-scroll">
+            <table class="data-table" id="tablePacientes">
+              <thead><tr><th>Patient</th><th>Sector</th><th>Exposure</th><th>Dose</th><th>Risk</th></tr></thead>
               <tbody>
-                <tr><td>Juan P. · 34a</td><td>Construcción</td><td>91 dB</td><td>108%</td><td><span class="tag tag-red">Crítico</span></td></tr>
-                <tr><td>María L. · 28a</td><td>Discotecas</td><td>88 dB</td><td>95%</td><td><span class="tag tag-red">Alto</span></td></tr>
-                <tr><td>Carlos M. · 45a</td><td>Manufactura</td><td>84 dB</td><td>72%</td><td><span class="tag tag-amber">Moderado</span></td></tr>
-                <tr><td>Lucía F. · 31a</td><td>Cocina industrial</td><td>80 dB</td><td>60%</td><td><span class="tag tag-amber">Moderado</span></td></tr>
-                <tr><td>Andrés R. · 52a</td><td>Oficina</td><td>58 dB</td><td>22%</td><td><span class="tag tag-green">Seguro</span></td></tr>
+                <tr><td>Juan P. · 34y</td><td>Construction</td><td>91 dB</td><td>108%</td><td><span class="tag tag-red" data-i18n="status_critical">Critical</span></td></tr>
+                <tr><td>María L. · 28y</td><td>Nightclubs</td><td>88 dB</td><td>95%</td><td><span class="tag tag-red" data-i18n="status_high">High</span></td></tr>
+                <tr><td>Carlos M. · 45y</td><td>Manufacturing</td><td>84 dB</td><td>72%</td><td><span class="tag tag-amber" data-i18n="status_moderate">Moderate</span></td></tr>
+                <tr><td>Lucía F. · 31y</td><td>Industrial kitchen</td><td>80 dB</td><td>60%</td><td><span class="tag tag-amber" data-i18n="status_moderate">Moderate</span></td></tr>
+                <tr><td>Andrés R. · 52y</td><td>Office</td><td>58 dB</td><td>22%</td><td><span class="tag tag-green" data-i18n="status_safe">Safe</span></td></tr>
               </tbody>
             </table>
+            </div>
           </div>
-          <div class="dash-panel">
-            <div class="panel-title">Distribución por riesgo</div>
-            <div class="prog-item"><div class="prog-header"><span style="font-size:.82rem;color:var(--red);">Crítico (&gt;90 dB)</span><span style="font-size:.82rem;">8 pacientes</span></div><div class="prog-bar"><div class="prog-fill" style="width:17%;background:var(--red);"></div></div></div>
-            <div class="prog-item"><div class="prog-header"><span style="font-size:.82rem;color:var(--red);">Alto (85–90 dB)</span><span style="font-size:.82rem;">4 pacientes</span></div><div class="prog-bar"><div class="prog-fill" style="width:9%;background:var(--red);opacity:.7;"></div></div></div>
-            <div class="prog-item"><div class="prog-header"><span style="font-size:.82rem;color:var(--amber);">Moderado (65–85 dB)</span><span style="font-size:.82rem;">21 pacientes</span></div><div class="prog-bar"><div class="prog-fill" style="width:45%;background:var(--amber);"></div></div></div>
-            <div class="prog-item"><div class="prog-header"><span style="font-size:.82rem;color:var(--green);">Seguro (&lt;65 dB)</span><span style="font-size:.82rem;">14 pacientes</span></div><div class="prog-bar"><div class="prog-fill" style="width:30%;background:var(--green);"></div></div></div>
-            <button class="btn btn-secondary" style="width:100%;font-size:.82rem;margin-top:8px;" onclick="generateReport()">📊 Generar informe institucional</button>
+          <div class="dash-panel" id="riskDistPanel">
+            <div class="panel-title">Risk distribution</div>
+            <div class="prog-item"><div class="prog-header"><span style="font-size:.82rem;color:var(--red);">Critical (&gt;90 dB)</span><span style="font-size:.82rem;">1 patient</span></div><div class="prog-bar"><div class="prog-fill" style="width:20%;background:var(--red);"></div></div></div>
+            <div class="prog-item"><div class="prog-header"><span style="font-size:.82rem;color:var(--red);">High (85–90 dB)</span><span style="font-size:.82rem;">1 patient</span></div><div class="prog-bar"><div class="prog-fill" style="width:20%;background:var(--red);opacity:.7;"></div></div></div>
+            <div class="prog-item"><div class="prog-header"><span style="font-size:.82rem;color:var(--amber);">Moderate (65–85 dB)</span><span style="font-size:.82rem;">2 patients</span></div><div class="prog-bar"><div class="prog-fill" style="width:40%;background:var(--amber);"></div></div></div>
+            <div class="prog-item"><div class="prog-header"><span style="font-size:.82rem;color:var(--green);">Safe (&lt;65 dB)</span><span style="font-size:.82rem;">1 patient</span></div><div class="prog-bar"><div class="prog-fill" style="width:20%;background:var(--green);"></div></div></div>
+            <button class="btn btn-secondary" style="width:100%;font-size:.82rem;margin-top:8px;" onclick="exportCSV('tablePacientes')">📊 Generate institutional report (CSV)</button>
+          </div>
+        </div>
+        <div class="dash-grid" style="margin-top:20px;">
+          <div class="dash-panel" id="histComparePanel">
+            <div class="panel-title">📈 Historical level comparison <span class="pt-tag">6 MONTHS</span></div>
+            <!-- Reconocimiento antes que recuerdo: leyenda visible de color→riesgo, sin que el médico tenga que memorizarla -->
+            <div class="chart-risk-legend"><span><span class="risk-dot" style="background:linear-gradient(to top,var(--blue),var(--cyan));"></span> Normal &lt;65 dB</span><span><span class="risk-dot" style="background:linear-gradient(to top,#D97706,#F59E0B);"></span> Moderate Risk 65–85 dB</span><span><span class="risk-dot" style="background:linear-gradient(to top,#DC2626,#EF4444);"></span> High Risk &gt;85 dB</span></div>
+            <div style="position:relative;">
+              <div class="chart-peak-flag" id="chartPeakFlag">⚠️ Peak: May · 95 dB · <strong>High Risk</strong></div>
+              <div class="chart-bars" id="histCompareBars">
+                <div class="chart-bar" style="height:55%" title="January (average): 58 dB — Normal"></div><div class="chart-bar amber" style="height:62%" title="January (max): 70 dB — Moderate Risk"></div>
+                <div class="chart-bar" style="height:48%" title="February (average): 55 dB — Normal"></div><div class="chart-bar amber" style="height:70%" title="February (max): 74 dB — Moderate Risk"></div>
+                <div class="chart-bar amber" style="height:66%" title="March (average): 71 dB — Moderate Risk"></div><div class="chart-bar red" style="height:82%" title="March (max): 87 dB — High Risk"></div>
+                <div class="chart-bar" style="height:50%" title="April (average): 57 dB — Normal"></div><div class="chart-bar red" style="height:88%" title="April (max): 93 dB — High Risk"></div>
+                <div class="chart-bar amber" style="height:60%" title="May (average): 69 dB — Moderate Risk"></div><div class="chart-bar red" style="height:90%" title="May (max): 95 dB — High Risk"></div>
+                <div class="chart-bar" style="height:45%" title="June (average): 53 dB — Normal"></div><div class="chart-bar amber" style="height:68%" title="June (max): 73 dB — Moderate Risk"></div>
+              </div>
+            </div>
+            <div class="chart-labels" id="histCompareLabels"><span>Jan</span><span>Jan</span><span>Feb</span><span>Feb</span><span>Mar</span><span>Mar</span><span>Apr</span><span>Apr</span><span>May</span><span>May</span><span>Jun</span><span>Jun</span></div>
+            <p style="margin-top:10px;font-size:.8rem;color:var(--muted);" id="histCompareCaption">Comparison of average level (left) vs. maximum level (right) reported by patients each month. Hover over each bar to see detail and risk level.</p>
+          </div>
+          <div class="dash-panel" id="preventPanel">
+            <div class="panel-title">🩺 Preventive recommendations</div>
+            <div class="alert-list">
+              <div class="alert-item" style="border-color:var(--green);"><span style="font-size:1.2rem;">🟢</span><div class="alert-body"><p>Mandatory hearing protection</p><small>Recommend certified plugs or headphones for exposures &gt;85 dB.</small></div></div>
+              <div class="alert-item" style="border-color:var(--amber);"><span style="font-size:1.2rem;">🟡</span><div class="alert-body"><p>Scheduled hearing breaks</p><small>Suggest 15-min breaks every 2h in noisy environments.</small></div></div>
+              <div class="alert-item" style="border-color:var(--cyan);"><span style="font-size:1.2rem;">🔵</span><div class="alert-body"><p>Periodic audiometry</p><small>Annual check-up for patients with recurring dose &gt;80%.</small></div></div>
+              <div class="alert-item" style="border-color:var(--red);"><span style="font-size:1.2rem;">🔴</span><div class="alert-body"><p>Referral to ENT specialist</p><small>Patients at Critical risk should be evaluated within 7 days.</small></div></div>
+            </div>
           </div>
         </div>
       </div>
@@ -647,21 +745,21 @@
     <!-- MAPA -->
     <div id="dp-mapa" style="display:none;">
       <div class="dash-panel" style="margin-bottom:20px;">
-        <div class="panel-title">🗺️ Mapa de ruido — Lima Metropolitana <span class="pt-tag">EN VIVO</span></div>
+        <div class="panel-title">🗺️ Noise map — Metropolitan Lima <span class="pt-tag">LIVE</span></div>
         <div style="margin-bottom:12px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
-          <button class="ctrl-btn ctrl-btn-blue" onclick="showToast('Actualizando puntos del mapa...')">🔄 Actualizar</button>
-          <button class="ctrl-btn ctrl-btn-green" onclick="activateAddPoint()" id="btnAddPoint" data-i18n="btn_add_point">📍 Agregar mi punto</button>
-          <button class="ctrl-btn ctrl-btn-amber" onclick="exportMap()">📥 Exportar mapa</button>
-          <span id="addPointHint" style="display:none;font-size:.8rem;color:var(--cyan);background:var(--cyan-dim);padding:6px 12px;border-radius:999px;border:1px solid var(--cyan);">📍 Haz clic en el mapa para colocar tu punto</span>
+          <button class="ctrl-btn ctrl-btn-blue" onclick="refreshMapPoints()">🔄 Refresh</button>
+          <button class="ctrl-btn ctrl-btn-green" onclick="activateAddPoint()" id="btnAddPoint" data-i18n="btn_add_point">📍 Add my point</button>
+          <button class="ctrl-btn ctrl-btn-amber" onclick="exportMap()">📥 Export map</button>
+          <span id="addPointHint" style="display:none;font-size:.8rem;color:var(--cyan);background:var(--cyan-dim);padding:6px 12px;border-radius:999px;border:1px solid var(--cyan);">📍 Click on the map to place your point</span>
         </div>
         <div style="height:420px;border-radius:var(--radius-md);overflow:hidden;border:1px solid var(--navy-border);">
           <div id="mapFull" style="height:100%;width:100%;"></div>
         </div>
         <div style="display:flex;gap:16px;margin-top:12px;font-size:.82rem;color:var(--muted);flex-wrap:wrap;">
-          <span><span style="color:var(--red)">●</span> Crítico &gt;85dB</span>
-          <span><span style="color:var(--amber)">●</span> Moderado 65–85dB</span>
-          <span><span style="color:var(--green)">●</span> Seguro &lt;65dB</span>
-          <span style="margin-left:auto;">Última actualización: hace 2 min</span>
+          <span><span style="color:var(--green)">●</span> <span data-i18n="map_legend1">Safe &lt;65dB</span></span>
+          <span><span style="color:var(--amber)">●</span> <span data-i18n="map_legend2">Moderate 65–85dB</span></span>
+          <span><span style="color:var(--red)">●</span> <span data-i18n="map_legend3">Critical &gt;85dB</span></span>
+          <span style="margin-left:auto;" data-i18n="map_last_update">Last update: 2 min ago</span>
         </div>
       </div>
     </div>
@@ -669,60 +767,62 @@
     <!-- HISTORIAL -->
     <div id="dp-historial" style="display:none;">
       <div class="dash-panel" style="margin-bottom:20px;">
-        <div class="panel-title">📁 Historial de exposición completo <span class="pt-tag">30 DÍAS</span></div>
+        <div class="panel-title">📁 Full exposure history <span class="pt-tag">30 DAYS</span></div>
         <div style="margin-bottom:16px;display:flex;gap:12px;flex-wrap:wrap;">
-          <button class="ctrl-btn ctrl-btn-blue" onclick="filterByDate()">📅 Filtrar por fecha</button>
-          <button class="ctrl-btn ctrl-btn-blue" onclick="resetDateFilter()" style="opacity:.7;">✕ Limpiar filtro</button>
-          <button class="ctrl-btn ctrl-btn-green" onclick="exportCSV()">📊 Exportar CSV</button>
+          <button class="ctrl-btn ctrl-btn-blue" onclick="filterByDate()">📅 Filter by date</button>
+          <button class="ctrl-btn ctrl-btn-blue" onclick="resetDateFilter()" style="opacity:.7;">✕ Clear filter</button>
+          <button class="ctrl-btn ctrl-btn-green" onclick="exportCSV('tableHistorialFull')">📊 Export CSV</button>
         </div>
-        <table class="data-table">
-          <thead><tr><th>Fecha</th><th>Nivel máx.</th><th>Nivel prom.</th><th>Dosis</th><th>Tiempo exposición</th><th>Estado</th></tr></thead>
+        <div class="table-scroll">
+        <table class="data-table" id="tableHistorialFull">
+          <thead><tr><th>Date</th><th>Max level</th><th>Avg level</th><th>Dose</th><th>Exposure time</th><th>Status</th></tr></thead>
           <tbody>
-            <tr><td>Jue 18 Jun 2026</td><td>92 dB</td><td>78 dB</td><td>87%</td><td>5h 40m</td><td><span class="tag tag-red">Riesgo alto</span></td></tr>
-            <tr><td>Mié 17 Jun 2026</td><td>95 dB</td><td>82 dB</td><td>102%</td><td>6h 20m</td><td><span class="tag tag-red">Supera límite</span></td></tr>
-            <tr><td>Mar 16 Jun 2026</td><td>88 dB</td><td>75 dB</td><td>74%</td><td>4h 50m</td><td><span class="tag tag-amber">Moderado</span></td></tr>
-            <tr><td>Lun 15 Jun 2026</td><td>76 dB</td><td>62 dB</td><td>38%</td><td>2h 10m</td><td><span class="tag tag-green">Seguro</span></td></tr>
-            <tr><td>Dom 14 Jun 2026</td><td>60 dB</td><td>52 dB</td><td>18%</td><td>1h 20m</td><td><span class="tag tag-green">Seguro</span></td></tr>
-            <tr><td>Sáb 13 Jun 2026</td><td>85 dB</td><td>74 dB</td><td>65%</td><td>4h 00m</td><td><span class="tag tag-amber">Moderado</span></td></tr>
-            <tr><td>Vie 12 Jun 2026</td><td>90 dB</td><td>80 dB</td><td>91%</td><td>5h 10m</td><td><span class="tag tag-red">Riesgo alto</span></td></tr>
+            <tr><td>Thu Jun 18, 2026</td><td>92 dB</td><td>78 dB</td><td>87%</td><td>5h 40m</td><td><span class="tag tag-red" data-i18n="status_high_risk">High risk</span></td></tr>
+            <tr><td>Wed Jun 17, 2026</td><td>95 dB</td><td>82 dB</td><td>102%</td><td>6h 20m</td><td><span class="tag tag-red" data-i18n="status_exceeds_limit">Exceeds limit</span></td></tr>
+            <tr><td>Tue Jun 16, 2026</td><td>88 dB</td><td>75 dB</td><td>74%</td><td>4h 50m</td><td><span class="tag tag-amber" data-i18n="status_moderate">Moderate</span></td></tr>
+            <tr><td>Mon Jun 15, 2026</td><td>76 dB</td><td>62 dB</td><td>38%</td><td>2h 10m</td><td><span class="tag tag-green" data-i18n="status_safe">Safe</span></td></tr>
+            <tr><td>Sun Jun 14, 2026</td><td>60 dB</td><td>52 dB</td><td>18%</td><td>1h 20m</td><td><span class="tag tag-green" data-i18n="status_safe">Safe</span></td></tr>
+            <tr><td>Sat Jun 13, 2026</td><td>85 dB</td><td>74 dB</td><td>65%</td><td>4h 00m</td><td><span class="tag tag-amber" data-i18n="status_moderate">Moderate</span></td></tr>
+            <tr><td>Fri Jun 12, 2026</td><td>90 dB</td><td>80 dB</td><td>91%</td><td>5h 10m</td><td><span class="tag tag-red" data-i18n="status_high_risk">High risk</span></td></tr>
           </tbody>
         </table>
+        </div>
       </div>
     </div>
 
     <!-- ALERTAS -->
     <div id="dp-alertas" style="display:none;">
       <div class="kpi-grid" style="margin-bottom:20px;">
-        <div class="kpi-card"><div class="kpi-label">Alertas hoy</div><div class="kpi-value" style="color:var(--red);">3</div><div class="kpi-trend trend-up">↑ 2 críticas</div></div>
-        <div class="kpi-card"><div class="kpi-label">Esta semana</div><div class="kpi-value" style="color:var(--amber);">11</div><div class="kpi-trend trend-up">↑ 4 resueltas</div></div>
-        <div class="kpi-card"><div class="kpi-label">Zonas críticas</div><div class="kpi-value" style="color:var(--red);">5</div><div class="kpi-trend trend-up">↑ Lima Norte</div></div>
-        <div class="kpi-card"><div class="kpi-label">Nivel máximo hoy</div><div class="kpi-value" style="color:var(--red);">96 dB</div><div class="kpi-trend trend-up">↑ Javier Prado</div></div>
+        <div class="kpi-card"><div class="kpi-label">Alerts today</div><div class="kpi-value" style="color:var(--red);">3</div><div class="kpi-trend trend-up">↑ 2 critical</div></div>
+        <div class="kpi-card"><div class="kpi-label">This week</div><div class="kpi-value" style="color:var(--amber);">11</div><div class="kpi-trend trend-up">↑ 4 resolved</div></div>
+        <div class="kpi-card"><div class="kpi-label">Critical zones</div><div class="kpi-value" style="color:var(--red);">5</div><div class="kpi-trend trend-up">↑ North Lima</div></div>
+        <div class="kpi-card"><div class="kpi-label">Max level today</div><div class="kpi-value" style="color:var(--red);">96 dB</div><div class="kpi-trend trend-up">↑ Javier Prado</div></div>
       </div>
       <div class="dash-panel">
-        <div class="panel-title">🔔 Centro de alertas <span class="pt-tag">ACTIVAS</span></div>
+        <div class="panel-title">🔔 Alert center <span class="pt-tag">ACTIVE</span></div>
         <div style="margin-bottom:16px;display:flex;gap:12px;">
-          <button class="ctrl-btn ctrl-btn-green" onclick="markAllRead()">✓ Marcar todo como leído</button>
-          <button class="ctrl-btn ctrl-btn-blue" onclick="configureAlerts()">⚙️ Configurar alertas</button>
+          <button class="ctrl-btn ctrl-btn-green" onclick="markAllRead()">✓ Mark all as read</button>
+          <button class="ctrl-btn ctrl-btn-blue" onclick="configureAlerts()">⚙️ Configure alerts</button>
         </div>
         <div class="alert-list">
           <div class="alert-item" style="border-color:var(--red);background:var(--red-dim);">
             <div class="alert-dot dot-red"></div>
-            <div class="alert-body" style="flex:1"><p style="color:var(--red);">🚨 CRÍTICO — Nivel 96 dB detectado</p><small>Av. Javier Prado Este · hace 15 min · Tu ubicación actual</small></div>
-            <button class="ctrl-btn ctrl-btn-red" style="font-size:.75rem;padding:6px 12px;" onclick="resolveAlert(this)">Resolver</button>
+            <div class="alert-body" style="flex:1"><p style="color:var(--red);">🚨 CRITICAL — 96 dB level detected</p><small>Av. Javier Prado Este · 15 min ago · Your current location</small></div>
+            <button class="ctrl-btn ctrl-btn-red" style="font-size:.75rem;padding:6px 12px;" onclick="resolveAlert(this)">Resolve</button>
           </div>
           <div class="alert-item" style="border-color:var(--red);">
             <div class="alert-dot dot-red"></div>
-            <div class="alert-body" style="flex:1"><p>⚠️ Dosis diaria superó el 85%</p><small>Umbral personalizado alcanzado · hace 1h</small></div>
-            <button class="ctrl-btn ctrl-btn-amber" style="font-size:.75rem;padding:6px 12px;" onclick="postponeAlert(this)">Posponer</button>
+            <div class="alert-body" style="flex:1"><p>⚠️ Daily dose exceeded 85%</p><small>Custom threshold reached · 1h ago</small></div>
+            <button class="ctrl-btn ctrl-btn-amber" style="font-size:.75rem;padding:6px 12px;" onclick="postponeAlert(this)">Postpone</button>
           </div>
           <div class="alert-item" style="border-color:var(--amber);">
             <div class="alert-dot dot-amber"></div>
-            <div class="alert-body" style="flex:1"><p>Zona moderada — Av. La Marina</p><small>74 dB · hace 3h · Camino al trabajo</small></div>
-            <button class="ctrl-btn ctrl-btn-green" style="font-size:.75rem;padding:6px 12px;" onclick="resolveAlert(this)">Resolver</button>
+            <div class="alert-body" style="flex:1"><p>Moderate zone — Av. La Marina</p><small>74 dB · 3h ago · On the way to work</small></div>
+            <button class="ctrl-btn ctrl-btn-green" style="font-size:.75rem;padding:6px 12px;" onclick="resolveAlert(this)">Resolve</button>
           </div>
           <div class="alert-item" style="border-color:var(--green);">
             <div class="alert-dot dot-green"></div>
-            <div class="alert-body"><p>✅ Nivel seguro detectado — Parque Kennedy</p><small>48 dB · hace 6h</small></div>
+            <div class="alert-body"><p>✅ Safe level detected — Parque Kennedy</p><small>48 dB · 6h ago</small></div>
           </div>
         </div>
       </div>
@@ -730,76 +830,134 @@
 
     <!-- CONFIGURAR -->
     <div id="dp-configurar" style="display:none;">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+      <div class="mg-2col" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
         <div class="dash-panel">
-          <div class="panel-title">🔔 Configurar alertas</div>
+          <div class="panel-title">🔔 Configure alerts</div>
           <div style="display:flex;flex-direction:column;gap:16px;">
             <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--navy-mid);border-radius:var(--radius-md);">
-              <div><p style="font-weight:600;font-size:.9rem;">Umbral de alerta</p><small style="color:var(--muted);">Nivel sonoro para notificar</small></div>
-              <div style="display:flex;align-items:center;gap:8px;"><input type="range" min="60" max="100" value="75" style="width:100px;" oninput="this.nextElementSibling.textContent=this.value+' dB'"><span style="color:var(--cyan);font-weight:700;min-width:48px;">75 dB</span></div>
+              <div><p style="font-weight:600;font-size:.9rem;">Alert threshold</p><small style="color:var(--muted);">Sound level to notify</small></div>
+              <div class="no-db-wrap" style="display:flex;align-items:center;gap:8px;"><input type="range" min="60" max="100" value="75" id="thresholdSlider" style="width:100px;" oninput="document.getElementById('thresholdValLabel').textContent=this.value+' '+unitSuffix()"><span style="color:var(--cyan);font-weight:700;min-width:56px;" id="thresholdValLabel">75 dB</span></div>
             </div>
             <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--navy-mid);border-radius:var(--radius-md);">
-              <div><p style="font-weight:600;font-size:.9rem;">Alertas push</p><small style="color:var(--muted);">Notificaciones del navegador</small></div>
-              <label style="position:relative;display:inline-block;width:48px;height:26px;"><input type="checkbox" checked style="opacity:0;width:0;height:0;" onchange="showToast(this.checked?'🔔 Alertas push activadas':'🔕 Alertas push desactivadas')"><span style="position:absolute;inset:0;background:var(--cyan);border-radius:13px;cursor:pointer;transition:.3s;"></span></label>
+              <div><p style="font-weight:600;font-size:.9rem;">Push alerts</p><small style="color:var(--muted);">Browser notifications</small></div>
+              <label style="position:relative;display:inline-block;width:48px;height:26px;"><input type="checkbox" checked style="opacity:0;width:0;height:0;" onchange="showToast(this.checked?'🔔 Push alerts enabled':'🔕 Push alerts disabled')"><span style="position:absolute;inset:0;background:var(--cyan);border-radius:13px;cursor:pointer;transition:.3s;"></span></label>
             </div>
             <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--navy-mid);border-radius:var(--radius-md);">
-              <div><p style="font-weight:600;font-size:.9rem;">Alertas por correo</p><small style="color:var(--muted);">Resumen diario al email</small></div>
-              <label style="position:relative;display:inline-block;width:48px;height:26px;"><input type="checkbox" style="opacity:0;width:0;height:0;" onchange="showToast(this.checked?'📧 Alertas por correo activadas':'📧 Alertas por correo desactivadas')"><span style="position:absolute;inset:0;background:var(--navy-border);border-radius:13px;cursor:pointer;transition:.3s;"></span></label>
+              <div><p style="font-weight:600;font-size:.9rem;">Email alerts</p><small style="color:var(--muted);">Daily summary by email</small></div>
+              <label style="position:relative;display:inline-block;width:48px;height:26px;"><input type="checkbox" style="opacity:0;width:0;height:0;" onchange="showToast(this.checked?'📧 Email alerts enabled':'📧 Email alerts disabled')"><span style="position:absolute;inset:0;background:var(--navy-border);border-radius:13px;cursor:pointer;transition:.3s;"></span></label>
             </div>
             <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--navy-mid);border-radius:var(--radius-md);">
-              <div><p style="font-weight:600;font-size:.9rem;">Modo silencio nocturno</p><small style="color:var(--muted);">Sin alertas entre 10pm–7am</small></div>
-              <label style="position:relative;display:inline-block;width:48px;height:26px;"><input type="checkbox" style="opacity:0;width:0;height:0;" onchange="showToast(this.checked?'🌙 Modo nocturno activado':'☀️ Modo nocturno desactivado')"><span style="position:absolute;inset:0;background:var(--navy-border);border-radius:13px;cursor:pointer;transition:.3s;"></span></label>
+              <div><p style="font-weight:600;font-size:.9rem;">Night silent mode</p><small style="color:var(--muted);">No alerts from 10pm–7am</small></div>
+              <label style="position:relative;display:inline-block;width:48px;height:26px;"><input type="checkbox" style="opacity:0;width:0;height:0;" onchange="showToast(this.checked?'🌙 Night mode enabled':'☀️ Night mode disabled')"><span style="position:absolute;inset:0;background:var(--navy-border);border-radius:13px;cursor:pointer;transition:.3s;"></span></label>
             </div>
           </div>
         </div>
         <div class="dash-panel">
-          <div class="panel-title">📍 Zonas de monitoreo</div>
-          <div style="display:flex;flex-direction:column;gap:12px;">
-            <div style="padding:12px;background:var(--navy-mid);border-radius:var(--radius-md);display:flex;justify-content:space-between;align-items:center;">
-              <div><p style="font-weight:600;font-size:.9rem;">📍 Casa</p><small style="color:var(--muted);">Miraflores, Lima</small></div>
-              <span class="tag tag-green">Activa</span>
+          <div class="panel-title">📍 Monitoring zones</div>
+          <!-- Cada perfil tiene su propia lista de zonas: eliminar una zona en un dashboard no afecta a los demás -->
+          <div style="display:flex;flex-direction:column;gap:12px;" id="zonesCiudadano" class="zones-wrap">
+            <div class="zone-item" style="padding:12px;background:var(--navy-mid);border-radius:var(--radius-md);display:flex;justify-content:space-between;align-items:center;gap:10px;">
+              <div><p style="font-weight:600;font-size:.9rem;" data-i18n="zone_ciu1_n">📍 Home</p><small style="color:var(--muted);" data-i18n="zone_ciu1_s">Miraflores, Lima · 58 dB</small></div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span class="tag tag-green" data-i18n="zone_active">Active</span>
+                <button class="ctrl-btn ctrl-btn-red" style="padding:5px 10px;font-size:.72rem;" onclick="this.closest('.zone-item').remove();showToast('🗑️ Zone deleted')" title="Delete zone">✕</button>
+              </div>
             </div>
-            <div style="padding:12px;background:var(--navy-mid);border-radius:var(--radius-md);display:flex;justify-content:space-between;align-items:center;">
-              <div><p style="font-weight:600;font-size:.9rem;">💼 Trabajo</p><small style="color:var(--muted);">San Isidro, Lima</small></div>
-              <span class="tag tag-amber">Moderado</span>
+            <div class="zone-item" style="padding:12px;background:var(--navy-mid);border-radius:var(--radius-md);display:flex;justify-content:space-between;align-items:center;gap:10px;">
+              <div><p style="font-weight:600;font-size:.9rem;" data-i18n="zone_ciu2_n">💼 Work</p><small style="color:var(--muted);" data-i18n="zone_ciu2_s">San Isidro, Lima · 78 dB</small></div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span class="tag tag-amber" data-i18n="zone_moderate">Moderate</span>
+                <button class="ctrl-btn ctrl-btn-red" style="padding:5px 10px;font-size:.72rem;" onclick="this.closest('.zone-item').remove();showToast('🗑️ Zone deleted')" title="Delete zone">✕</button>
+              </div>
             </div>
-            <div style="padding:12px;background:var(--navy-mid);border-radius:var(--radius-md);display:flex;justify-content:space-between;align-items:center;">
-              <div><p style="font-weight:600;font-size:.9rem;">🏋️ Gimnasio</p><small style="color:var(--muted);">Surco, Lima</small></div>
-              <span class="tag tag-red">Crítico</span>
+            <div class="zone-item" style="padding:12px;background:var(--navy-mid);border-radius:var(--radius-md);display:flex;justify-content:space-between;align-items:center;gap:10px;">
+              <div><p style="font-weight:600;font-size:.9rem;" data-i18n="zone_ciu3_n">🏋️ Gym</p><small style="color:var(--muted);" data-i18n="zone_ciu3_s">Surco, Lima · 91 dB</small></div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span class="tag tag-red" data-i18n="zone_critical">Critical</span>
+                <button class="ctrl-btn ctrl-btn-red" style="padding:5px 10px;font-size:.72rem;" onclick="this.closest('.zone-item').remove();showToast('🗑️ Zone deleted')" title="Delete zone">✕</button>
+              </div>
             </div>
-            <button class="ctrl-btn ctrl-btn-blue" style="width:100%;" onclick="addZone()">+ Agregar zona</button>
+            <button class="ctrl-btn ctrl-btn-blue" style="width:100%;" onclick="addZone()">+ Add zone</button>
+          </div>
+          <div style="display:none;flex-direction:column;gap:12px;" id="zonesTrabajador" class="zones-wrap">
+            <div class="zone-item" style="padding:12px;background:var(--navy-mid);border-radius:var(--radius-md);display:flex;justify-content:space-between;align-items:center;gap:10px;">
+              <div><p style="font-weight:600;font-size:.9rem;" data-i18n="zone_trab1_n">🏭 Production plant</p><small style="color:var(--muted);" data-i18n="zone_trab1_s">Industrial zone, Ate · 92 dB</small></div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span class="tag tag-red" data-i18n="zone_critical">Critical</span>
+                <button class="ctrl-btn ctrl-btn-red" style="padding:5px 10px;font-size:.72rem;" onclick="this.closest('.zone-item').remove();showToast('🗑️ Zone deleted')" title="Delete zone">✕</button>
+              </div>
+            </div>
+            <div class="zone-item" style="padding:12px;background:var(--navy-mid);border-radius:var(--radius-md);display:flex;justify-content:space-between;align-items:center;gap:10px;">
+              <div><p style="font-weight:600;font-size:.9rem;" data-i18n="zone_trab2_n">🔧 Maintenance workshop</p><small style="color:var(--muted);" data-i18n="zone_trab2_s">Callao · 84 dB</small></div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span class="tag tag-amber" data-i18n="zone_moderate">Moderate</span>
+                <button class="ctrl-btn ctrl-btn-red" style="padding:5px 10px;font-size:.72rem;" onclick="this.closest('.zone-item').remove();showToast('🗑️ Zone deleted')" title="Delete zone">✕</button>
+              </div>
+            </div>
+            <div class="zone-item" style="padding:12px;background:var(--navy-mid);border-radius:var(--radius-md);display:flex;justify-content:space-between;align-items:center;gap:10px;">
+              <div><p style="font-weight:600;font-size:.9rem;" data-i18n="zone_trab3_n">🧰 Administrative office</p><small style="color:var(--muted);" data-i18n="zone_trab3_s">Callao · 58 dB</small></div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span class="tag tag-green" data-i18n="zone_active">Active</span>
+                <button class="ctrl-btn ctrl-btn-red" style="padding:5px 10px;font-size:.72rem;" onclick="this.closest('.zone-item').remove();showToast('🗑️ Zone deleted')" title="Delete zone">✕</button>
+              </div>
+            </div>
+            <button class="ctrl-btn ctrl-btn-blue" style="width:100%;" onclick="addZone()">+ Add zone</button>
+          </div>
+          <div style="display:none;flex-direction:column;gap:12px;" id="zonesProfesional" class="zones-wrap">
+            <div class="zone-item" style="padding:12px;background:var(--navy-mid);border-radius:var(--radius-md);display:flex;justify-content:space-between;align-items:center;gap:10px;">
+              <div><p style="font-weight:600;font-size:.9rem;" data-i18n="zone_prof1_n">🏥 ENT office</p><small style="color:var(--muted);" data-i18n="zone_prof1_s">Clínica San Felipe, Jesús María · 52 dB</small></div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span class="tag tag-green" data-i18n="zone_active">Active</span>
+                <button class="ctrl-btn ctrl-btn-red" style="padding:5px 10px;font-size:.72rem;" onclick="this.closest('.zone-item').remove();showToast('🗑️ Zone deleted')" title="Delete zone">✕</button>
+              </div>
+            </div>
+            <div class="zone-item" style="padding:12px;background:var(--navy-mid);border-radius:var(--radius-md);display:flex;justify-content:space-between;align-items:center;gap:10px;">
+              <div><p style="font-weight:600;font-size:.9rem;" data-i18n="zone_prof2_n">🩺 Waiting room</p><small style="color:var(--muted);" data-i18n="zone_prof2_s">Clínica San Felipe · 68 dB</small></div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span class="tag tag-amber" data-i18n="zone_moderate">Moderate</span>
+                <button class="ctrl-btn ctrl-btn-red" style="padding:5px 10px;font-size:.72rem;" onclick="this.closest('.zone-item').remove();showToast('🗑️ Zone deleted')" title="Delete zone">✕</button>
+              </div>
+            </div>
+            <div class="zone-item" style="padding:12px;background:var(--navy-mid);border-radius:var(--radius-md);display:flex;justify-content:space-between;align-items:center;gap:10px;">
+              <div><p style="font-weight:600;font-size:.9rem;" data-i18n="zone_prof3_n">🏭 Industrial plant visit</p><small style="color:var(--muted);" data-i18n="zone_prof3_s">North industrial zone · 89 dB</small></div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span class="tag tag-red" data-i18n="zone_critical">Critical</span>
+                <button class="ctrl-btn ctrl-btn-red" style="padding:5px 10px;font-size:.72rem;" onclick="this.closest('.zone-item').remove();showToast('🗑️ Zone deleted')" title="Delete zone">✕</button>
+              </div>
+            </div>
+            <button class="ctrl-btn ctrl-btn-blue" style="width:100%;" onclick="addZone()">+ Add zone</button>
           </div>
         </div>
       </div>
       <div class="dash-panel" style="margin-top:20px;">
-        <div class="panel-title">🎛️ Preferencias de la aplicación</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;">
+        <div class="panel-title">🎛️ Application preferences</div>
+        <div class="mg-3col" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;">
           <div style="padding:16px;background:var(--navy-mid);border-radius:var(--radius-md);">
             <p style="font-size:1.4rem;margin-bottom:8px;text-align:center;">🌙</p>
-            <p style="font-size:.82rem;font-weight:600;margin-bottom:10px;text-align:center;">Tema</p>
-            <button class="ctrl-btn ctrl-btn-blue" style="width:100%;font-size:.8rem;" onclick="toggleTheme();showToast('Tema cambiado correctamente')">Cambiar tema</button>
+            <p style="font-size:.82rem;font-weight:600;margin-bottom:10px;text-align:center;">Theme</p>
+            <button class="ctrl-btn ctrl-btn-blue" style="width:100%;font-size:.8rem;" onclick="toggleTheme();showToast('Theme changed successfully')">Change theme</button>
           </div>
           <div style="padding:16px;background:var(--navy-mid);border-radius:var(--radius-md);">
             <p style="font-size:1.4rem;margin-bottom:8px;text-align:center;">🌐</p>
-            <p style="font-size:.82rem;font-weight:600;margin-bottom:10px;text-align:center;">Idioma</p>
+            <p style="font-size:.82rem;font-weight:600;margin-bottom:10px;text-align:center;">Language</p>
             <select id="appLanguage" style="width:100%;padding:9px 12px;background:var(--navy-card);border:1px solid var(--navy-border);border-radius:var(--radius-md);color:var(--white);font-size:.85rem;outline:none;cursor:pointer;" onchange="applyLanguage(this.value)">
-              <option value="es" selected>🇵🇪 Español</option>
-              <option value="en">🇺🇸 English</option>
-              <option value="zh">🇨🇳 中文 (Chino)</option>
+              <option value="es">🇵🇪 Español</option>
+              <option value="en" selected>🇺🇸 English</option>
+              <option value="zh">🇨🇳 中文 (Chinese)</option>
             </select>
           </div>
           <div style="padding:16px;background:var(--navy-mid);border-radius:var(--radius-md);">
             <p style="font-size:1.4rem;margin-bottom:8px;text-align:center;">📊</p>
-            <p style="font-size:.82rem;font-weight:600;margin-bottom:10px;text-align:center;">Unidad de medida</p>
+            <p style="font-size:.82rem;font-weight:600;margin-bottom:10px;text-align:center;">Unit of measurement</p>
             <select id="appUnit" style="width:100%;padding:9px 12px;background:var(--navy-card);border:1px solid var(--navy-border);border-radius:var(--radius-md);color:var(--white);font-size:.85rem;outline:none;cursor:pointer;" onchange="applyUnit(this.value)">
               <option value="dB_SPL" selected>dB (SPL)</option>
-              <option value="dBA">dB(A) — Ponderado A</option>
-              <option value="dBC">dB(C) — Ponderado C</option>
+              <option value="dBA">dB(A) — A-weighted</option>
+              <option value="dBC">dB(C) — C-weighted</option>
             </select>
           </div>
         </div>
         <div style="margin-top:16px;display:flex;justify-content:flex-end;">
-          <button class="ctrl-btn ctrl-btn-blue" onclick="saveAppPreferences()">💾 Guardar preferencias</button>
+          <button class="ctrl-btn ctrl-btn-blue" onclick="saveAppPreferences()">💾 Save preferences</button>
         </div>
       </div>
     </div>
@@ -808,35 +966,35 @@
     <div id="dp-perfil" style="display:none;">
       <div class="profile-panel">
         <div class="profile-avatar-lg" id="profileAvatarLg">US</div>
-        <div class="profile-name" id="profileName">Usuario</div>
+        <div class="profile-name" id="profileName">User</div>
         <div class="profile-email" id="profileEmail">usuario@correo.com</div>
         <div class="profile-grid">
-          <div class="profile-field"><label>Nombre</label><input type="text" id="pfNombre" value="Carlos"/></div>
-          <div class="profile-field"><label>Apellido</label><input type="text" id="pfApellido" value="Ruiz"/></div>
-          <div class="profile-field"><label>Correo</label><input type="email" id="pfEmail" value="carlos@correo.com"/></div>
-          <div class="profile-field"><label>Teléfono</label><input type="text" value="+51 987 654 321"/></div>
-          <div class="profile-field"><label>Ciudad</label><input type="text" value="Lima, Perú"/></div>
-          <div class="profile-field"><label>Segmento</label><input type="text" id="pfSegmento" value="Ciudadano" readonly style="color:var(--cyan);"/></div>
+          <div class="profile-field"><label>First name</label><input type="text" id="pfNombre" value="Carlos"/></div>
+          <div class="profile-field"><label>Last name</label><input type="text" id="pfApellido" value="Ruiz"/></div>
+          <div class="profile-field"><label>Email</label><input type="email" id="pfEmail" value="carlos@correo.com"/></div>
+          <div class="profile-field"><label>Phone</label><input type="text" value="+51 987 654 321"/></div>
+          <div class="profile-field"><label>City</label><input type="text" value="Lima, Peru"/></div>
+          <div class="profile-field"><label>Segment</label><input type="text" id="pfSegmento" value="Citizen" readonly style="color:var(--cyan);"/></div>
         </div>
         <div style="margin-top:20px;display:flex;gap:12px;">
-          <button class="ctrl-btn ctrl-btn-blue" onclick="saveProfile()">💾 Guardar cambios</button>
-          <button class="ctrl-btn ctrl-btn-amber" onclick="changePassword()">🔑 Cambiar contraseña</button>
+          <button class="ctrl-btn ctrl-btn-blue" onclick="saveProfile()">💾 Save changes</button>
+          <button class="ctrl-btn ctrl-btn-amber" onclick="changePassword()">🔑 Change password</button>
         </div>
       </div>
       <div class="dash-panel">
-        <div class="panel-title">📊 Resumen de tu actividad</div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+        <div class="panel-title">📊 Summary of your activity</div>
+        <div class="mg-3col" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
           <div style="text-align:center;padding:20px;background:var(--navy-mid);border-radius:var(--radius-md);">
             <div style="font-family:'Space Grotesk';font-size:2rem;font-weight:700;color:var(--cyan);">142</div>
-            <div style="font-size:.82rem;color:var(--muted);">Sesiones de monitoreo</div>
+            <div style="font-size:.82rem;color:var(--muted);">Monitoring sessions</div>
           </div>
           <div style="text-align:center;padding:20px;background:var(--navy-mid);border-radius:var(--radius-md);">
             <div style="font-family:'Space Grotesk';font-size:2rem;font-weight:700;color:var(--amber);">28</div>
-            <div style="font-size:.82rem;color:var(--muted);">Alertas recibidas</div>
+            <div style="font-size:.82rem;color:var(--muted);">Alerts received</div>
           </div>
           <div style="text-align:center;padding:20px;background:var(--navy-mid);border-radius:var(--radius-md);">
             <div style="font-family:'Space Grotesk';font-size:2rem;font-weight:700;color:var(--green);">7</div>
-            <div style="font-size:.82rem;color:var(--muted);">Informes generados</div>
+            <div style="font-size:.82rem;color:var(--muted);">Reports generated</div>
           </div>
         </div>
       </div>
@@ -846,7 +1004,6 @@
 </div><!-- /dashboard -->
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-  <script src="assets/scripts/main.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
