@@ -1,6 +1,10 @@
 // ── Theme ──
-function toggleTheme(){const t=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',t);document.querySelectorAll('.theme-btn:not(.lang-btn)').forEach(b=>b.textContent=t==='dark'?'☀️':'🌙');}
-
+function toggleTheme(){
+  var t=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',t);
+  localStorage.setItem('audiosafe-theme',t);
+  document.querySelectorAll('.theme-btn:not(.lang-btn)').forEach(function(b){b.textContent=t==='dark'?'☀️':'🌙';});
+}
 // ── Menu ──
 function toggleMenu(){const nav=document.getElementById('navLinks');nav.style.display=nav.style.display==='flex'?'none':'flex';}
 
