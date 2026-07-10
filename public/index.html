@@ -8,16 +8,19 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <!-- Leaflet map -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="public/assets/styles/styles.css" />
 </head>
 <body>
 
+<!-- LANDING -->
 <div id="landing">
 
+  <!-- CTA flotante persistente: visibilidad continua de la acción principal (IHC) -->
   <div class="sticky-cta" id="stickyCta">
     <button class="btn btn-primary btn-hero" onclick="openLogin()">Start for free →</button>
   </div>
 
+  <!-- NAV -->
   <header class="site-header">
     <nav class="navbar container">
       <a class="brand" href="#inicio">
@@ -76,6 +79,7 @@
   </header>
 
   <main>
+    <!-- INICIO / HERO -->
     <section class="hero" id="inicio">
       <div class="hero-bg">
         <div class="hero-orb orb-1"></div>
@@ -84,6 +88,15 @@
       <div class="container hero-grid">
         <div class="hero-content reveal">
           <span class="eyebrow" data-i18n="hero_eyebrow">🔊 The app that protects your hearing</span>
+          <!--
+            IMPORTANT (i18n): each visual line of this heading MUST be its own element
+            with its own data-i18n key. Never split a translated sentence across raw
+            text nodes separated by <br> (e.g. "text<br>more text<br><em>text</em>"),
+            because setLang() only rewrites elements it can select — a bare text node
+            between two <br> tags has no selector, so it gets silently skipped and
+            stays in whatever language was hardcoded here. That was the exact bug
+            that caused the Chinese/English mix on this headline.
+          -->
           <h1><span data-i18n="hero_h1_l1">Your ears don't warn you</span><br><span data-i18n="hero_h1_l2">when noise damages them.</span><br><em data-i18n="hero_h1_l3">AudioSafe does.</em></h1>
           <p>Measure the sound around you in real time, get warned in time, and protect something that, once lost, never comes back.</p>
           <div class="hero-actions">
@@ -220,6 +233,7 @@
       </div>
     </section>
 
+    <!-- CTA intermedio: repite la acción principal a mitad del funnel (visibilidad de la acción clave) -->
     <section class="midfunnel-cta">
       <div class="container">
         <p>You've seen how it works. Start measuring your exposure today.</p>
@@ -227,6 +241,7 @@
       </div>
     </section>
 
+        <!-- CONFIANZA / PRUEBA SOCIAL (reforzada antes de precios) -->
     <section class="trust-bar" aria-label="Trust indicators">
       <div class="container">
         <div class="trust-stats">
@@ -279,6 +294,7 @@
       </div>
     </section>
 
+    <!-- PLANES -->
     <section class="section-pad" id="planes">
       <div class="container">
         <div class="section-heading reveal">
@@ -335,6 +351,7 @@
       </div>
     </section>
 
+    <!-- FAQ -->
     <section class="section-pad" id="faq">
       <div class="container">
         <div class="section-heading reveal">
@@ -352,6 +369,7 @@
       </div>
     </section>
 
+    <!-- CTA -->
     <section class="section-pad cta-section">
       <div class="container">
         <div class="cta-card reveal">
@@ -362,7 +380,6 @@
         </div>
       </div>
     </section>
-    
   <!-- CONTACTO -->
     <section class="section-pad" id="contacto" style="background:var(--navy-mid);">
       <div class="container">
@@ -458,7 +475,7 @@
   </footer>
 </div>
 
-<!-- LOGIN  -->
+<!-- LOGIN MODAL -->
 <div class="modal-overlay" id="loginModal">
   <div class="modal-box">
     <button class="modal-close" onclick="closeLogin()">✕</button>
@@ -481,6 +498,7 @@
     </div>
     <p class="modal-sub">Sign in to access the dashboard.</p>
     <div id="loginEmailDisplay" class="username-display"></div>
+    <!-- Validation error box -->
     <div id="loginError" style="display:none;background:var(--red-dim);border:1px solid var(--red);border-radius:var(--radius-md);padding:10px 14px;font-size:.83rem;color:var(--red);margin-bottom:12px;"></div>
     <div class="mg-2col" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:0;">
       <div class="form-group" style="margin-bottom:0;">
@@ -511,6 +529,7 @@
   </div>
 </div>
 
+<!-- TOAST -->
 <div id="toast" class="toast" style="display:none;"></div>
 
 <!-- DASHBOARD -->
@@ -556,7 +575,9 @@
       <p id="dashSub" style="color:var(--muted);font-size:.88rem;"></p>
     </div>
 
+    <!-- PANEL PRINCIPAL (tabs) -->
     <div id="dp-panel">
+      <!-- Controles de monitoreo -->
       <div class="monitor-controls">
         <button class="ctrl-btn ctrl-btn-red" id="btnStop" onclick="toggleMonitor()">⏹ Stop monitoring</button>
         <button class="ctrl-btn ctrl-btn-blue" onclick="generateReport()">📊 Export CSV</button>
@@ -564,6 +585,8 @@
         <button class="ctrl-btn ctrl-btn-green" onclick="shareLocation()">📍 Share location</button>
       </div>
 
+      <!-- Ayuda a reconocer y recuperarse de errores: si el micrófono falla, la app sigue funcionando -->
+      <!-- (el monitoreo simulado continúa) y muestra un aviso claro y accionable, no se congela. -->
       <div id="micErrorBanner" class="mic-error-banner" style="display:none;">
         <span style="font-size:1.1rem;">🎙️</span>
         <span class="mic-error-text">We couldn't access your microphone. Enable permissions in your browser settings.</span>
@@ -613,7 +636,8 @@
 
       <!-- TRABAJADOR -->
       <div class="seg-dash" id="dash-trabajador">
-          <div class="glance-card glance-red" id="glanceCard">
+        <!-- Glanceable UI: indicador gigante de un solo vistazo, pensado para leerse en segundos mientras se opera maquinaria -->
+        <div class="glance-card glance-red" id="glanceCard">
           <div class="glance-main">
             <div class="glance-icon" id="glanceIcon">⏱️</div>
             <div>
@@ -1004,6 +1028,6 @@
 </div><!-- /dashboard -->
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="script.js"></script>
+<script src="main.js"></script>
 </body>
 </html>
