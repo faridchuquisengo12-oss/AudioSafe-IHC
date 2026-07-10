@@ -50,7 +50,7 @@ function highlightSegment(seg){
 })();
 selectSegment('ciudadano');
 
-function updateEmailDisplay(val){const d=document.getElementById('loginEmailDisplay');if(val.length>3){d.textContent='👤 Signed in as: '+val;d.classList.add('show');}else{d.classList.remove('show');}}
+function updateEmailDisplay(val){const d=document.getElementById('loginEmailDisplay');if(val.length>3){d.textContent='👤 '+(currentLang==='es'?'Conectado como: ':currentLang==='en'?'Signed in as: ':'登录为: ')+val;d.classList.add('show');}else{d.classList.remove('show');}}
 
 // ── Enter dashboard ──
 function enterDash(){
@@ -69,33 +69,33 @@ function enterDash(){
   errEl.style.display='none';
 
   if(!nombre){
-    errEl.textContent='⚠️ Please enter your first name.';
+    errEl.textContent=i18n[currentLang].err_name_required||'⚠️ Please enter your first name.';
     errEl.style.display='block';
     nombreEl.focus();return;
   }
   if(!apellido){
-    errEl.textContent='⚠️ Please enter your last name.';
+    errEl.textContent=i18n[currentLang].err_lastname_required||'⚠️ Please enter your last name.';
     errEl.style.display='block';
     apellidoEl.focus();return;
   }
   if(!email){
-    errEl.textContent='⚠️ Please enter your email address.';
+    errEl.textContent=i18n[currentLang].err_email_required||'⚠️ Please enter your email address.';
     errEl.style.display='block';
     emailEl.focus();return;
   }
   if(!email.includes('@')){
-    errEl.textContent='⚠️ The email entered is not valid. It must include the "@" symbol (example: user@email.com).';
+    errEl.textContent=i18n[currentLang].err_email_invalid_at||'⚠️ The email entered is not valid. It must include the "@" symbol (example: user@email.com).';
     errEl.style.display='block';
     emailEl.focus();return;
   }
   const emailParts=email.split('@');
   if(emailParts.length!==2||!emailParts[0]||!emailParts[1]||!emailParts[1].includes('.')){
-    errEl.textContent='⚠️ The email format is not valid. Correct example: user@email.com';
+    errEl.textContent=i18n[currentLang].err_email_invalid_format||'⚠️ The email format is not valid. Correct example: user@email.com';
     errEl.style.display='block';
     emailEl.focus();return;
   }
   if(!pass||pass.length<6){
-    errEl.textContent='⚠️ The password must be at least 6 characters long.';
+    errEl.textContent=i18n[currentLang].err_password_min||'⚠️ The password must be at least 6 characters long.';
     errEl.style.display='block';
     passEl.focus();return;
   }
@@ -107,13 +107,13 @@ function enterDash(){
   window.scrollTo(0,0);
 
   const fullName=nombre+' '+apellido;
-  const segLabels={ciudadano:'Citizen',trabajador:'Worker',profesional:'Health Professional'};
-  const subs={ciudadano:'Monitor your daily sound exposure in Lima',trabajador:'Occupational exposure record — Law No. 29783',profesional:'Clinical follow-up of patients exposed to noise'};
+  const segLabels=i18n[currentLang].seg_dash_labels||{ciudadano:'Citizen',trabajador:'Worker',profesional:'Health Professional'};
+  const subs=i18n[currentLang].seg_dash_subs||{ciudadano:'Monitor your daily sound exposure in Lima',trabajador:'Occupational exposure record — Law No. 29783',profesional:'Clinical follow-up of patients exposed to noise'};
   const initials=(nombre[0]||'')+(apellido[0]||'');
 
   document.getElementById('dashAvatar').textContent=initials.toUpperCase();
   document.getElementById('dashUserLabel').textContent=fullName;
-  document.getElementById('dashGreet').textContent='👋 Welcome, '+nombre;
+  document.getElementById('dashGreet').textContent=i18n[currentLang].dash_welcome_msg||'👋 Welcome, '+nombre;
   document.getElementById('dashSub').textContent=subs[pendingSeg]||'';
   document.getElementById('profileAvatarLg').textContent=initials.toUpperCase();
   document.getElementById('profileName').textContent=fullName;
@@ -311,6 +311,17 @@ const i18n={
     prof_activity_title:'📊 Resumen de tu actividad',prof_sessions:'Sesiones de monitoreo',prof_alerts_recv:'Alertas recibidas',prof_reports:'Informes generados',
     label_name:'Nombre',label_lastname:'Apellido',label_email:'Correo',label_phone:'Teléfono',label_city:'Ciudad',label_segment:'Segmento',
     btn_save_profile:'💾 Guardar cambios',btn_change_pass:'🔑 Cambiar contraseña',
+    // Nuevas traducciones para el formulario de login
+    err_name_required:'⚠️ Por favor ingresa tu nombre.',
+    err_lastname_required:'⚠️ Por favor ingresa tu apellido.',
+    err_email_required:'⚠️ Por favor ingresa tu correo electrónico.',
+    err_email_invalid_at:'⚠️ El correo ingresado no es válido. Debe incluir el símbolo "@" (ejemplo: usuario@correo.com).',
+    err_email_invalid_format:'⚠️ El formato del correo no es válido. Ejemplo correcto: usuario@correo.com',
+    err_password_min:'⚠️ La contraseña debe tener al menos 6 caracteres.',
+    // Nuevas traducciones para el dashboard
+    seg_dash_labels:{ciudadano:'Ciudadano',trabajador:'Trabajador',profesional:'Profesional de salud'},
+    seg_dash_subs:{ciudadano:'Monitorea tu exposición sonora diaria en Lima',trabajador:'Registro de exposición ocupacional — Ley N° 29783',profesional:'Seguimiento clínico de pacientes expuestos a ruido'},
+    dash_welcome_msg:'👋 Bienvenido, ',
   },
   en:{
     nav_inicio:'Home',nav_problema:'Problem',nav_beneficios:'Benefits',nav_funcionalidades:'Features',nav_planes:'Plans',nav_faq:'FAQ',nav_contacto:'Contact',nav_login:'Sign in',
@@ -477,6 +488,17 @@ const i18n={
     prof_activity_title:'📊 Your activity summary',prof_sessions:'Monitoring sessions',prof_alerts_recv:'Alerts received',prof_reports:'Reports generated',
     label_name:'First name',label_lastname:'Last name',label_email:'Email',label_phone:'Phone',label_city:'City',label_segment:'Segment',
     btn_save_profile:'💾 Save changes',btn_change_pass:'🔑 Change password',
+    // Nuevas traducciones para el formulario de login
+    err_name_required:'⚠️ Please enter your first name.',
+    err_lastname_required:'⚠️ Please enter your last name.',
+    err_email_required:'⚠️ Please enter your email address.',
+    err_email_invalid_at:'⚠️ The email entered is not valid. It must include the "@" symbol (example: user@email.com).',
+    err_email_invalid_format:'⚠️ The email format is not valid. Correct example: user@email.com',
+    err_password_min:'⚠️ The password must be at least 6 characters long.',
+    // Nuevas traducciones para el dashboard
+    seg_dash_labels:{ciudadano:'Citizen',trabajador:'Worker',profesional:'Health Professional'},
+    seg_dash_subs:{ciudadano:'Monitor your daily sound exposure in Lima',trabajador:'Occupational exposure record — Law No. 29783',profesional:'Clinical follow-up of patients exposed to noise'},
+    dash_welcome_msg:'👋 Welcome, ',
   },
   zh:{
     nav_inicio:'首页',nav_problema:'问题',nav_beneficios:'优势',nav_funcionalidades:'功能',nav_planes:'计划',nav_faq:'常见问题',nav_contacto:'联系',nav_login:'登录',
@@ -567,928 +589,17 @@ const i18n={
     mic_error:'我们无法访问您的麦克风。请在浏览器设置中启用权限。',mic_retry:'🔄 重试',
     kpi_c1:'当前级别',kpi_c2:'今日暴露',kpi_c3:'活跃警报',kpi_c4:'每周剂量',
     kpi_c1_trend:'↑ 超过限值',kpi_c2_sub:'最多8小时',kpi_c3_trend:'↑ 今天1个新警报',kpi_c4_trend:'↓ 受控',
-    chart_today:'历史记录 — 最近12小时',tag_today:'今天',
-    panel_recent_alerts:'最近警报',
-    alert1_p:'检测到危急级别',alert1_s:'95 dB · Av. Javier Prado · 2小时前',
-    alert2_p:'中度嘈杂区域',alert2_s:'72 dB · Miraflores · 4小时前',
-    alert3_p:'安全级别',alert3_s:'48 dB · Parque Kennedy · 6小时前',
-    panel_map:'区域地图 — 利马',map_legend1:'安全 <65dB',map_legend2:'中等 65-85dB',map_legend3:'危急 >85dB',map_last_update:'最后更新：2 分钟前',
-    panel_recs:'建议',
-    rec1_p:'使用耳塞',rec1_s:'如果您将在高噪声区待超过1小时。',
-    rec2_p:'休息耳朵',rec2_s:'接下来2小时内避免使用耳机。',
-    rec3_p:'可选替代路线',rec3_s:'Av. Arequipa：平均水平58 dB。',
-    kpi_w1:'当前暴露',kpi_w2:'每日剂量',kpi_w3:'在危急区时间',kpi_w4:'无风险天数',
-    kpi_w1_trend:'↑ 超过限值（85 dB）',kpi_w2_trend:'↑ 高风险',kpi_w3_trend:'↑ 最多8小时',kpi_w4_trend:'↓ 本周',
-    chart_week:'暴露记录 — 本周',days_short:'周一,周二,周三,周四,周五,周六,周日',
-    warn_box:'⚠️ 周三和周四超过了限值，建议周末休息耳朵。',
-    panel_dose:'累计剂量',dose_label:'每日累计剂量',
-    panel_sunafil:'SUNAFIL历史记录',tag_verif:'可核查',
-    th_date:'日期',th_max:'最高级别',th_dose:'剂量',th_time:'时间',th_status:'状态',th_avg:'平均级别',th_exptime:'暴露时间',
-    btn_export_csv:'📊 导出CSV',
-    kpi_p1:'活跃患者',kpi_p2:'听力风险',kpi_p3:'生成报告',kpi_p4:'区域平均水平',
-    kpi_p1_trend:'↑ 本周3名新患者',kpi_p2_trend:'↑ 需要关注',kpi_p3_sub:'本月',kpi_p4_trend:'↑ 北部工业区',
-    panel_patients:'患者面板',tag_clinical:'临床',
-    th_patient:'患者',th_sector:'行业',th_exposure:'暴露',th_risk:'风险',
-    panel_risk_dist:'风险分布',
-    riskdist_critical:'危急 (>90 dB)',riskdist_high:'较高 (85–90 dB)',riskdist_moderate:'中等 (65–85 dB)',riskdist_safe:'安全 (<65 dB)',
-    label_patient:'位患者',label_patients:'位患者',
-    btn_gen_report:'📊 生成机构报告 (CSV)',
-    panel_hist_compare:'📈 历史水平对比',tag_6months:'6个月',
-    legend_normal:'正常 <65 dB',legend_moderate_risk:'中等风险 65–85 dB',legend_high_risk:'高风险 >85 dB',
-    months_short:'1月,2月,3月,4月,5月,6月',
-    chart_peak_prefix:'⚠️ 峰值：',
-    hist_compare_caption:'每月患者报告的平均水平（左）与最高水平（右）对比。将鼠标悬停在每个柱形上可查看详情和风险等级。',
-    tt_avg:'平均',tt_max:'最高',
-    tt_risk_normal:'正常',tt_risk_moderate:'中等风险',tt_risk_high:'高风险',
-    panel_prevent:'🩺 预防建议',
-    prevent1_p:'强制听力防护',prevent1_s:'建议对暴露 >85 dB 的情况使用认证耳塞或耳罩。',
-    prevent2_p:'定期听力休息',prevent2_s:'在噪声环境中每2小时建议休息15分钟。',
-    prevent3_p:'定期听力检测',prevent3_s:'对反复剂量 >80% 的患者进行年度检查。',
-    prevent4_p:'转诊耳鼻喉科专家',prevent4_s:'处于危急风险的患者应在7天内接受评估。',
-    toast_updating_map:'🔄 正在更新地图点位...',
-    map_panel_title:'🗺️ 噪声地图 — 利马大都市',tag_live:'直播',
-    btn_refresh:'🔄 刷新',btn_add_point:'📍 添加我的点',btn_export_map:'📥 导出地图',
-    add_point_hint:'📍 点击地图放置您的噪声点',map_last_update:'上次更新：2分钟前',
-    hist_title:'📁 完整暴露历史记录',tag_30days:'30天',
-    btn_filter_date:'📅 按日期筛选',btn_clear_filter:'✕ 清除筛选',
-    kpi_a1:'今日警报',kpi_a2:'本周',kpi_a3:'危急区域',kpi_a4:'今日最高级别',
-    kpi_a1_trend:'↑ 2个危急',kpi_a2_trend:'↑ 4个已解决',kpi_a3_trend:'↑ 利马北部',kpi_a4_trend:'↑ Javier Prado',
-    alerts_center_title:'🔔 警报中心',tag_active:'活跃',
-    btn_mark_read:'✓ 全部标为已读',btn_config_alerts:'⚙️ 配置警报',
-    falert1_p:'🚨 危急 — 检测到96 dB',falert1_s:'Av. Javier Prado Este · 15分钟前 · 您当前位置',
-    falert2_p:'⚠️ 每日剂量超过85%',falert2_s:'已达到自定义阈值 · 1小时前',
-    falert3_p:'中等区域 — Av. La Marina',falert3_s:'74 dB · 3小时前 · 上班途中',
-    falert4_p:'✅ 检测到安全级别 — Parque Kennedy',falert4_s:'48 dB · 6小时前',
-    btn_resolve:'解决',btn_postpone:'推迟',
-    config_alerts_title:'🔔 配置警报',
-    cfg_threshold_h:'警报阈值',cfg_threshold_s:'通知的声级',
-    cfg_push_h:'推送警报',cfg_push_s:'浏览器通知',
-    cfg_email_h:'电子邮件警报',cfg_email_s:'每日邮件摘要',
-    cfg_night_h:'夜间静音模式',cfg_night_s:'晚上10点至早上7点无警报',
-    zones_title:'📍 监测区域',
-    zone_active:'活跃',zone_moderate:'中等',zone_critical:'危急',
-    status_high_risk:'高风险',status_exceeds_limit:'超出限值',status_moderate:'中等',status_safe:'安全',status_critical:'危急',status_high:'较高',
-    zone_ciu1_n:'📍 家',zone_ciu1_s:'Miraflores, 利马 · 58 dB',
-    zone_ciu2_n:'💼 工作',zone_ciu2_s:'San Isidro, 利马 · 78 dB',
-    zone_ciu3_n:'🏋️ 健身房',zone_ciu3_s:'Surco, 利马 · 91 dB',
-    zone_trab1_n:'🏭 生产工厂',zone_trab1_s:'工业区，Ate · 92 dB',
-    zone_trab2_n:'🔧 维修车间',zone_trab2_s:'Callao · 84 dB',
-    zone_trab3_n:'🧰 行政办公室',zone_trab3_s:'Callao · 58 dB',
-    zone_prof1_n:'🏥 耳鼻喉科诊室',zone_prof1_s:'圣费利佩诊所，Jesús María · 52 dB',
-    zone_prof2_n:'🩺 候诊室',zone_prof2_s:'圣费利佩诊所 · 68 dB',
-    zone_prof3_n:'🏭 工业厂区巡查',zone_prof3_s:'北部工业区 · 89 dB',
-    btn_add_zone:'+ 添加区域',
-    prefs_title:'🎛️ 应用偏好',pref_theme:'主题',pref_lang:'语言',pref_unit:'测量单位',
-    btn_change_theme:'更换主题',btn_save_prefs:'💾 保存偏好',
-    prof_activity_title:'📊 您的活动摘要',prof_sessions:'监测会话',prof_alerts_recv:'收到警报',prof_reports:'生成报告',
-    label_name:'名字',label_lastname:'姓氏',label_email:'电子邮件',label_phone:'电话',label_city:'城市',label_segment:'细分',
-    btn_save_profile:'💾 保存更改',btn_change_pass:'🔑 更改密码',
-  }
+    chart_today:'历史记录 — 最近12小时',
+    // Nuevas traducciones para el formulario de login
+    err_name_required:'⚠️ 请输入您的名字。',
+    err_lastname_required:'⚠️ 请输入您的姓氏。',
+    err_email_required:'⚠️ 请输入您的电子邮件地址。',
+    err_email_invalid_at:'⚠️ 输入的电子邮件无效。必须包含"@"符号（例如：user@email.com）。',
+    err_email_invalid_format:'⚠️ 电子邮件格式无效。正确示例：user@email.com',
+    err_password_min:'⚠️ 密码长度必须至少为6个字符。',
+    // Nuevas traducciones para el dashboard
+    seg_dash_labels:{ciudadano:'市民',trabajador:'工人',profesional:'健康专业人员'},
+    seg_dash_subs:{ciudadano:'监测您在利马的每日声音暴露',trabajador:'职业暴露记录 — 第29783号法律',profesional:'暴露于噪音患者的临床随访'},
+    dash_welcome_msg:'👋 欢迎， ',
+  },
 };
-let currentLang='es';
-
-function setLang(lang,silent){
-  currentLang=lang;
-  const t=i18n[lang]||i18n.es;
-
-  // NAV
-  const navMap={inicio:'nav_inicio',problema:'nav_problema',beneficios:'nav_beneficios',funcionalidades:'nav_funcionalidades',planes:'nav_planes',faq:'nav_faq',contacto:'nav_contacto'};
-  document.querySelectorAll('.nav-links a').forEach(a=>{const href=(a.getAttribute('href')||'').replace('#','');if(navMap[href])a.textContent=t[navMap[href]];});
-  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(t[k])el.textContent=t[k];});
-
-  // HERO
-  const heroPara=document.querySelector('.hero-content>p');if(heroPara)heroPara.textContent=t.hero_p;
-  const heroStart=document.querySelector('.hero-actions .btn-primary');if(heroStart)heroStart.textContent=t.hero_btn_start;
-  const heroHow=document.querySelector('.hero-actions .btn-secondary');if(heroHow)heroHow.textContent=t.hero_btn_how;
-  const heroStats=document.querySelectorAll('.hero-stats div');
-  if(heroStats[0])heroStats[0].querySelector('span').textContent=t.hero_stat1_label;
-  if(heroStats[1])heroStats[1].querySelector('span').textContent=t.hero_stat2_label;
-  if(heroStats[2])heroStats[2].querySelector('span').textContent=t.hero_stat3_label;
-
-  // MONITOR CARD
-  const monLabel=document.querySelector('.monitor-header .label');if(monLabel)monLabel.textContent=t.label_current_level;
-  const liveBadge=document.querySelector('.live-badge');if(liveBadge)liveBadge.innerHTML='<span class="live-dot"></span> '+t.label_live;
-  const mpills=document.querySelectorAll('.metric-pill');
-  if(mpills[0])mpills[0].querySelector('.m-label').textContent=t.metric_exposure;
-  if(mpills[1]){mpills[1].querySelector('.m-label').textContent=t.metric_zone;mpills[1].querySelector('.m-value').textContent=t.zone_moderate;}
-  if(mpills[2]){mpills[2].querySelector('.m-label').textContent=t.metric_risk;mpills[2].querySelector('.m-value').textContent=t.risk_medium;}
-  const floatAlert=document.querySelector('.float-alert');
-  if(floatAlert){floatAlert.querySelector('strong').textContent=t.float_alert_title;floatAlert.querySelector('span').textContent=t.float_alert_body;}
-
-  // SECTION EYEBROWS (only section-heading ones, not hero)
-  const sectionEyebrows=document.querySelectorAll('.section-heading .eyebrow');
-  const sEyeKeys=['problem_eyebrow','benefit_eyebrow','feature_eyebrow','how_eyebrow','plans_eyebrow','faq_eyebrow','contact_eyebrow'];
-  sectionEyebrows.forEach((el,i)=>{if(sEyeKeys[i])el.textContent=t[sEyeKeys[i]];});
-  // H2s
-  const sH2s=document.querySelectorAll('.section-heading h2');
-  const sH2Keys=['problem_h2','benefit_h2','feature_h2','how_h2','plans_h2','faq_h2','contact_heading'];
-  sH2s.forEach((el,i)=>{if(sH2Keys[i])el.textContent=t[sH2Keys[i]];});
-  // Paras
-  const sPs=document.querySelectorAll('.section-heading>p');
-  const sPKeys=['problem_p','benefit_p',null,null,null,null,'contact_p'];
-  sPs.forEach((el,i)=>{if(sPKeys[i])el.textContent=t[sPKeys[i]];});
-
-  // PROBLEMA CARDS
-  const probCards=document.querySelectorAll('#problema .info-card');
-  const probData=[['prob_c1_h','prob_c1_p'],['prob_c2_h','prob_c2_p'],['prob_c3_h','prob_c3_p'],['prob_c4_h','prob_c4_p'],['prob_c5_h','prob_c5_p'],['prob_c6_h','prob_c6_p']];
-  probCards.forEach((card,i)=>{if(probData[i]){card.querySelector('h3').textContent=t[probData[i][0]];card.querySelector('p').textContent=t[probData[i][1]];}});
-
-  // BENEFICIOS
-  const segCards=document.querySelectorAll('.segment-card');
-  const segData=[{h:'seg1_h',p:'seg1_p',li:['seg1_li1','seg1_li2','seg1_li3','seg1_li4'],btn:'seg1_btn'},{h:'seg2_h',p:'seg2_p',li:['seg2_li1','seg2_li2','seg2_li3','seg2_li4'],btn:'seg2_btn'},{h:'seg3_h',p:'seg3_p',li:['seg3_li1','seg3_li2','seg3_li3','seg3_li4'],btn:'seg3_btn'}];
-  segCards.forEach((card,i)=>{
-    if(!segData[i])return;const d=segData[i];
-    card.querySelector('h3').textContent=t[d.h];
-    card.querySelector(':scope>p').textContent=t[d.p];
-    const lis=card.querySelectorAll('ul li');d.li.forEach((k,j)=>{if(lis[j])lis[j].textContent=t[k];});
-    const btn=card.querySelector('.btn-segment');if(btn)btn.textContent=t[d.btn];
-  });
-
-  // FUNCIONALIDADES
-  const featCards=document.querySelectorAll('.feature-card');
-  const featData=[['feat1_h','feat1_p'],['feat2_h','feat2_p'],['feat3_h','feat3_p'],['feat4_h','feat4_p'],['feat5_h','feat5_p'],['feat6_h','feat6_p'],['feat7_h','feat7_p'],['feat8_h','feat8_p'],['feat9_h','feat9_p']];
-  featCards.forEach((card,i)=>{if(featData[i]){card.querySelector('h3').textContent=t[featData[i][0]];card.querySelector('p').textContent=t[featData[i][1]];}});
-
-  // PASOS
-  const steps=document.querySelectorAll('.step-card');
-  const stepData=[['step1_h','step1_p'],['step2_h','step2_p'],['step3_h','step3_p'],['step4_h','step4_p']];
-  steps.forEach((s,i)=>{if(stepData[i]){s.querySelector('h3').textContent=t[stepData[i][0]];s.querySelector('p').textContent=t[stepData[i][1]];}});
-
-  // PLANES
-  const priceCards=document.querySelectorAll('.price-card');
-  if(priceCards[0]){priceCards[0].querySelector('h3').textContent=t.plan1_h;priceCards[0].querySelector(':scope>p').textContent=t.plan1_p;const l=priceCards[0].querySelectorAll('ul li');['plan1_li1','plan1_li2','plan1_li3','plan1_li4'].forEach((k,j)=>{if(l[j])l[j].textContent=t[k];});const b=priceCards[0].querySelector('.btn-plan');if(b)b.textContent=t.plan1_btn;}
-  if(priceCards[1]){priceCards[1].querySelector('h3').textContent=t.plan2_h;priceCards[1].querySelector(':scope>p').textContent=t.plan2_p;const pn=priceCards[1].querySelector('.price-num');if(pn)pn.innerHTML=t.plan2_price+' <small>'+t.plan2_period+'</small>';const l=priceCards[1].querySelectorAll('ul li');['plan2_li1','plan2_li2','plan2_li3','plan2_li4','plan2_li5'].forEach((k,j)=>{if(l[j])l[j].textContent=t[k];});const b=priceCards[1].querySelector('.btn-plan');if(b)b.textContent=t.plan2_btn;const pt=priceCards[1].querySelector('.popular-tag');if(pt)pt.textContent=t.popular_tag;}
-  if(priceCards[2]){priceCards[2].querySelector('h3').textContent=t.plan3_h;priceCards[2].querySelector(':scope>p').textContent=t.plan3_p;const pn=priceCards[2].querySelector('.price-num');if(pn)pn.textContent=t.plan3_price;const l=priceCards[2].querySelectorAll('ul li');['plan3_li1','plan3_li2','plan3_li3','plan3_li4','plan3_li5'].forEach((k,j)=>{if(l[j])l[j].textContent=t[k];});const b=priceCards[2].querySelector('.btn-plan');if(b)b.textContent=t.plan3_btn;}
-
-  // FAQ
-  const faqs=document.querySelectorAll('.faq-list details');
-  const faqData=[['faq1_q','faq1_a'],['faq2_q','faq2_a'],['faq3_q','faq3_a'],['faq4_q','faq4_a'],['faq5_q','faq5_a'],['faq6_q','faq6_a']];
-  faqs.forEach((d,i)=>{if(faqData[i]){d.querySelector('summary').childNodes[0].textContent=t[faqData[i][0]];d.querySelector('p').textContent=t[faqData[i][1]];}});
-
-  // CONTACTO
-  const contactInfo=document.querySelector('.contact-info');
-  if(contactInfo){
-    const h3=contactInfo.querySelector('h3');if(h3)h3.textContent=t.contact_talk_h;
-    const p=contactInfo.querySelector('p');if(p)p.textContent=t.contact_talk_p;
-    const items=contactInfo.querySelectorAll('.contact-item');
-    if(items[3]){const spans=items[3].querySelectorAll('span');if(spans[1])spans[1].textContent=t.contact_hours;}
-    const innerDivs=contactInfo.querySelectorAll('div>p');
-    innerDivs.forEach(p=>{if(p.style&&p.style.color==='var(--cyan)')p.textContent=t.contact_inst_h;});
-    const muted=contactInfo.querySelectorAll('div p[style*="muted"],div>.muted');
-    if(muted[0])muted[0].textContent=t.contact_inst_p;
-  }
-  const cForm=document.querySelector('.contact-form');
-  if(cForm){
-    const labels=cForm.querySelectorAll('label');
-    ['contact_f_name','contact_f_lastname','contact_f_email','contact_f_subject','contact_f_msg'].forEach((k,i)=>{if(labels[i])labels[i].textContent=t[k];});
-    const inputs=cForm.querySelectorAll('input[type=text],input[type=email]');
-    if(inputs[0])inputs[0].placeholder=t.contact_ph_name;
-    if(inputs[1])inputs[1].placeholder=t.contact_ph_lastname;
-    if(inputs[2])inputs[2].placeholder=t.contact_ph_email;
-    const ta=cForm.querySelector('textarea');if(ta)ta.placeholder=t.contact_ph_msg;
-    const opts=cForm.querySelectorAll('select option');
-    ['contact_opt1','contact_opt2','contact_opt3','contact_opt4'].forEach((k,j)=>{if(opts[j])opts[j].textContent=t[k];});
-    const sendBtn=cForm.querySelector('button');if(sendBtn)sendBtn.textContent=t.contact_f_send;
-  }
-
-  // CTA
-  const ctaCard=document.querySelector('.cta-card');
-  if(ctaCard){const h2=ctaCard.querySelector('h2');if(h2)h2.textContent=t.cta_h2;const p=ctaCard.querySelector('p');if(p)p.textContent=t.cta_p;const btn=ctaCard.querySelector('button');if(btn)btn.textContent=t.cta_btn;}
-
-  // FOOTER
-  const footCopy=document.querySelector('.footer-bottom small');if(footCopy)footCopy.textContent=t.footer_copy;
-  const footCols=document.querySelectorAll('.footer-col h4');
-  if(footCols[1])footCols[1].textContent=t.footer_product;
-  if(footCols[2])footCols[2].textContent=t.footer_company;
-  if(footCols[3])footCols[3].textContent=t.footer_legal;
-
-  // MODAL
-  const modalTitle=document.querySelector('.modal-title');if(modalTitle)modalTitle.textContent=t.modal_welcome;
-  const modalSub=document.querySelector('.modal-sub');if(modalSub)modalSub.textContent=t.modal_sub;
-  const modalLabels=document.querySelectorAll('#loginOverlay .form-group label');
-  ['modal_name','modal_lastname','modal_email','modal_pass'].forEach((k,i)=>{if(modalLabels[i])modalLabels[i].textContent=t[k];});
-  const ln=document.getElementById('loginNombre');if(ln)ln.placeholder=t.modal_ph_name;
-  const la=document.getElementById('loginApellido');if(la)la.placeholder=t.modal_ph_lastname;
-  const le=document.getElementById('loginEmail');if(le)le.placeholder=t.modal_ph_email;
-  const mSegQ=document.querySelector('.modal-seg-label');if(mSegQ)mSegQ.textContent=t.modal_profile_q;
-  const chipC=document.getElementById('chip-ciudadano');if(chipC)chipC.textContent=t.chip_ciudadano;
-  const chipW=document.getElementById('chip-trabajador');if(chipW)chipW.textContent=t.chip_trabajador;
-  const chipP=document.getElementById('chip-profesional');if(chipP)chipP.textContent=t.chip_profesional;
-  const btnLoginEl=document.querySelector('.btn-full.btn-login');if(btnLoginEl)btnLoginEl.textContent=t.modal_btn_login;
-
-  // DASHBOARD NAV
-  const dn=document.getElementById('dn-panel');if(dn)dn.textContent=t.dash_panel;
-  const dnm=document.getElementById('dn-mapa');if(dnm)dnm.textContent=t.dash_mapa;
-  const dnh=document.getElementById('dn-historial');if(dnh)dnh.textContent=t.dash_historial;
-  const dna=document.getElementById('dn-alertas');if(dna)dna.innerHTML=t.dash_alertas+'<span class="notif-dot"></span>';
-  const dnc=document.getElementById('dn-configurar');if(dnc)dnc.textContent=t.dash_configurar;
-  const dnp=document.getElementById('dn-perfil');if(dnp)dnp.textContent=t.dash_perfil;
-  const exitBtn=document.querySelector('.dash-nav .btn-ghost');if(exitBtn)exitBtn.textContent=t.dash_exit;
-
-  // DASHBOARD WELCOME
-  const dg=document.getElementById('dashGreet');if(dg)dg.textContent=t.dash_greeting;
-
-  // MONITOR CONTROLS
-  const btnStop=document.getElementById('btnStop');if(btnStop)btnStop.textContent=monitoring?t.btn_stop:t.btn_start;
-  const ctrlBtns=document.querySelectorAll('.monitor-controls .ctrl-btn');
-  if(ctrlBtns[1])ctrlBtns[1].textContent=t.btn_report;
-  if(ctrlBtns[2])ctrlBtns[2].textContent=t.btn_export_pdf;
-  if(ctrlBtns[3])ctrlBtns[3].textContent=t.btn_share;
-  const micErr=document.getElementById('micErrorBanner');
-  if(micErr){const mt=micErr.querySelector('.mic-error-text');if(mt)mt.textContent=t.mic_error;const rb=micErr.querySelector('.mic-retry-btn');if(rb)rb.textContent=t.mic_retry;}
-
-  // KPI CIUDADANO
-  const kpiC=document.querySelectorAll('#dash-ciudadano .kpi-card');
-  [['kpi_c1','kpi_c1_trend'],['kpi_c2','kpi_c2_sub'],['kpi_c3','kpi_c3_trend'],['kpi_c4','kpi_c4_trend']].forEach(([lk,tk],i)=>{
-    if(!kpiC[i])return;const l=kpiC[i].querySelector('.kpi-label');if(l)l.textContent=t[lk];const tr=kpiC[i].querySelector('.kpi-trend');if(tr)tr.textContent=t[tk];
-  });
-  const cPanels=document.querySelectorAll('#dash-ciudadano .dash-panel');
-  if(cPanels[0]){const pt=cPanels[0].querySelector('.panel-title');if(pt){const tag=pt.querySelector('.pt-tag');pt.childNodes[0].textContent=t.chart_today+' ';if(tag)tag.textContent=t.tag_today;}}
-  if(cPanels[1]){const pt=cPanels[1].querySelector('.panel-title');if(pt)pt.textContent=t.panel_recent_alerts;}
-  const cAlerts=document.querySelectorAll('#dash-ciudadano .alert-list .alert-item');
-  if(cAlerts[0]){const p=cAlerts[0].querySelector('.alert-body p');const s=cAlerts[0].querySelector('.alert-body small');if(p)p.textContent=t.alert1_p;if(s)s.textContent=t.alert1_s;}
-  if(cAlerts[1]){const p=cAlerts[1].querySelector('.alert-body p');const s=cAlerts[1].querySelector('.alert-body small');if(p)p.textContent=t.alert2_p;if(s)s.textContent=t.alert2_s;}
-  if(cAlerts[2]){const p=cAlerts[2].querySelector('.alert-body p');const s=cAlerts[2].querySelector('.alert-body small');if(p)p.textContent=t.alert3_p;if(s)s.textContent=t.alert3_s;}
-  if(cPanels[2]){const pt=cPanels[2].querySelector('.panel-title');if(pt)pt.textContent=t.panel_recs;}
-  if(cAlerts[3]){const ab=cAlerts[3].querySelector('.alert-body');if(ab){const p=ab.querySelector('p');const s=ab.querySelector('small');if(p)p.textContent=t.rec1_p;if(s)s.textContent=t.rec1_s;}}
-  if(cAlerts[4]){const ab=cAlerts[4].querySelector('.alert-body');if(ab){const p=ab.querySelector('p');const s=ab.querySelector('small');if(p)p.textContent=t.rec2_p;if(s)s.textContent=t.rec2_s;}}
-  if(cAlerts[5]){const ab=cAlerts[5].querySelector('.alert-body');if(ab){const p=ab.querySelector('p');const s=ab.querySelector('small');if(p)p.textContent=t.rec3_p;if(s)s.textContent=t.rec3_s;}}
-
-  // GLANCE CARD TRABAJADOR
-  const gMsg=document.getElementById('glanceMsg');if(gMsg)gMsg.textContent=t.glance_msg;
-  const gSub=document.getElementById('glanceSub');if(gSub)gSub.textContent=t.glance_sub;
-  const gBtn=document.getElementById('glanceToggleBtn');
-  if(gBtn)gBtn.textContent=(document.getElementById('workerDetail')&&document.getElementById('workerDetail').style.display!=='none')?t.glance_hide:t.glance_show;
-
-  // KPI TRABAJADOR
-  const kpiW=document.querySelectorAll('#dash-trabajador .kpi-card');
-  [['kpi_w1','kpi_w1_trend'],['kpi_w2','kpi_w2_trend'],['kpi_w3','kpi_w3_trend'],['kpi_w4','kpi_w4_trend']].forEach(([lk,tk],i)=>{
-    if(!kpiW[i])return;const l=kpiW[i].querySelector('.kpi-label');if(l)l.textContent=t[lk];const tr=kpiW[i].querySelector('.kpi-trend');if(tr)tr.textContent=t[tk];
-  });
-  const wPanels=document.querySelectorAll('#dash-trabajador .dash-panel');
-  if(wPanels[0]){const pt=wPanels[0].querySelector('.panel-title');if(pt)pt.textContent=t.chart_week;}
-  const dayLabels=document.querySelectorAll('#dash-trabajador .chart-labels span');
-  const days=(t.days_short||'').split(',');dayLabels.forEach((el,i)=>{if(days[i])el.textContent=days[i];});
-  const warnBox=document.querySelector('#dash-trabajador [style*="red-dim"]');if(warnBox)warnBox.textContent=t.warn_box;
-  if(wPanels[1]){const pt=wPanels[1].querySelector('.panel-title');if(pt)pt.textContent=t.panel_dose;const gs=wPanels[1].querySelector('.gauge-sub');if(gs)gs.textContent=t.dose_label;}
-  if(wPanels[2]){
-    const pt=wPanels[2].querySelector('.panel-title');if(pt){const tag=pt.querySelector('.pt-tag');if(tag)tag.textContent=t.tag_verif;pt.childNodes[0].textContent=t.panel_sunafil+' ';}
-    const ths=wPanels[2].querySelectorAll('th');[t.th_date,t.th_max,t.th_dose,t.th_time,t.th_status].forEach((v,i)=>{if(ths[i])ths[i].textContent=v;});
-    const eb=wPanels[2].querySelector('button');if(eb)eb.textContent=t.btn_export_csv;
-  }
-
-  // KPI PROFESIONAL
-  const kpiP=document.querySelectorAll('#dash-profesional .kpi-card');
-  [['kpi_p1','kpi_p1_trend'],['kpi_p2','kpi_p2_trend'],['kpi_p3','kpi_p3_sub'],['kpi_p4','kpi_p4_trend']].forEach(([lk,tk],i)=>{
-    if(!kpiP[i])return;const l=kpiP[i].querySelector('.kpi-label');if(l)l.textContent=t[lk];const tr=kpiP[i].querySelector('.kpi-trend');if(tr)tr.textContent=t[tk];
-  });
-  const pPanels=document.querySelectorAll('#dash-profesional .dash-panel');
-  if(pPanels[0]){const pt=pPanels[0].querySelector('.panel-title');if(pt){const tag=pt.querySelector('.pt-tag');pt.childNodes[0].textContent=t.panel_patients+' ';if(tag)tag.textContent=t.tag_clinical;}
-    const ths=pPanels[0].querySelectorAll('th');[t.th_patient,t.th_sector,t.th_exposure,t.th_dose,t.th_risk].forEach((v,i)=>{if(ths[i])ths[i].textContent=v;});}
-  if(pPanels[1]){
-    const pt=pPanels[1].querySelector('.panel-title');if(pt)pt.textContent=t.panel_risk_dist;
-    const genBtn=pPanels[1].querySelector('.btn-secondary');if(genBtn)genBtn.textContent=t.btn_gen_report;
-    const progItems=pPanels[1].querySelectorAll('.prog-item .prog-header span:first-child');
-    const rdKeys=['riskdist_critical','riskdist_high','riskdist_moderate','riskdist_safe'];
-    progItems.forEach((el,i)=>{if(rdKeys[i]&&t[rdKeys[i]])el.textContent=t[rdKeys[i]];});
-  }
-  // PANEL DE COMPARACIÓN HISTÓRICA (profesional)
-  const histPanel2=document.getElementById('histComparePanel');
-  if(histPanel2){
-    const pt=histPanel2.querySelector('.panel-title');
-    if(pt){const tag=pt.querySelector('.pt-tag');pt.childNodes[0].textContent=t.panel_hist_compare+' ';if(tag)tag.textContent=t.tag_6months;}
-    const legendSpans=histPanel2.querySelectorAll('.chart-risk-legend>span');
-    const legendKeys=['legend_normal','legend_moderate_risk','legend_high_risk'];
-    legendSpans.forEach((el,i)=>{if(!legendKeys[i])return;const dot=el.querySelector('.risk-dot');el.textContent=' '+t[legendKeys[i]];if(dot)el.prepend(dot);});
-    const months=(t.months_short||'Jan,Feb,Mar,Apr,May,Jun').split(',');
-    const monthLabels=histPanel2.querySelectorAll('#histCompareLabels span');
-    monthLabels.forEach((el,i)=>{const m=months[Math.floor(i/2)];if(m)el.textContent=m;});
-    // Datos fijos de la maqueta (promedio/máximo por mes) — se reconstruyen los tooltips traducidos.
-    const monthData=[[58,'tt_risk_normal',70,'tt_risk_moderate'],[55,'tt_risk_normal',74,'tt_risk_moderate'],[71,'tt_risk_moderate',87,'tt_risk_high'],[57,'tt_risk_normal',93,'tt_risk_high'],[69,'tt_risk_moderate',95,'tt_risk_high'],[53,'tt_risk_normal',73,'tt_risk_moderate']];
-    const bars=histPanel2.querySelectorAll('#histCompareBars .chart-bar');
-    monthData.forEach(([avg,avgKey,max,maxKey],i)=>{
-      const m=months[i];
-      const avgBar=bars[i*2],maxBar=bars[i*2+1];
-      if(avgBar)avgBar.title=`${m} (${t.tt_avg}): ${avg} dB — ${t[avgKey]}`;
-      if(maxBar)maxBar.title=`${m} (${t.tt_max}): ${max} dB — ${t[maxKey]}`;
-    });
-    const peakFlag=document.getElementById('chartPeakFlag');
-    if(peakFlag){const strong=peakFlag.querySelector('strong');if(strong)strong.textContent=t.tt_risk_high;peakFlag.childNodes[0].textContent=t.chart_peak_prefix+' '+(months[4]||'May')+' · ';}
-    const caption=document.getElementById('histCompareCaption');if(caption)caption.textContent=t.hist_compare_caption;
-  }
-  // PANEL DE RECOMENDACIONES PREVENTIVAS (profesional)
-  const preventPanel=document.getElementById('preventPanel');
-  if(preventPanel){
-    const pt=preventPanel.querySelector('.panel-title');if(pt)pt.textContent=t.panel_prevent;
-    const pItems=preventPanel.querySelectorAll('.alert-item');
-    const pData=[['prevent1_p','prevent1_s'],['prevent2_p','prevent2_s'],['prevent3_p','prevent3_s'],['prevent4_p','prevent4_s']];
-    pItems.forEach((item,i)=>{if(!pData[i])return;const p=item.querySelector('.alert-body p');const s=item.querySelector('.alert-body small');if(p)p.textContent=t[pData[i][0]];if(s)s.textContent=t[pData[i][1]];});
-  }
-  updatePatientKPIs();
-
-  // MAPA PANEL
-  const mapPanel=document.querySelector('#dp-mapa .dash-panel');
-  if(mapPanel){
-    const pt=mapPanel.querySelector('.panel-title');if(pt){const tag=pt.querySelector('.pt-tag');pt.childNodes[0].textContent=t.map_panel_title+' ';if(tag)tag.textContent=t.tag_live;}
-    const btns=mapPanel.querySelectorAll('.ctrl-btn');
-    if(btns[0])btns[0].textContent=t.btn_refresh;if(btns[1])btns[1].textContent=t.btn_add_point;if(btns[2])btns[2].textContent=t.btn_export_map;
-    const hint=document.getElementById('addPointHint');if(hint)hint.textContent=t.add_point_hint;
-  }
-
-  // HISTORIAL PANEL
-  const histPanel=document.querySelector('#dp-historial .dash-panel');
-  if(histPanel){
-    const pt=histPanel.querySelector('.panel-title');if(pt){const tag=pt.querySelector('.pt-tag');pt.childNodes[0].textContent=t.hist_title+' ';if(tag)tag.textContent=t.tag_30days;}
-    const btns=histPanel.querySelectorAll('.ctrl-btn');
-    if(btns[0])btns[0].textContent=t.btn_filter_date;if(btns[1])btns[1].textContent=t.btn_clear_filter;if(btns[2])btns[2].textContent=t.btn_export_csv;
-    const ths=histPanel.querySelectorAll('th');[t.th_date,t.th_max,t.th_avg,t.th_dose,t.th_exptime,t.th_status].forEach((v,i)=>{if(ths[i])ths[i].textContent=v;});
-  }
-
-  // ALERTAS PANEL
-  const kpiA=document.querySelectorAll('#dp-alertas .kpi-card');
-  [['kpi_a1','kpi_a1_trend'],['kpi_a2','kpi_a2_trend'],['kpi_a3','kpi_a3_trend'],['kpi_a4','kpi_a4_trend']].forEach(([lk,tk],i)=>{
-    if(!kpiA[i])return;const l=kpiA[i].querySelector('.kpi-label');if(l)l.textContent=t[lk];const tr=kpiA[i].querySelector('.kpi-trend');if(tr)tr.textContent=t[tk];
-  });
-  const alertsPanel=document.querySelector('#dp-alertas .dash-panel');
-  if(alertsPanel){
-    const pt=alertsPanel.querySelector('.panel-title');if(pt){const tag=pt.querySelector('.pt-tag');pt.childNodes[0].textContent=t.alerts_center_title+' ';if(tag)tag.textContent=t.tag_active;}
-    const panelBtns=alertsPanel.querySelectorAll('.ctrl-btn');
-    if(panelBtns[0])panelBtns[0].textContent=t.btn_mark_read;if(panelBtns[1])panelBtns[1].textContent=t.btn_config_alerts;
-    const aItems=alertsPanel.querySelectorAll('.alert-item');
-    const aData=[['falert1_p','falert1_s'],['falert2_p','falert2_s'],['falert3_p','falert3_s'],['falert4_p','falert4_s']];
-    aItems.forEach((item,i)=>{
-      if(!aData[i])return;const ab=item.querySelector('.alert-body');if(!ab)return;
-      const p=ab.querySelector('p');if(p)p.textContent=t[aData[i][0]];
-      const s=ab.querySelector('small');if(s)s.textContent=t[aData[i][1]];
-      const rb=item.querySelector('[onclick*="resolveAlert"]');if(rb)rb.textContent=t.btn_resolve;
-      const pb=item.querySelector('[onclick*="postponeAlert"]');if(pb)pb.textContent=t.btn_postpone;
-    });
-  }
-
-  // CONFIGURAR PANEL
-  const cfgPanels=document.querySelectorAll('#dp-configurar .dash-panel');
-  if(cfgPanels[0]){
-    const pt=cfgPanels[0].querySelector('.panel-title');if(pt)pt.textContent=t.config_alerts_title;
-    const rows=cfgPanels[0].querySelectorAll('[style*="space-between"]');
-    const cfgData=[['cfg_threshold_h','cfg_threshold_s'],['cfg_push_h','cfg_push_s'],['cfg_email_h','cfg_email_s'],['cfg_night_h','cfg_night_s']];
-    rows.forEach((row,i)=>{if(!cfgData[i])return;const p=row.querySelector('p');if(p)p.textContent=t[cfgData[i][0]];const sm=row.querySelector('small');if(sm)sm.textContent=t[cfgData[i][1]];});
-  }
-  if(cfgPanels[1]){
-    const pt=cfgPanels[1].querySelector('.panel-title');if(pt)pt.textContent=t.zones_title;
-    // Zone names/subtitles/status tags for all 3 segments (citizen, worker, professional) now
-    // carry their own data-i18n attributes directly in the markup (zone_ciu*_n/s, zone_trab*_n/s,
-    // zone_prof*_n/s, zone_active/zone_moderate/zone_critical) and are translated by the generic
-    // '[data-i18n]' loop above. We used to grab only the first 3 '.zone-item' rows here with
-    // querySelectorAll, which silently matched the citizen zones no matter which segment's list
-    // was actually visible — the worker and professional zone lists were never translated. Do not
-    // reintroduce positional zi[0]/zi[1]/zi[2] selection here.
-    const azb=cfgPanels[1].querySelector('.ctrl-btn');if(azb)azb.textContent=t.btn_add_zone;
-  }
-  const prefsPanel=document.querySelector('#dp-configurar>div:last-child');
-  if(prefsPanel){
-    const pt=prefsPanel.querySelector('.panel-title');if(pt)pt.textContent=t.prefs_title;
-    const prefDivs=prefsPanel.querySelectorAll('[style*="navy-mid"]');
-    if(prefDivs[0]){const p=prefDivs[0].querySelector('p:last-of-type');if(p)p.textContent=t.pref_theme;const b=prefDivs[0].querySelector('button');if(b)b.textContent=t.btn_change_theme;}
-    if(prefDivs[1]){const p=prefDivs[1].querySelector('p:last-of-type');if(p)p.textContent=t.pref_lang;}
-    if(prefDivs[2]){const p=prefDivs[2].querySelector('p:last-of-type');if(p)p.textContent=t.pref_unit;}
-    const sb=prefsPanel.querySelector('[onclick*="saveAppPreferences"]');if(sb)sb.textContent=t.btn_save_prefs;
-  }
-
-  // PERFIL PANEL
-  const profLabels=document.querySelectorAll('.profile-field label');
-  ['label_name','label_lastname','label_email','label_phone','label_city','label_segment'].forEach((k,i)=>{if(profLabels[i])profLabels[i].textContent=t[k];});
-  const spb=document.querySelector('[onclick="saveProfile()"]');if(spb)spb.textContent=t.btn_save_profile;
-  const cpb=document.querySelector('[onclick="changePassword()"]');if(cpb)cpb.textContent=t.btn_change_pass;
-  const actTitle=document.querySelector('#dp-perfil .dash-panel .panel-title');if(actTitle)actTitle.textContent=t.prof_activity_title;
-  const actDivs=document.querySelectorAll('#dp-perfil .dash-panel div[style*="muted"]');
-  if(actDivs[0])actDivs[0].textContent=t.prof_sessions;
-  if(actDivs[1])actDivs[1].textContent=t.prof_alerts_recv;
-  if(actDivs[2])actDivs[2].textContent=t.prof_reports;
-
-  // LANG BUTTONS
-  document.querySelectorAll('.lang-opt').forEach(b=>b.classList.remove('active'));
-  const activeLangBtn=document.getElementById('lopt-'+lang);if(activeLangBtn)activeLangBtn.classList.add('active');
-  document.getElementById('langMenu').classList.remove('open');
-  if(!silent)showToast(lang==='es'?'🌐 Idioma: Español':lang==='en'?'🌐 Language: English':'🌐 语言: 中文');
-}
-function applyLanguage(lang){setLang(lang);}
-
-function toggleLangMenu(){document.getElementById('langMenu').classList.toggle('open');}
-document.addEventListener('click',e=>{if(!e.target.closest('.lang-selector')){const m=document.getElementById('langMenu');if(m)m.classList.remove('open');}});
-let currentUnit='dB_SPL';
-const UNIT_OFFSETS={dB_SPL:0,dBA:-2,dBC:3};
-const UNIT_LABELS={dB_SPL:'dB',dBA:'dB(A)',dBC:'dB(C)'};
-function unitSuffix(){return UNIT_LABELS[currentUnit]||'dB';}
-function convertDbValue(base){return Math.round(base+(UNIT_OFFSETS[currentUnit]||0));}
-
-function refreshAllDbDisplays(){
-  document.querySelectorAll('.db-auto').forEach(el=>{
-    const base=parseFloat(el.dataset.db);
-    if(!isNaN(base))el.textContent=convertDbValue(base);
-  });
-  document.querySelectorAll('.db-unit-auto').forEach(el=>{el.textContent=' '+unitSuffix();});
-  // Umbral de alerta (panel Configurar) — mantiene el número elegido por el usuario,
-  // solo actualiza el sufijo de unidad
-  const thresholdSlider=document.getElementById('thresholdSlider');
-  const thresholdLabel=document.getElementById('thresholdValLabel');
-  if(thresholdSlider && thresholdLabel)thresholdLabel.textContent=thresholdSlider.value+' '+unitSuffix();
-  // Refresca marcadores del mapa (si ya están creados) para que su popup use la unidad activa
-  if(typeof refreshMapMarkersUnit==='function')refreshMapMarkersUnit();
-}
-
-function applyUnit(unit){
-  currentUnit=unit;
-  refreshAllDbDisplays();
-  const labels={'dB_SPL':'📊 Unit: dB (SPL) — sound pressure level','dBA':'📊 Unit: dB(A) — A-weighted (most common use)','dBC':'📊 Unit: dB(C) — C-weighted (impact sounds)'};
-  showToast(labels[unit]||'Unit updated');
-}
-
-// ── Envuelve automáticamente cualquier "NN dB" dentro de #dashboard en spans
-function wrapDbValues(root){
-  if(!root)return;
-  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{
-    acceptNode(node){
-      if(!node.nodeValue||!/\d+(?:\.\d+)?\s?dB\b/.test(node.nodeValue))return NodeFilter.FILTER_REJECT;
-      if(node.parentElement && node.parentElement.closest('.no-db-wrap'))return NodeFilter.FILTER_REJECT;
-      return NodeFilter.FILTER_ACCEPT;
-    }
-  });
-  const nodes=[];
-  let n;
-  while(n=walker.nextNode())nodes.push(n);
-  const re=/(\d+(?:\.\d+)?)\s?dB\b/g;
-  nodes.forEach(node=>{
-    const text=node.nodeValue;
-    const frag=document.createDocumentFragment();
-    let last=0,m;
-    re.lastIndex=0;
-    while(m=re.exec(text)){
-      frag.appendChild(document.createTextNode(text.slice(last,m.index)));
-      const numSpan=document.createElement('span');
-      numSpan.className='db-auto';
-      numSpan.dataset.db=m[1];
-      numSpan.textContent=m[1];
-      frag.appendChild(numSpan);
-      const unitSpan=document.createElement('span');
-      unitSpan.className='db-unit-auto';
-      unitSpan.textContent=' dB';
-      frag.appendChild(unitSpan);
-      last=re.lastIndex;
-    }
-    frag.appendChild(document.createTextNode(text.slice(last)));
-    node.parentNode.replaceChild(frag,node);
-  });
-}
-function saveAppPreferences(){
-  const lang=document.getElementById('appLanguage');
-  const unit=document.getElementById('appUnit');
-  const langName=lang?lang.options[lang.selectedIndex].text:'English';
-  const unitName=unit?unit.options[unit.selectedIndex].text:'dB (SPL)';
-  showToast('✅ Preferences saved: '+langName+' · '+unitName);
-}
-
-// ── Button Functions ──
-function saveProfile(){
-  const n=document.getElementById('pfNombre').value.trim();
-  const a=document.getElementById('pfApellido').value.trim();
-  const e=document.getElementById('pfEmail').value.trim();
-  if(!n||!a){showToast('⚠️ First and last name are required');return;}
-  if(!e.includes('@')){showToast('⚠️ Invalid email: missing "@"');return;}
-  const full=n+' '+a;
-  document.getElementById('profileName').textContent=full;
-  document.getElementById('profileEmail').textContent=e;
-  document.getElementById('dashUserLabel').textContent=full;
-  document.getElementById('dashAvatar').textContent=(n[0]||'')+(a[0]||'');
-  document.getElementById('profileAvatarLg').textContent=(n[0]||'')+(a[0]||'');
-  showToast('✅ Profile updated: '+full);
-}
-
-function changePassword(){
-  const e=document.getElementById('pfEmail').value.trim();
-  if(!e||!e.includes('@')){showToast('⚠️ Invalid email. Check the email field.');return;}
-  showToast('📧 Password reset email sent to: '+e);
-}
-
-// ── Zonas de monitoreo — ahora totalmente funcional ──
-function addZone(){
-  const name=prompt('Name of the new zone (e.g. Work, Gym, University):');
-  if(!name||!name.trim()){showToast('⚠️ Enter a valid name for the zone');return;}
-  const addr=prompt('Address or reference (e.g. Miraflores, Lima):');
-  if(!addr||!addr.trim()){showToast('⚠️ Enter a valid address or reference');return;}
-  const dbStr=prompt('Approximate noise level in that zone, in dB (e.g. 70):');
-  const db=parseFloat(dbStr);
-  if(isNaN(db)||db<30||db>140){showToast('⚠️ Invalid noise level. Must be between 30 and 140 dB');return;}
-  let riskClass,riskLabel;
-  if(db>=85){riskClass='tag-red';riskLabel='Critical';}
-  else if(db>=65){riskClass='tag-amber';riskLabel='Moderate';}
-  else{riskClass='tag-green';riskLabel='Safe';}
-  const list=document.getElementById('zones'+pendingSeg.charAt(0).toUpperCase()+pendingSeg.slice(1));
-  if(!list){showToast('⚠️ Zone list not found');return;}
-  const item=document.createElement('div');
-  item.className='zone-item';
-  item.style.cssText='padding:12px;background:var(--navy-mid);border-radius:var(--radius-md);display:flex;justify-content:space-between;align-items:center;gap:10px;';
-  item.innerHTML=`<div><p style="font-weight:600;font-size:.9rem;">📍 ${name.trim()}</p><small style="color:var(--muted);">${addr.trim()} · ${db} dB</small></div>
-    <div style="display:flex;align-items:center;gap:8px;">
-      <span class="tag ${riskClass}">${riskLabel}</span>
-      <button class="ctrl-btn ctrl-btn-red" style="padding:5px 10px;font-size:.72rem;" onclick="this.closest('.zone-item').remove();showToast('🗑️ Zone deleted')" title="Delete zone">✕</button>
-    </div>`;
-  list.insertBefore(item,list.querySelector('button'));
-  wrapDbValues(item);
-  refreshAllDbDisplays();
-  showToast('✅ Zone "'+name.trim()+'" added successfully');
-}
-
-function configureAlerts(){
-  showDashPanel('configurar');
-  showToast('⚙️ Alert configuration panel opened');
-}
-
-function markAllRead(){
-  document.querySelectorAll('.notif-dot').forEach(d=>d.style.display='none');
-  showToast('✅ All alerts marked as read');
-}
-
-function exportPDF(){
-  const name=document.getElementById('profileName')?.textContent||'User';
-  const now=new Date();
-  const dateStr=now.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
-  const timeStr=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-  const content=`============================================================
-  AudioSafe REPORT — Sound Exposure History
-============================================================
-User        : ${name}
-Date        : ${dateStr} ${timeStr}
-Segment     : ${document.getElementById('pfSegmento')?.value||'Citizen'}
-Email       : ${document.getElementById('profileEmail')?.textContent||'—'}
-------------------------------------------------------------
-EXPOSURE HISTORY — LAST 7 DAYS
-------------------------------------------------------------
-Date               Max Level   Avg Level    Dose    Time       Status
-Thu Jun 18, 2026   92 dB       78 dB        87%     5h 40m     High risk
-Wed Jun 17, 2026   95 dB       82 dB        102%    6h 20m     Exceeds limit
-Tue Jun 16, 2026   88 dB       75 dB        74%     4h 50m     Moderate
-Mon Jun 15, 2026   76 dB       62 dB        38%     2h 10m     Safe
-Sun Jun 14, 2026   60 dB       52 dB        18%     1h 20m     Safe
-Sat Jun 13, 2026   85 dB       74 dB        65%     4h 00m     Moderate
-Fri Jun 12, 2026   90 dB       80 dB        91%     5h 10m     High risk
-------------------------------------------------------------
-SUMMARY
-------------------------------------------------------------
-Maximum level recorded  : 95 dB (Wed Jun 17, 2026)
-Maximum dose            : 102% — Exceeds SUNAFIL limit
-Days at high risk       : 3 out of 7
-Total exposure          : 26h 00m over 7 days
-
-Reference threshold     : 85 dB (Law 29783 / SUNAFIL)
-Safe daily limit        : 8h at 85 dB
-------------------------------------------------------------
-RECOMMENDATIONS
-------------------------------------------------------------
-• Use hearing protection during shifts >85 dB
-• Take hearing breaks every 2h of exposure
-• See an ENT specialist if exposure persists
-------------------------------------------------------------
-Generated by AudioSafe v4.0 — audiosafe.pe
-UPC IHC & Mobile Technologies · Lima, Peru
-============================================================`;
-  const blob=new Blob([content],{type:'text/plain;charset=utf-8'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');
-  a.href=url;
-  a.download='AudioSafe_Report_'+name.replace(/ /g,'_')+'_'+now.toISOString().slice(0,10)+'.txt';
-  a.click();
-  URL.revokeObjectURL(url);
-  showToast('✅ TXT report downloaded successfully');
-}
-
-// ── Utilidades genéricas de exportación CSV ──
-function tableToCSVRows(table){
-  if(!table)return [];
-  return [...table.querySelectorAll('tr')]
-    .filter(row=>row.style.display!=='none')
-    .map(row=>[...row.children].map(cell=>cell.textContent.replace(/\s+/g,' ').trim()));
-}
-function rowsToCSV(rows){
-  return rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\r\n');
-}
-function downloadCSV(filename,csvContent){
-  const blob=new Blob(['\ufeff'+csvContent],{type:'text/csv;charset=utf-8;'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');
-  a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();
-  URL.revokeObjectURL(url);
-}
-function dateStamp(){return new Date().toISOString().slice(0,10);}
-
-// Exporta la tabla indicada (por id) a un archivo Excel/CSV real y descargable.
-function exportCSV(tableId){
-  const table=tableId?document.getElementById(tableId):document.querySelector('.data-table');
-  if(!table){showToast('⚠️ Could not find the table to export');return;}
-  const rows=tableToCSVRows(table);
-  if(!rows.length){showToast('⚠️ No visible data to export');return;}
-  downloadCSV('AudioSafe_History_'+dateStamp()+'.csv',rowsToCSV(rows));
-  showToast('📊 History exported to CSV (Excel) successfully');
-}
-
-function exportMap(){
-  showToast('🗺️ Exporting noise map to PDF... Ready in a moment');
-}
-
-function filterByDate(){
-  const desde=prompt('Start date (mm/dd/yyyy):');
-  if(!desde){showToast('⚠️ Enter a valid start date');return;}
-  const hasta=prompt('End date (mm/dd/yyyy):');
-  if(!hasta){showToast('⚠️ Enter a valid end date');return;}
-  const parseDate=s=>{const p=s.split('/');if(p.length!==3)return null;return new Date(+p[2],+p[0]-1,+p[1]);};
-  const dStart=parseDate(desde);const dEnd=parseDate(hasta);
-  if(!dStart||isNaN(dStart)||!dEnd||isNaN(dEnd)){showToast('⚠️ Invalid date format. Use mm/dd/yyyy');return;}
-  if(dStart>dEnd){showToast('⚠️ The start date must be before the end date');return;}
-  const tables=document.querySelectorAll('.data-table tbody');
-  let shown=0,hidden=0;
-  tables.forEach(tbody=>{
-    tbody.querySelectorAll('tr').forEach(row=>{
-      const cell=row.cells[0];if(!cell)return;
-      const txt=cell.textContent.trim();
-      // Try to parse date from cell (various formats)
-      const monthsEN={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
-      // Pattern: "Thu Jun 18, 2026" or "Today · Thu Jun 18"
-      const m=txt.match(/([A-Za-z]{3,})\s+(\d{1,2}),?\s+(\d{4})/);
-      if(m){
-        const mon=monthsEN[m[1].slice(0,3)]??0;const day=+m[2];const yr=+m[3];
-        const rowDate=new Date(yr,mon,day);
-        const visible=rowDate>=dStart&&rowDate<=dEnd;
-        row.style.display=visible?'':'none';
-        if(visible)shown++;else hidden++;
-      }
-    });
-  });
-  showToast(`📅 Filter applied: ${desde} → ${hasta} (${shown} rows visible)`);
-}
-function resetDateFilter(){
-  document.querySelectorAll('.data-table tbody tr').forEach(r=>r.style.display='');
-  showToast('🔄 Date filter cleared');
-}
-
-// ── Add noise point via map click (drag-to-place) ──
-let addPointMode=false;
-let addPointMarker=null;
-function activateAddPoint(){
-  if(!mapFull){showToast('🗺️ First open the Map panel');return;}
-  addPointMode=true;
-  document.getElementById('addPointHint').style.display='inline-flex';
-  document.getElementById('btnAddPoint').style.background='var(--cyan)';
-  document.getElementById('btnAddPoint').style.color='var(--navy)';
-  showToast('📍 Click on the map to place your noise point');
-  mapFull.once('click',function(e){
-    addPointMode=false;
-    document.getElementById('addPointHint').style.display='none';
-    document.getElementById('btnAddPoint').style.background='';
-    document.getElementById('btnAddPoint').style.color='';
-    const db=prompt('Approximate noise level in dB (e.g. 82):');
-    const dbNum=parseFloat(db);
-    if(isNaN(dbNum)||dbNum<30||dbNum>140){showToast('⚠️ Invalid noise level. Must be between 30 and 140 dB');return;}
-    const loc=prompt('Name of the place (e.g. Av. Brasil, Lima):');
-    if(!loc||!loc.trim()){showToast('⚠️ Enter a valid place name');return;}
-    const risk=dbNum>=85?'red':dbNum>=65?'amber':'green';
-    const col=colorMap[risk];
-    const icon=L.divIcon({html:`<div style="width:16px;height:16px;background:${col};border:2.5px solid #fff;border-radius:50%;box-shadow:0 0 10px ${col}"></div>`,iconSize:[16,16],iconAnchor:[8,8],className:''});
-    const marker=L.marker([e.latlng.lat,e.latlng.lng],{icon,draggable:true}).addTo(mapFull);
-    marker._noisePt={lat:e.latlng.lat,lng:e.latlng.lng,db:dbNum,name:loc.trim(),risk};
-    allNoiseMarkers.push(marker);
-    marker.bindPopup(`<b>📍 ${loc.trim()}</b><br>🔊 ${convertDbValue(dbNum)} ${unitSuffix()}<br><span style="color:${col}">● ${risk==='red'?'Critical':risk==='amber'?'Moderate':'Safe'}</span><br><small style="color:#888">You can drag this marker</small>`).openPopup();
-    showToast('✅ Point added: '+loc.trim()+' — '+dbNum+' dB');
-  });
-}
-function addNoisePoint(){activateAddPoint();}
-function refreshMapPoints(){const t=i18n[currentLang]||i18n.es;showToast(t.toast_updating_map||'🔄 Updating map points...');}
-
-
-// ── Generar informe — ahora descarga un CSV/Excel real ──
-function generateReport(){
-  const name=document.getElementById('profileName')?.textContent||'User';
-  const now=new Date();
-  const activeDash=document.querySelector('.seg-dash.active');
-  const rows=[['AudioSafe — Report'],['User',name],['Date',now.toLocaleString('en-US')],['Unit of measurement',unitSuffix()],[]];
-
-  if(activeDash){
-    rows.push(['Indicator','Value']);
-    activeDash.querySelectorAll('.kpi-card').forEach(card=>{
-      const label=card.querySelector('.kpi-label')?.textContent.trim()||'';
-      const value=card.querySelector('.kpi-value')?.textContent.trim().replace(/\s+/g,' ')||'';
-      rows.push([label,value]);
-    });
-  }
-
-  const patientTable=document.getElementById('tablePacientes');
-  if(patientTable && activeDash && activeDash.id==='dash-profesional'){
-    rows.push([]);
-    rows.push(['Patient panel']);
-    tableToCSVRows(patientTable).forEach(r=>rows.push(r));
-  }
-
-  const sunafilTable=document.getElementById('tableHistorialSunafil');
-  if(sunafilTable && activeDash && activeDash.id==='dash-trabajador'){
-    rows.push([]);
-    rows.push(['Daily exposure history (SUNAFIL)']);
-    tableToCSVRows(sunafilTable).forEach(r=>rows.push(r));
-  }
-
-  downloadCSV('AudioSafe_Report_'+name.replace(/\s+/g,'_')+'_'+dateStamp()+'.csv',rowsToCSV(rows));
-  showToast('✅ Report downloaded in CSV (Excel) format');
-}
-
-// ── Registro de pacientes por especialistas de salud ──
-function addPatient(){
-  const nombre=prompt('Patient name and age (e.g. Rosa T. · 40y):');
-  if(!nombre||!nombre.trim()){showToast('⚠️ Enter a valid name');return;}
-  const sector=prompt('Patient sector or activity (e.g. Construction, Office):');
-  if(!sector||!sector.trim()){showToast('⚠️ Enter a valid sector');return;}
-  const dbStr=prompt('Recorded exposure level, in dB (e.g. 82):');
-  const db=parseFloat(dbStr);
-  if(isNaN(db)||db<30||db>140){showToast('⚠️ Invalid noise level. Must be between 30 and 140 dB');return;}
-  const table=document.getElementById('tablePacientes');
-  if(!table){showToast('⚠️ Patient panel not found');return;}
-  const dosis=Math.min(999,Math.round((db/85)*100));
-  let riskClass,riskLabel;
-  if(db>=90){riskClass='tag-red';riskLabel='Critical';}
-  else if(db>=85){riskClass='tag-red';riskLabel='High';}
-  else if(db>=65){riskClass='tag-amber';riskLabel='Moderate';}
-  else{riskClass='tag-green';riskLabel='Safe';}
-  const tr=document.createElement('tr');
-  tr.innerHTML=`<td>${nombre.trim()}</td><td>${sector.trim()}</td><td>${db} dB</td><td>${dosis}%</td><td><span class="tag ${riskClass}">${riskLabel}</span></td>`;
-  table.querySelector('tbody').appendChild(tr);
-  wrapDbValues(tr);
-  refreshAllDbDisplays();
-  updatePatientKPIs();
-  showToast('✅ Patient registered: '+nombre.trim());
-}
-
-// Recalcula KPIs y distribución de riesgo del panel profesional a partir de la tabla real
-function updatePatientKPIs(){
-  const table=document.getElementById('tablePacientes');
-  if(!table)return;
-  const t=i18n[currentLang]||i18n.es;
-  const rows=[...table.querySelectorAll('tbody tr')];
-  const counts={status_critical:0,status_high:0,status_moderate:0,status_safe:0};
-  rows.forEach(r=>{
-    const tag=r.querySelector('.tag');
-    const key=tag?tag.getAttribute('data-i18n'):'';
-    if(key&&counts.hasOwnProperty(key))counts[key]++;
-  });
-  const total=rows.length;
-  const enRiesgo=counts.status_critical+counts.status_high;
-  const profDash=document.getElementById('dash-profesional');
-  if(profDash){
-    const kpiCards=profDash.querySelectorAll('.kpi-grid .kpi-card .kpi-value');
-    if(kpiCards[0])kpiCards[0].textContent=total;
-    if(kpiCards[1])kpiCards[1].textContent=enRiesgo;
-  }
-  const progItems=document.querySelectorAll('#dash-profesional .prog-item');
-  const order=['status_critical','status_high','status_moderate','status_safe'];
-  const patientWord=(n)=>n===1?(t.label_patient||'patient'):(t.label_patients||'patients');
-  progItems.forEach((item,i)=>{
-    const key=order[i];
-    const count=counts[key]||0;
-    const pct=total?Math.round((count/total)*100):0;
-    const headerSpans=item.querySelectorAll('.prog-header span');
-    if(headerSpans[1])headerSpans[1].textContent=count+' '+patientWord(count);
-    const fill=item.querySelector('.prog-fill');
-    if(fill)fill.style.width=pct+'%';
-  });
-}
-
-function shareLocation(){showToast('📍 Location and sound level shared with the community');}
-
-function resolveAlert(btn){
-  const item=btn.closest('.alert-item');
-  if(item){item.style.opacity='0.4';item.style.pointerEvents='none';}
-  showToast('✅ Alert resolved successfully');
-}
-
-function postponeAlert(btn){
-  const item=btn.closest('.alert-item');
-  showToast('⏰ Alert postponed for 2 hours');
-}
-
-function sendContactForm(){
-  const nombre=document.querySelector('.cf-group input[placeholder="Your first name"]')?.value.trim();
-  const apellido=document.querySelector('.cf-group input[placeholder="Your last name"]')?.value.trim();
-  const email=document.querySelector('.cf-group input[type="email"]')?.value.trim();
-  if(!nombre){showToast('⚠️ Enter your first name in the contact form');return;}
-  if(!email||!email.includes('@')){showToast('⚠️ Invalid email: must include "@" (e.g. name@email.com)');return;}
-  showToast('✅ Message sent successfully. We will contact you within 24h.');
-}
-
-// ── Glanceable UI (perfil Trabajador) ──
-function toggleWorkerDetail(){
-  const detail=document.getElementById('workerDetail');
-  const btn=document.getElementById('glanceToggleBtn');
-  if(!detail||!btn)return;
-  const showing=detail.style.display!=='none';
-  detail.style.display=showing?'none':'block';
-  btn.textContent=showing?'📊 View detailed panel':'✕ Hide detailed panel';
-}
-
-// ── Dashboard panels ──
-function showDashPanel(panel){
-  ['panel','mapa','historial','alertas','configurar','perfil'].forEach(p=>{
-    const el=document.getElementById('dp-'+p);
-    if(el)el.style.display=p===panel?'block':'none';
-  });
-  document.querySelectorAll('.dash-nav-links a').forEach(a=>a.classList.remove('active'));
-  const activeLink=document.getElementById('dn-'+panel);
-  if(activeLink)activeLink.classList.add('active');
-  if(panel==='mapa')setTimeout(()=>initFullMap(),200);
-}
-
-// ── Monitor controls ──
-let monitoring=true;
-let micStream=null;
-function requestMicAccess(){
-  const banner=document.getElementById('micErrorBanner');
-  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
-    if(banner){banner.style.display='flex';const t=banner.querySelector('.mic-error-text');if(t)t.textContent='🎙️ Your browser does not support microphone access. Try a recent version of Chrome, Firefox or Edge.';}
-    return;
-  }
-  navigator.mediaDevices.getUserMedia({audio:true})
-    .then(stream=>{
-      micStream=stream;
-      if(banner)banner.style.display='none';
-    })
-    .catch(()=>{
-      // El monitoreo simulado sigue funcionando: el error de permisos nunca bloquea la interfaz.
-      if(banner){const t=banner.querySelector('.mic-error-text');if(t)t.textContent='🎙️ We couldn\'t access your microphone. Enable permissions in your browser settings.';banner.style.display='flex';}
-    });
-}
-function retryMicAccess(){showToast('🎙️ Requesting microphone access...');requestMicAccess();}
-function toggleMonitor(){
-  monitoring=!monitoring;
-  const btn=document.getElementById('btnStop');
-  if(monitoring){btn.textContent='⏹ Stop monitoring';btn.className='ctrl-btn ctrl-btn-red';showToast('▶️ Monitoring started');requestMicAccess();}
-  else{
-    btn.textContent='▶️ Start monitoring';btn.className='ctrl-btn ctrl-btn-green';showToast('⏹ Monitoring stopped');
-    const banner=document.getElementById('micErrorBanner');if(banner)banner.style.display='none';
-    if(micStream){micStream.getTracks().forEach(tr=>tr.stop());micStream=null;}
-  }
-}
-
-// Puntos de ruido reales en Lima
-const noisePts=[
-  {lat:-12.0688,lng:-77.0476,db:94,name:'Av. Javier Prado Este',risk:'red'},
-  {lat:-12.0833,lng:-77.0458,db:91,name:'Av. La Marina',risk:'red'},
-  {lat:-12.0565,lng:-77.0370,db:88,name:'Av. Brasil',risk:'red'},
-  {lat:-12.0731,lng:-77.0644,db:85,name:'Av. Arequipa / Surco',risk:'amber'},
-  {lat:-12.0400,lng:-77.0437,db:82,name:'Av. Tacna',risk:'amber'},
-  {lat:-12.1219,lng:-77.0282,db:78,name:'Av. Benavides',risk:'amber'},
-  {lat:-12.1079,lng:-77.0441,db:72,name:'Miraflores Centro',risk:'amber'},
-  {lat:-12.0931,lng:-77.0259,db:58,name:'Parque Kennedy',risk:'green'},
-  {lat:-12.0980,lng:-77.0170,db:55,name:'San Isidro El Olivar',risk:'green'},
-  {lat:-12.0481,lng:-77.0628,db:60,name:'Breña',risk:'green'},
-  {lat:-12.0699,lng:-77.0800,db:88,name:'Av. Venezuela',risk:'red'},
-  {lat:-12.1186,lng:-77.0302,db:68,name:'Surquillo',risk:'amber'},
-];
-const colorMap={red:'#EF4444',amber:'#F59E0B',green:'#22C55E'};
-
-let mapFull=null;
-const allNoiseMarkers=[];
-function createNoiseMarker(map,pt){
-  const col=colorMap[pt.risk];
-  const icon=L.divIcon({html:`<div style="width:14px;height:14px;background:${col};border:2px solid #fff;border-radius:50%;box-shadow:0 0 8px ${col}"></div>`,iconSize:[14,14],iconAnchor:[7,7],className:''});
-  const marker=L.marker([pt.lat,pt.lng],{icon}).addTo(map);
-  marker._noisePt=pt;
-  marker.bindPopup(`<b>${pt.name}</b><br>🔊 ${convertDbValue(pt.db)} ${unitSuffix()}<br><span style="color:${col}">● ${pt.risk==='red'?'Critical':pt.risk==='amber'?'Moderate':'Safe'}</span>`);
-  allNoiseMarkers.push(marker);
-}
-// Re-genera los popups de los marcadores fijos cuando cambia la unidad de medida
-function refreshMapMarkersUnit(){
-  allNoiseMarkers.forEach(marker=>{
-    const pt=marker._noisePt;if(!pt)return;
-    const col=colorMap[pt.risk];
-    marker.setPopupContent(`<b>${pt.name}</b><br>🔊 ${convertDbValue(pt.db)} ${unitSuffix()}<br><span style="color:${col}">● ${pt.risk==='red'?'Critical':pt.risk==='amber'?'Moderate':'Safe'}</span>`);
-  });
-}
-
-function initFullMap(){
-  const tiles='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-  if(!mapFull){
-    const mf=document.getElementById('mapFull');
-    if(mf){mapFull=L.map('mapFull',{zoomControl:true,scrollWheelZoom:true}).setView([-12.0731,-77.0465],12);L.tileLayer(tiles,{attribution:'© OpenStreetMap'}).addTo(mapFull);noisePts.forEach(p=>createNoiseMarker(mapFull,p));}
-  } else {
-    setTimeout(()=>mapFull.invalidateSize(),100);
-  }
-}
-
-// Fix Leaflet icon path issue
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({iconRetinaUrl:'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',iconUrl:'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',shadowUrl:'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png'});
-
-// ── Reveal on scroll ──
-const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.1});
-document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
-
-// ── Inicialización de la unidad de medida ──
-wrapDbValues(document.getElementById('dashboard'));
-refreshAllDbDisplays();
-
-// ── Idioma por defecto: Español ──
-setLang('es', true);
