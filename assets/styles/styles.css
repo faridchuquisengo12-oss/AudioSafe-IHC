@@ -172,7 +172,7 @@
     .segment-card{background:var(--navy-card);border:1px solid var(--navy-border);border-radius:var(--radius-xl);padding:32px 28px;transition:all .25s;position:relative;overflow:hidden;}
     .segment-card.featured{border-color:var(--cyan);box-shadow:0 0 40px var(--cyan-dim);}
     .segment-card.segment-highlight{border-color:var(--cyan);box-shadow:0 0 0 4px var(--cyan-dim);transition:box-shadow .3s,border-color .3s;}
-    .segment-card.featured::before{content:'Most complete';position:absolute;top:16px;right:16px;background:var(--cyan);color:var(--navy);font-size:.72rem;font-weight:700;padding:4px 12px;border-radius:999px;}
+    .segment-card.featured::before{content:var(--seg-featured-label,'Most complete');position:absolute;top:16px;right:16px;background:var(--cyan);color:var(--navy);font-size:.72rem;font-weight:700;padding:4px 12px;border-radius:999px;}
     .segment-card:hover{transform:translateY(-4px);}
     .segment-icon{font-size:2.4rem;margin-bottom:16px;}
     .segment-card h3{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:8px;}
